@@ -1,0 +1,284 @@
+message:
+    form:
+        errors:
+            require!: Required parameters were not passed!
+            access_action!: You don't have permission to perform this action!
+            access_page!: You don't have permission to view the page!
+            not_post!: The page only supports post requests!
+    competition:
+        status_updated: Сompetition status updated
+        status_updated!: Сompetition status has not been updated
+        login_required!: Sign in with WCA required
+    competitor:
+        login: You are logged in.
+        logout: You are logged out.
+        logout_all: You are logged out on all devices.
+    wcaoauth:
+        access_denied!: WCA authorization denied!
+    round:
+        register: Registration is done.
+        register!: Registration failed!
+        unregister: Registration canceled.
+        unregister!: Registration was not canceled!
+        not_wca_registration!: >-
+            You are not registered for the competition on the WCA website
+            (or try again later)!
+        not_wca_id!: You don't have a WCA ID.
+        registration_disabled!: Registration cannot be changed!
+    scrambles_generate:
+        done: Scrambles were generated.
+        wrong_file!: Wrong file!
+        wrong_count!: There are not enough scrambles in the file!
+    results:
+        results: Results are saved.
+        remove: Competitor updated.
+        remove!: The сompetitor was not updated!
+        finish: The current round is completed.
+        register: Registration is done.
+        register!: Registration failed!
+    settings:
+        save: Competition settings saved.
+        save!: Competition settings not saved.
+aouth:
+    login: Sign in with WCA
+    logout: Sign out
+    logout_all: Sign out from all devices
+competition:
+    statuses_extended:
+        draft: |
+            Waiting for Extra Events Organizer
+            to send competition announcement 
+            to the Extra Events Leaders for approval.
+        announcement_approval: |
+            Waiting Extra Events Leaders for the approval
+            of the competition announcement.
+        announced: |
+            Waiting competition start (Extra Events Organizer will do this).
+        running: |
+            Extra Events Organizer enter the results and send them 
+            to the Extra Events Leaders for approval.
+        results_approval: |
+            Waiting Extra Events Leaders for the approval
+            of the competition results. 
+        completed: |
+            The competition is completed and the results are published.
+        results_canceled: |
+            Extra Events Leaders canceled the results of the competition.
+            For more information, contact the Extra Events Organizer.
+    actions:
+        draft__delete: Delete the competition
+        draft__announcement_approval: Send the competition announcement for approval
+        announcement_approval__draft: Take a step back
+        announcement_approval__announced: Approve the competition announcement
+        announced__announcement_approval: Take a step back
+        announced__running: Start the competition
+        running__results_approval: Send the competition results for approval
+        running__announced: Take a step back
+        results_approval__running: Take a step back
+        results_approval__completed: Approve the competition results
+        results_approval__results_canceled: Reject the competition results
+        completed__results_approval: Take a step back
+        results_canceled__results_approval: Take a step back
+    navigation:
+        info: Info
+        register: Register
+        registrations: Competitors
+        scrambles: Scrambles
+        scorecards: Scorecards
+        status: Status
+        settings: Settings
+        results: Results
+    title: Competitions with Extra Events
+    mine: My competitions
+    more_info: WCA website
+    date: Date
+    name: Name
+    events: Events
+    contact: Contact
+    country: Country
+    registration: Registration
+    registration_date_close: Until
+    organizers: Extra Events organizers
+    action: Available actions
+    scorecards: Scorecards
+    results: Results
+    status: Competition status
+    statuses:
+        field: Status
+        delete: Deleted
+        draft: Draft
+        announcement_approval: Awaiting approval of the announcement
+        results_approval: Awaiting approval of the results
+        announced: Announced
+        running: Running
+        completed: Completed
+        results_canceled: The results canceled
+    registrations: Registrations for Extra Events
+    register_descriptions:
+        open: >-
+            You must have a WCA ID and already be registered to the competition on the WCA
+            website.
+        close: Registration cannot be changed.
+    settings: Competition settings
+    create: Create competition
+contact:
+    leaders: Mail to leaders
+    support: Report a bug
+date:
+    month:
+        '10': Oct
+        '11': Nov
+        '12': Dec
+        '01': Jan
+        '02': Feb
+        '03': Mar
+        '04': Apr
+        '05': May
+        '06': Jun
+        '07': Jul
+        08: Aug
+        09: Sep
+team:
+    title: Extra Events Team
+    member: Member Extra Events Team
+    leader: Leader
+    name: Name
+    country: Country
+    contacts: Contacts
+    description: Description
+round:
+    event: Event
+    events: Events
+    round: Round
+    format: Format
+    time_limit: Time limit
+    cumulative: cumulative
+    cutoff: Cutoff
+    competitor_limit: Competitor limit
+    competitor_limit_current: 'Limit for {%level} competitors'
+    competitor_limit_next: '{%level} competitors go to the next round'
+    register:
+        title: Register for Extra Events
+        statuses:
+            complete: You have registered
+            full: There are no more spots available
+            part: Waiting for team members
+        registered: Registered
+        buttons:
+            register: Register!
+            unregister: Unregister
+        registrations_count: Registrations   
+        team_key: Team key
+        team_key_join: |
+            Enter team key for join the team
+            or leave it empty to create a new team.
+    scrambles:
+        title: Scrambles
+        timestamp: Generated at
+        generate: Generate sets
+    scorecards:
+    registrations:
+        total: Total
+results:
+    position: '#'
+    sort_by:
+        average: Average
+        single: Single
+    round: Round
+    competitor: Competitor
+    results: Results
+    result: Result
+    event: Event
+    competition: Competition
+    card_id: ID
+    save: Submit
+    close: Input of results is not allowed
+    finish: Complete the current round
+    print: Print results
+    types:
+        average: Average
+        single: Single
+    type: Type
+    continent: Continent
+    country: Country
+    attempts: Solves
+records:    
+    title: Records
+region_filter:
+    world: World
+    continent: Continent
+    country: Country
+event:
+    title: Extra Events
+    long_inspection: Inspection
+    person_count: Team
+    wca_events: Puzzles from WCA events
+    format: Format
+    name: Name  
+    id: ID  
+    training: Training 
+training:
+    title: Training
+    generate_pdf: Generate scramble sets PDF    
+    instruction: Press the space bar or refresh the page for a new scramble
+
+navigation:
+    competitions: Competitions
+    persons: Persons
+    team: Team
+    events: Events
+    rankings: Rankings
+    export_db: Database export
+    api: API
+    icons: Logo & Icons
+    my_competitions: My competitions
+    my_results: My results
+    records: Records
+    regulations: Regulations
+    training: Training
+    wca_delegates: WCA Delegates
+    competition_create: Create competition
+    team_import: Import Team
+api:
+    title: Extra Events API
+    
+rankings:
+    title: Rankings
+    rank: '#'
+    country: Country
+    continent: Continent
+    region: Region
+    world: World
+    
+settings:
+    save: Save
+    create: Create
+    not_allowed: Edit/create competition is not allowed (contact the leader).    
+        
+export:
+    title: Database export    
+    
+persons:
+    country: Country
+    wca_id: WCA ID
+    name: Name
+    records: Current Personal Records
+    results: Results
+    country_rank: NR
+    continent_rank: CR
+    world_rank: WR
+    position: Place
+    title: Persons
+    
+statistics:
+    world_records_country: Word records by country
+    competitions_country: Competitions by country
+    persons_country: Persons by country
+    events_competition_country: Events by country
+    persons_event: Persons by event
+    competitions_event: Competitions by event
+    countries_competition_event: Competition country by event
+    countries_person_event: Person country by event
+    
+table:
+    total: Total

@@ -1,0 +1,27 @@
+.competition .country{
+    font-weight: bold;
+}
+
+.competitions_events_select{
+    color: var(--black);
+}
+
+.competitions_events_panel{
+    color: var(--light_gray);
+}
+
+.competitions_events_panel_none:hover{
+    color: var(--light_blue);
+}
+
+.competitions_events_panel  i, .competitions_events_panel_none{
+    cursor: pointer;
+}
+
+.country{
+    font-weight: bold;
+}
+
+.events-image i{
+    font-size: 1.3em;
+}

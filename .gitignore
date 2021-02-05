@@ -1,0 +1,9 @@
+.DS_Store
+/.initial_export
+/.config_key
+/.files*
+/.well-known
+**/external
+/vendor/
+/composer.lock
+/nbproject/

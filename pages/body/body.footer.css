@@ -1,0 +1,10 @@
+.footer{
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid var(--light_gray);
+}
+.footer a{
+   color: var(--black); 
+   margin: 0px 10px;
+}
+

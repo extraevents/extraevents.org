@@ -1,0 +1,32 @@
+.competition_navigation{
+    margin:10px;
+}
+.competition_navigation div{
+    display: inline-block;
+    padding:5px 10px;
+    border-radius: 7px;
+}
+.competition_navigation div.section{
+    border:1px solid  #e7e7e7;
+}
+.competition_navigation div.section:hover, .parrent-select{
+    background-color: #e7e7e7;
+    cursor: pointer;
+}
+
+div.parrent-select:hover{
+    background-color: #ccc;
+}
+
+.competition_navigation a{
+    color: var(--black);
+}
+
+.competition_navigation .select{
+    background-color: #ccc;
+}
+
+.competition-comment{
+    color:var(--gray);
+    padding-left:20px;
+}

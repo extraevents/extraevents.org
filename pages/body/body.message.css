@@ -1,0 +1,17 @@
+.form_message_wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+    background-color: var(--light_green);   
+    padding:5px 20px;
+    border-radius: 10px;
+    margin:5px 0px;
+}
+
+.form_message_wrapper_error{
+    background-color: var(--light_red);   
+}
+
+.form_message_close{
+    justify-content: flex-end;
+}

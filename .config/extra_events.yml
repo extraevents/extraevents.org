@@ -1,0 +1,304 @@
+1mguild:
+    name: 1-Man Mini Guildford Challenge
+    scramble_tnoodle:
+        events:
+            - sq1
+            - skewb
+            - clock
+            - minx
+            - pyram
+            - '333oh'
+            - '555'
+            - '444'
+            - '333'
+            - '222'
+        format: pdf
+    long_inspection: true
+  
+fifteen:
+    name: 15-Puzzle
+    scramble: generate_fifteen
+    scramble_training: generate_fifteen_training
+    drawing: drawing_fifteen    
+  
+2mguild:
+    name: 2-Man Mini Guildford Challenge
+    person_count: 2
+    scramble_tnoodle: 
+        events:
+            - sq1
+            - skewb
+            - clock
+            - minx
+            - pyram
+            - '333oh'
+            - '555'
+            - '444'
+            - '333'
+            - '222'
+        format: pdf       
+    long_inspection: true
+  
+222oh:
+    name: 2x2x2 One-Handed
+    scramble_tnoodle: 
+        events: 
+            - '222'
+        format: pdf
+  
+222pyra:
+    name: 2x2x2 Pyramorphix
+    scramble_tnoodle: 
+          events: 
+              - '222'
+          format: json
+          hook: tnoodle_hook_222pyra
+    scramble_training: generate_222pyra_training            
+    drawing: drawing_222pyra
+    comments:
+        - Yellow side to the top, Green - on themselves
+        - Yellow-Green-Blue corner remains in place
+        - R - rotation line near to Green sticker
+        - U - rotation line near to Yellow sticker
+        - B - rotation line near to Blue sticker    
+  
+2to4relay:
+    name: 2x2x2-4x4x4 Relay
+    scramble_tnoodle: 
+        events:
+            - '222'
+            - '333'
+            - '444'
+        format: pdf
+    long_inspection: true
+   
+2to7relay:
+    name: 2x2x2-7x7x7 Relay
+    scramble_tnoodle: 
+        events:
+            - '222'
+            - '333'
+            - '444'
+            - '555'
+            - '666'
+            - '777'
+        format: pdf
+    long_inspection: true
+
+223:
+    name: 2x2x3 Tower    
+    scramble: generate_223
+    drawing: drawing_223   
+    comments:
+        - The lightest 2x2 face on the top
+        - The darkest 2x3 face on the front
+  
+3mguild:
+    name: 3-Man Mini Guildford Challenge  
+    person_count: 3
+    scramble_tnoodle: 
+        events:
+            - sq1
+            - skewb
+            - clock
+            - minx
+            - pyram
+            - '333oh'
+            - '555'
+            - '444'
+            - '333'
+            - '222'
+        format: pdf
+    long_inspection: true
+   
+332:
+    name: 3x3x2 Domino Cube
+    scramble: generate_332
+    drawing: drawing_332  
+    comments: 
+        - The lightest 3x3 face on the top
+        - The darkest 2x3 face on the front  
+    custom_wrap: true        
+  
+333bets:
+    name: 3x3x3 Bets
+    scramble_tnoodle: 
+        events:
+            - '333'
+        format: pdf  
+  
+333bfoh:
+    name: 3x3x3 Blindfolded One-Handed
+    scramble_tnoodle: 
+        events: 
+            - '333bf'
+        format: pdf  
+      
+333rescr:
+    name: 3x3x3 Rescramble
+    scramble_tnoodle: 
+        events: 
+            - '333'
+        format: pdf  
+                
+teambld:
+    name: 3x3x3 Team-Blind
+    person_count: 2
+    scramble_tnoodle: 
+        events: 
+            - '333'
+        format: pdf  
+  
+333ft:
+    name: 3x3x3 With Feet
+    scramble_tnoodle: 
+        events: 
+            - '333'
+        format: pdf  
+  
+333omt:
+    name: 3x3x3 With Oven Mitts
+    scramble_tnoodle: 
+        events: 
+            - '333'
+        format: pdf  
+  
+444ft:
+    name: 4x4x4 With Feet
+    scramble_tnoodle: 
+        events: 
+            - '444'
+        format: pdf  
+  
+888:
+    name: 8x8x8 Cube
+    scramble: generate_888
+    drawing: drawing_888
+    custom_wrap: true
+
+999:
+    name: 9x9x9 Cube
+    scramble: generate_999
+    drawing: drawing_999
+    custom_wrap: true
+     
+  
+curvycopter:
+    name: Curvy Copter
+    scramble: generate_curvycopter
+    scramble_training: generate_curvycopter_training    
+    drawing: drawing_curvycopter
+    comment:
+        - '[verify] - verify the puzzle by image'
+        - '+ turn 60 degrees clockwise'
+        - '++ turn 120 degrees clockwise'
+        - '- turn 60 degrees counterclockwise'
+        - '-- turn 120 degrees counterclockwise'
+  
+dino:
+    name: Dino Cube
+    scramble: generate_dino
+    drawing: drawing_dino
+    comment:
+        - R - Right Front Up corner
+        - L - Left Front Up corner  
+    custom_wrap: true
+    
+fto:
+    name: Face-Turning Octahedron
+    scramble: generate_fto
+    drawing: drawing_fto
+    comment:
+        - The lightest face on the top
+        - (the base of the triangle faces itself)
+        - The darkest adjacent face on the front
+        - (out of the possible scrambling orientations)
+
+ivy:
+    name: Ivy Cube
+    scramble: generate_ivy
+    drawing: drawing_ivy
+    comment:
+        - Up-White, Right-Green, Left-Orange
+        - U - WBR, R - GRY, L - OYB, F - WGO
+  
+kilo:
+    name: Kilominx
+    scramble: generate_kilo
+    scramble_training: generate_kilo_training
+    drawing: drawing_kilo
+    
+444pyra:
+    name: Master Pyraminx 
+    scramble: generate_444pyra
+    drawing: drawing_444pyra
+  
+mirror:
+    name: Mirror Blocks
+    scramble_tnoodle: 
+            events: 
+                - '333'
+            format: json  
+    scramble_training: generate_mirror_training                    
+    drawing: drawing_mirror
+    comments:
+        - U layer is the thickest
+        - UFL is the biggest corner of the cube 
+  
+mirrorbld:
+    name: Mirror Blocks Blindfolded
+    scramble_tnoodle: 
+        events: 
+            - '333'
+        format: json  
+    scramble_training: generate_mirror_training                    
+    drawing: drawing_mirror
+    comments:
+        - U layer is the thickest
+        - UFL is the biggest corner of the cube 
+  
+redi:
+    name: Redi Cube
+    scramble: generate_redi
+    drawing: drawing_redi
+    comments:
+        - R - Right Front Up corner
+        - L - Left Front Up corner
+  
+113sia:
+    name: Siamese Cubes 1x3x3
+    scramble: generate_113sia
+    drawing: drawing_113sia
+  
+333ten:
+    name: Ten 3x3x3 Cubes
+    scramble_tnoodle: 
+        events:
+            - '333'
+            - '333'
+            - '333'
+            - '333'
+            - '333'
+            - '333'
+            - '333'
+            - '333'
+            - '333'
+            - '333'
+        format: pdf
+    long_inspection: true  
+    
+333scr:
+    name: 3x3x3 Scrambling
+    scramble_tnoodle: 
+        events: 
+            - '333'
+        format: pdf  
+    scrambling: true    
+    
+clockscr:
+    name: Clock Scrambling
+    scramble_tnoodle: 
+        events: 
+            - 'clock'
+        format: pdf
+    scrambling: true         

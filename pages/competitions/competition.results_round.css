@@ -1,0 +1,15 @@
+.result_top:after{
+    color:var(--green);
+    font-family: 'Font Awesome 5 Free';
+    content: '\f5a2';
+}
+
+.result_next:after{
+    color:var(--green);
+    font-family: 'Font Awesome 5 Free';
+    content: '\f054';
+}
+
+.competitor_mark{
+    font-weight: bold;
+}

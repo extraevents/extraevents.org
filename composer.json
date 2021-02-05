@@ -1,0 +1,11 @@
+{
+    "require": {
+        "justinrainbow/json-schema": "^5.2",
+        "ifsnop/mysqldump-php": "^2.9",
+        "dallgoot/yaml": "^0.3.2",
+        "league/commonmark": "^1.5"
+    },
+    "require-dev": {
+        "dflydev/dot-access-data": "^3.0@dev"
+    }
+}

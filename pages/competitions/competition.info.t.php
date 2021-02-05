@@ -1,0 +1,2 @@
+<?= $data->info ?>
+<?= $data->rounds ?>

@@ -1,0 +1,22 @@
+div.training_scramble{
+    width:700px;
+    display: inline-block;
+}
+
+div.training_image{
+    width:400px;
+    height:300px;
+    display: inline-block; 
+    vertical-align: top;
+}
+
+div.training_scramble textarea{
+    font-size:18px; 
+    font-family: monospace;
+    white-space: pre-wrap;
+    width: 100%;
+}
+div.training_image img{
+    max-width: 100%; 
+    max-height: 100%;
+}

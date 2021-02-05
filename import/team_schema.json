@@ -1,0 +1,40 @@
+{
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": [
+            "id"
+        ],
+        "properties": {
+            "id": {
+                "type": "string",
+                "pattern": "^[0-9]{4}[a-zA-Z]{4}[0-9]{2}$"
+            },
+            "leader": "boolean",
+            "description": "string",
+            "contacts": {
+                "type": "array",
+                "items": {
+                    "required": [
+                        "type",
+                        "value"
+                    ],
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "email",
+                                "url",
+                                "phone"
+                            ],
+                            "type": "string"
+                        },
+                        "value": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

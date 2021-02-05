@@ -1,0 +1,39 @@
+.navigator div.section{ 
+    font-size:var(--font_p1);
+}
+
+.navigator div{
+    white-space: nowrap;
+    padding:5px 10px;
+    border-radius: 10px;
+    display:inline-block;
+    vertical-align: middle;
+    cursor:pointer;
+}
+
+.navigator div.section a{
+    text-decoration: none; 
+    color: rgb(119, 119, 119);
+}
+
+.navigator div.competitor a{
+    text-decoration: none; 
+    color: var(--blue);
+}
+
+.navigator .hover, .navigator .select{
+    background-color: rgb(231, 231, 231);
+}
+    
+.navigator div.section.select a{
+    color: var(--black);
+}
+
+.navigator .logo img{
+    width: 30px;
+}
+
+
+.navigator{
+    border-bottom: 1px solid var(--light_gray);
+}

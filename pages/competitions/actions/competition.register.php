@@ -1,0 +1,58 @@
+<?php
+
+$args = form::required('event');
+$event_id = $args->event;
+$competition = competition::get();
+
+$details = [
+    'competition' => $competition->id,
+    'event' => $event_id
+];
+
+if (!$competition->show_register()) {
+    form::process(false, $details, 'round.registration_disabled!');
+    form::return();
+}
+
+$action = form::action();
+$team_key = form::value('team-key');
+$user_id = wcaoauth::user_id();
+$wca_id = wcaapi::get("users/$user_id")->user->wca_id ?? false;
+$round = $competition->get_round($event_id, 1);
+
+if ($action == 'register') {
+    if (!$wca_id) {
+        form::process(false, $details, 'round.not_wca_id!');
+        form::return();
+    }
+
+    $registrations = wcaapi::get("competitions/$competition->id/registrations") ?? [];
+    $wca_registred = false;
+    $users = [];
+    foreach ($registrations as $registration) {
+        if ($registration->user_id == $user_id) {
+            $wca_registred = true;
+        }
+    }
+
+    if (!$wca_registred) {
+        form::process(false, $details, 'round.not_wca_registration!');
+        form::return();
+    }
+
+    if (round::register($wca_id, $round, $team_key)) {
+        form::process(true, $details, 'round.register');
+    } else {
+        form::process(false, $details, 'round.register!');
+    }
+}
+
+if ($action == 'unregister') {
+    if (round::unregister($wca_id, $round)) {
+        form::process(true, $details, 'round.unregister');
+    } else {
+        form::process(false, $details, 'round.unregister!');
+    }
+}
+
+form::return();

@@ -1,0 +1,3 @@
+
+<?= $data->out_scorecards ?>
+

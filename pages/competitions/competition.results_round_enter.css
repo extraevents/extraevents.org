@@ -1,0 +1,58 @@
+.results_row{
+    cursor:pointer;
+}
+
+.chosen-select{
+    width:300px;
+}
+
+.result_incorrect{
+    color: var(--light_red);
+}
+
+.result_correct{
+
+}
+
+.result_blank{
+    color: var(--light_gray);
+}
+
+form.result{
+    margin-top: 10px;
+}
+form.result input{
+    width:180px;
+    font-family: monospace;
+    font-size: 32px;
+    text-align: right;
+} 
+
+form.result button{
+    width:200px;
+    font-size:30px;
+    margin:10px;
+}
+
+form.result_action button{
+    margin:10px;
+}
+
+form.result button:focus{
+    background-color: var(--light_green);
+}
+
+.incorrect{
+    color: var(--light_red);
+    font-weight: bold;
+}
+
+.result_competitor_select{
+    color: var(--light_blue);
+}
+
+.attemp_number{
+    position: relative;
+    left:16px;
+    top:-15px;
+}

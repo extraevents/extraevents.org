@@ -1,0 +1,269 @@
+config:
+    wca_site: https://www.worldcubeassociation.org
+    site: extraevents.org
+    title: Extra Events
+    short: EE
+    email:
+        leaders: leaders@extraevents.org
+        support: support@extraevents.org
+    owner: 
+        url: https://www.worldcubeassociation.org/persons/2015SOLO01
+        name: Konstantin Solovyov
+                
+file:
+    tmp: .files_tmp
+    main: .files
+    public: .files_public
+
+db:
+    main:
+        host: #db_host
+        port: #db_port
+        username: #db_username
+        password: #db_password
+        schema: #db_main_schema
+    wca:
+        host: #db_host
+        port: #db_port
+        username: #db_username
+        password: #db_password
+        schema: #db_wca_schema
+    export:
+        host: #db_host
+        port: #db_port
+        username: #db_username
+        password: #db_password
+        schema: #db_export_schema
+    helper:
+        host: #db_host
+        port: #db_port
+        username: #db_username
+        password: #db_password
+        schema: #db_helper_schema
+    initial_data:
+        host: #db_host
+        port: #db_port
+        username: #db_username
+        password: #db_password
+        schema: #db_initial_schema            
+        
+db_count:
+    table:
+        log:
+            name: db_count
+            clear: #hour
+            depth: #day
+
+backup:
+    table:
+        log:
+            name: backup
+            clear: #day
+            depth: #week 
+    dir:
+        public:
+            parent: public
+            name: backups
+            clear: #day
+            depth: #week
+        main:
+            parent: main
+            name: backups
+            clear: #day
+            depth: #week
+    format_time: dmY_His
+        
+smtp:
+    host: #smtp_host
+    port: #smtp_port
+    username: #smtp_username
+    password: #smtp_password
+    from: from Extra Events
+    table:
+        log:
+            name: smtp
+            clear: #week    
+            depth: #month 
+    send_max: 10        
+    
+wcaoauth:
+    url_refer: #wcaoauth_url_refer
+    client_id: #wcaoauth_client_id
+    client_secret: #wcaoauth_client_secret
+    scope: public
+    url: https://www.worldcubeassociation.org/oauth
+    table:
+        log:
+            name: wcaoauth
+            clear: #day
+            depth: #week     
+
+wcaapi:
+    url: https://www.worldcubeassociation.org/api/v0
+    table:
+        log:
+            name: wcaapi
+            clear: #hour
+            depth: #day
+
+training:
+    dir:
+        image:
+            parent: public 
+            name: training
+            clear: #5minutes
+            depth: #10minutes
+
+scramble_pdf:
+    dir:
+        image:
+            parent: tmp 
+            name: scramble_pdf
+            clear: #5minutes
+            depth: #10minutes                    
+            
+form:
+    table:
+        log:
+            name: form
+            clear: #day
+            depth: #month     
+        process:
+            name: form_process
+            clear: #day
+            depth: #month   
+     
+file_size:
+    table:
+        size:
+            name: file_size
+            clear: #month
+            depth: #year
+        
+file_clear:
+    table:
+        log:
+            name: file_clear
+            clear: #day
+            depth: #week   
+                        
+page:
+    yml: .config/pages.yml
+    
+event:
+    yml: .config/extra_events.yml
+    
+template:    
+    yml: .config/templates.yml
+    
+register:
+    table:
+        log:
+            name: register
+            clear: #day
+            depth: #year
+            
+competition:
+    table:
+        status:
+            name: competition_status
+            clear: #day
+            depth: #month
+            
+import_team:
+    table:
+        log:
+            name: import_team
+            clear: #day
+            depth: #month
+
+round:
+    table:
+        scoretaker:
+            name: scoretaker
+            clear: #day
+            depth: #month
+        register:
+            name: register
+            clear: #day
+            depth: #month
+    dir:  
+        scramble:
+            parent: main 
+            name: scrambles
+
+helper:
+    db: helper
+    
+wca:
+    db: wca
+    
+export:
+    db: export
+    
+cron:        
+    table:
+        log:
+            name: cron
+            clear: #day
+            depth: #week 
+        
+    task:
+        1:
+            command: transfer
+            run: #day
+                    
+        2:
+            command : smtp::send
+            run: #5minutes   
+            
+        3:
+            command: export::build
+            run: #day
+           
+        4:
+            command: backup::sql
+            run: #day     
+            attributes: 
+                dir: public
+                db: export
+                
+        5:
+            command: backup::tsv
+            run: #day     
+            attributes: 
+                dir: public
+                db: export        
+                
+        6:
+            command: backup::sql
+            run: #day     
+            attributes: 
+                dir: main
+                db: main
+                
+        7:
+            command: cron::clearing_table_error
+            run: #day
+            attributes: 
+                depth: #week
+
+        8:
+            command: support_error
+            run: #day
+            
+        9:
+            command: support_checker
+            run: #week
+            
+        10:
+            command: support_backup
+            run: #week
+            
+        11:
+            command: file_size::save
+            run: #week 
+            
+        12: 
+            command: build_info
+            run: #hour 

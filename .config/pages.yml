@@ -1,0 +1,66 @@
+default: info
+navigations:
+    competitions:
+        title: navigation.competitions
+        icon: fas fa-cube
+    regulations:
+        title: navigation.regulations
+        icon: fas fa-book
+    records:
+        title: navigation.records
+        icon: fas fa-trophy
+    events:    
+        title: navigation.events
+        icon: fas fa-star
+    team:
+        title: navigation.team
+        icon: fas fa-address-card
+    
+info:
+    file: base_router
+    
+api:
+    file: api_router
+    
+cron:
+    file: cron_run
+    
+migration:
+    file: migration
+    
+competitions:
+    file: competitions_router
+    section: competitions
+    title: navigation.competitions   
+    
+regulations:
+    file: regulations_router
+    section: regulations
+    title: navigation.regulations
+
+records:
+    file: records_router
+    section: records
+    title: navigation.records
+    
+events:
+    file: events_router
+    section: events    
+    title: navigation.events
+    
+persons:
+    file: persons_router
+    section: persons    
+    title: navigation.persons
+    
+team:
+    file: team_router
+    section: team    
+    title: navigation.team
+        
+icons:
+    file: base_router
+    
+export:
+    file: base_router    
+    

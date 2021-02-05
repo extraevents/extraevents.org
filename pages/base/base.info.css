@@ -1,0 +1,30 @@
+@font-face {
+    font-family: font_title; /* Гарнитура шрифта */
+    src: url(fonts/19847.otf); /* Путь к файлу со шрифтом */
+}
+.title {
+    font-family: font_title;
+    font-size: 84px; 
+}
+
+.title  img{
+    width:100px
+}
+
+.g{
+    color:green;
+}
+.b{
+    color:blue;
+}
+.r{
+    color:red;
+}
+
+.statistics{
+    border-top: 1px solid var(--light_gray);
+    display:inline-block;
+    text-align: left;
+    padding:0px 10px;
+    margin-top:10px;
+}

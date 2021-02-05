@@ -1,0 +1,29 @@
+
+.competitor-panel{
+    display: none;
+    text-align: right;
+}
+
+.competitor-panel a{
+   margin-right: 10px;
+}
+
+#competitor_panel{
+    margin-right: 10px;
+}
+
+.competitor_panel_link:after{
+    font-family: 'Font Awesome 5 Free';
+    content: '\f0d7';
+    font-weight: bold;
+}
+
+.competitor_panel_open_link:after{
+    font-family: 'Font Awesome 5 Free';
+    content: '\f0d8';    
+    font-weight: bold;
+}
+
+.language_set{
+   padding-left: 10px; 
+}
