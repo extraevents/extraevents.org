@@ -118,14 +118,14 @@ class event {
     }
 
     static function filter($where = false) {
-        $where.=$where?'AND ':'';
+        $where = $where ? " AND $where " : '';
         ob_start();
         ?>
         <select data-navigation-event>
             <?php foreach (db::rows("
                     SELECT id, name 
                     FROM events 
-                    WHERE 1 =1 
+                    WHERE 1 = 1 
                     $where 
                     ORDER BY name") as $event) { ?>
                 <option value='<?= $event->id ?>'>

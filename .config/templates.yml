@@ -6,19 +6,19 @@ message:
             access_page!: You don't have permission to view the page!
             not_post!: The page only supports post requests!
     competition:
-        status_updated: Сompetition status updated
-        status_updated!: Сompetition status has not been updated
-        login_required!: Sign in with WCA required
+        status_updated: Сompetition status has been updated
+        status_updated!: Сompetition status has not been updated!
+        login_required!: Sign in with WCA required!
     competitor:
         login: You are logged in.
         logout: You are logged out.
         logout_all: You are logged out on all devices.
     wcaoauth:
-        access_denied!: WCA authorization denied!
+        access_denied!: WCA authorization was denied!
     round:
-        register: Registration is done.
-        register!: Registration failed!
-        unregister: Registration canceled.
+        register: Registration was done.
+        register!: Registration was failed!
+        unregister: Registration was canceled.
         unregister!: Registration was not canceled!
         not_wca_registration!: >-
             You are not registered for the competition on the WCA website
@@ -31,14 +31,12 @@ message:
         wrong_count!: There are not enough scrambles in the file!
     results:
         results: Results are saved.
-        remove: Competitor updated.
+        remove: Competitor was updated.
         remove!: The сompetitor was not updated!
         finish: The current round is completed.
-        register: Registration is done.
-        register!: Registration failed!
     settings:
-        save: Competition settings saved.
-        save!: Competition settings not saved.
+        save: Competition settings were saved.
+        save!: Competition settings were not saved.
 aouth:
     login: Sign in with WCA
     logout: Sign out
@@ -53,9 +51,9 @@ competition:
             Waiting Extra Events Leaders for the approval
             of the competition announcement.
         announced: |
-            Waiting competition start (Extra Events Organizer will do this).
+            Waiting for the competition to start (Extra Events Organizer will do this).
         running: |
-            Extra Events Organizer enter the results and send them 
+            Extra Events Organizer enters the results and sends them 
             to the Extra Events Leaders for approval.
         results_approval: |
             Waiting Extra Events Leaders for the approval
@@ -112,11 +110,11 @@ competition:
         announced: Announced
         running: Running
         completed: Completed
-        results_canceled: The results canceled
+        results_canceled: The results were canceled
     registrations: Registrations for Extra Events
     register_descriptions:
         open: >-
-            You must have a WCA ID and already be registered to the competition on the WCA
+            You must have a WCA ID and have already been registered to the competition on the WCA
             website.
         close: Registration cannot be changed.
     settings: Competition settings
@@ -160,7 +158,7 @@ round:
     register:
         title: Register for Extra Events
         statuses:
-            complete: You have registered
+            complete: You have been registered
             full: There are no more spots available
             part: Waiting for team members
         registered: Registered
@@ -271,14 +269,14 @@ persons:
     title: Persons
     
 statistics:
-    world_records_country: Word records by country
+    world_records_country: World records by country
     competitions_country: Competitions by country
     persons_country: Persons by country
     events_competition_country: Events by country
     persons_event: Persons by event
     competitions_event: Competitions by event
-    countries_competition_event: Competition country by event
-    countries_person_event: Person country by event
+    countries_competition_event: Competition countries by event
+    countries_person_event: Person countries by event
     
 table:
     total: Total

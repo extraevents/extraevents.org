@@ -12,14 +12,17 @@ class backup extends Ifsnop\Mysqldump\Mysqldump {
     static function sql($attributes) {
         $db_key = $attributes->db;
         $dir_key = $attributes->dir;
+        db::add_connection($db_key);
+
         return self::use_mysqldump_sql(
                         $db_key, $dir_key
         );
     }
 
-    static function tsv($attributes) {        
+    static function tsv($attributes) {
         $db_key = $attributes->db;
         $dir_key = $attributes->dir;
+        db::add_connection($db_key);
 
         $path = self::build_path($dir_key);
         $filename_template = $db_key . "_" . date(self::$config->format_time);
@@ -69,7 +72,6 @@ class backup extends Ifsnop\Mysqldump\Mysqldump {
         $filename_path = "$path/$filename_template.sql";
         $filename = "$filename_template.sql";
         $filename_zip_path = "$filename_path.zip";
-
         self::mysqldump_init(
                 db::get_db($db_key)->config,
                 ['add-drop-table' => true]

@@ -12,8 +12,7 @@ class log_clear {
                     cron::exec_task(
                             __CLASS__ . "::go",
                             $table,
-                            $clear,
-                            $log_id
+                            $clear
                     );
                 }
             }

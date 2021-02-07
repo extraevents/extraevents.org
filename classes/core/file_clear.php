@@ -19,8 +19,7 @@ class file_clear {
                     cron::exec_task(
                             __CLASS__ . "::go",
                             $dir,
-                            $clear,
-                            $log_id
+                            $clear
                     );
                 }
             }

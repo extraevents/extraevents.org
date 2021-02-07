@@ -1,15 +1,18 @@
 <?php
 
 function build_info() {
-    info_persons_event();
-    info_competitions_event();
-    info_countries_competition_event();
-    info_countries_person_event();
+    $detail = 0;
+    $detail += info_persons_event();
+    $detail += info_competitions_event();
+    $detail += info_countries_competition_event();
+    $detail += info_countries_person_event();
 
-    info_persons_country();
-    info_competitions_country();
-    info_world_records_country();
-    info_events_competition_country();
+    $detail += info_persons_country();
+    $detail += info_competitions_country();
+    $detail += info_world_records_country();
+    $detail += info_events_competition_country();
+    return
+            $detail;
 }
 
 function info_persons_event() {
@@ -25,6 +28,8 @@ function info_persons_event() {
         db::exec("INSERT INTO info (id, count, event_id, event_name,icon_wca_revert )
                 VALUES ('$id', '$r->count', '$r->event_id', '$r->event_name', '$r->icon_wca_revert' )");
     }
+    return
+            sizeof($rows);
 }
 
 function info_competitions_event() {
@@ -40,6 +45,8 @@ function info_competitions_event() {
         db::exec("INSERT INTO info (id, count, event_id, event_name,icon_wca_revert )
                 VALUES ('$id', '$r->count', '$r->event_id', '$r->event_name', '$r->icon_wca_revert' )");
     }
+    return
+            sizeof($rows);
 }
 
 function info_countries_competition_event() {
@@ -56,6 +63,8 @@ function info_countries_competition_event() {
         db::exec("INSERT INTO info (id, count, event_id, event_name,icon_wca_revert )
                 VALUES ('$id', '$r->count', '$r->event_id', '$r->event_name', '$r->icon_wca_revert' )");
     }
+    return
+            sizeof($rows);
 }
 
 function info_countries_person_event() {
@@ -71,6 +80,8 @@ function info_countries_person_event() {
         db::exec("INSERT INTO info (id, count, event_id, event_name,icon_wca_revert )
                 VALUES ('$id', '$r->count', '$r->event_id', '$r->event_name', '$r->icon_wca_revert' )");
     }
+    return
+            sizeof($rows);
 }
 
 function info_persons_country() {
@@ -87,6 +98,8 @@ function info_persons_country() {
         db::exec("INSERT INTO info (id, count, country_iso2, country_name )
                 VALUES ('$id', '$r->count', '$r->country_iso2', '$r->country_name' )");
     }
+    return
+            sizeof($rows);
 }
 
 function info_competitions_country() {
@@ -103,6 +116,8 @@ function info_competitions_country() {
         db::exec("INSERT INTO info (id, count, country_iso2, country_name )
                 VALUES ('$id', '$r->count', '$r->country_iso2', '$r->country_name' )");
     }
+    return
+            sizeof($rows);
 }
 
 function info_world_records_country() {
@@ -121,6 +136,8 @@ function info_world_records_country() {
         db::exec("INSERT INTO info (id, count, country_iso2, country_name )
                 VALUES ('$id', '$r->count', '$r->country_iso2', '$r->country_name' )");
     }
+    return
+            sizeof($rows);
 }
 
 function info_events_competition_country() {
@@ -137,4 +154,6 @@ function info_events_competition_country() {
         db::exec("INSERT INTO info (id, count, country_iso2, country_name )
                 VALUES ('$id', '$r->count', '$r->country_iso2', '$r->country_name' )");
     }
+    return
+            sizeof($rows);
 }

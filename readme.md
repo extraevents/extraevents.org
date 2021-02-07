@@ -33,7 +33,7 @@ The organization of these events is based on the [`WCA Regulations`](https://www
 ##  Article 4: Organization
 
 - 4a) The `Extra Events Organizer` has the duty to be present when extra events are held.
-- 4b) A member `Extra Events Team` or `WCA delegate` can be a `Extra Events Organizer`.
+- 4b) A member of `Extra Events Team` or `WCA delegate` can be a `Extra Events Organizer`.
 - 4c) The `WCA organizer` sends a request for an extra event (events) and who will be the `Extra Events Organizer` to `Extra Events Leaders`.
 - 4d) Requirements for the opening of registration on extra events:
   - 4d1) Extra events can be included in the schedule on the `WCA website` in the following format: "{time} Extra Event: {event name}" . (e.g. [Sariki in Moscow 2020](https://www.worldcubeassociation.org/competitions/SarikiInMoscow2020#competition-schedule)).

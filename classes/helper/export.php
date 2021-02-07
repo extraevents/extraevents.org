@@ -14,6 +14,8 @@ class export {
 
     public static function build() {
 
+        db::add_connection(self::db());
+
         self::build_competitions();
         self::build_events();
         self::build_ranks();
