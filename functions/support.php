@@ -5,6 +5,10 @@ function support_error() {
     $short = config::get()->short;
 
     $count = sizeof(errors::get());
+    if (!$count) {
+        return
+                false;
+    }
     return
             smtp::put($email, "$short: support_error $count", "$short: support_error $count");
 }

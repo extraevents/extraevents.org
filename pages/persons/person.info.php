@@ -11,6 +11,7 @@ $build_block_member = new build_block();
 $member = new member($person->id);
 if ($member->id) {
     $build_block_member->set_title(t('team.member'));
+    $build_contacts = [];
     foreach ($member->contacts as $contact) {
         $build_contact = new build_contact($contact);
         $build_contacts[] = $build_contact->out();

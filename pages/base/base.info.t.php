@@ -1,6 +1,3 @@
-<style>
-<?php include_once('styles/external/markdown.css') ?>
-</style>    
 <a href="">
     <span class="title">
         <img align=center  src="%i/logos/color.svg">

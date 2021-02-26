@@ -11,10 +11,7 @@
         <i class="fas fa-plus-square"></i>
         <?= t('settings.create') ?>
     </button>
-</form>
-<style>
-<?php include_once('styles/external/markdown.css') ?>
-</style>    
+</form>  
 <div class='markdown-body'>
     <?= $data->markdown_competition ?>    
 </div>

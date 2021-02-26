@@ -208,6 +208,10 @@ class wcaoauth {
                 )
         );
     }
+    
+    static function location(){
+        form::return('');
+    }
 
     static function table_log() {
         return

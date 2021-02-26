@@ -33,7 +33,7 @@ class markdown {
             ]
         ]);
 
-        $converter = new CommonMarkConverter($environment->getConfig());
+        $converter = new CommonMarkConverter([],$environment);
 
         return $converter->convertToHtml($content);
     }

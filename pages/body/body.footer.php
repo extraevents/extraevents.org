@@ -3,11 +3,11 @@
 $config = config :: get();
 $mails = [
     'leaders' => [
-        'mail' => urlencode($config->email->leaders),
+        'mail' => $config->email->leaders,
         'subject' => $data->title
     ],
     'support' => [
-        'mail' => urlencode($config->email->support),
+        'mail' => $config->email->support,
         'subject' => "Support: {$data->title}"
     ],
 ];

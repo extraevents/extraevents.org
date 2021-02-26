@@ -9,7 +9,7 @@ class errors {
 
     static function __autoload() {
         error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+        ini_set('display_errors', 0);
         set_error_handler("errors::handler");
         self::$echo = config::isTest();
         register_shutdown_function("errors::shutdown");
@@ -138,61 +138,14 @@ $errstr
     static function get() {
         $result = [];
         $dir = self::dir();
-        foreach (scandir($dir) as $file) {
+        foreach (glob("$dir/*.err") as $file) {
+
             $result[] = [
                 'file' => $file,
-                'time' => filectime("$dir/$file")
+                'time' => filectime("$file")
             ];
         }
         return($result);
-    }
-
-    static function done($id) {
-        self::setStatus($id, self::_DONE);
-    }
-
-    static function work($id) {
-        self::setStatus($id, self::_WORK);
-    }
-
-    static function skip($id) {
-        for ($i = 1; $i <= $id; $i++) {
-            $status = self::getStatus($i);
-            if (in_array($status, [self::_NEW, self::_WORK])) {
-                self::setStatus($i, self::_SKIP);
-            }
-        }
-    }
-
-    private static function getStatus($id) {
-        if (!$id) {
-            return;
-        }
-        $dir = self::dir();
-        foreach (scandir($dir) as $file) {
-            $explode = explode("_", $file);
-            if (sizeof($explode) == 4
-                    and $explode[0] == $id) {
-                return $explode[3];
-            }
-        }
-    }
-
-    private static function setStatus($id, $status) {
-        if (!$id) {
-            return;
-        }
-        $dir = self::dir();
-        foreach (scandir($dir) as $file) {
-            $explode = explode("_", $file);
-            if (sizeof($explode) == 4
-                    and $explode[0] == $id) {
-                $explode[3] = $status;
-                $newFile = implode("_", $explode);
-                rename($dir . "/" . $file
-                        , $dir . "/" . $newFile);
-            }
-        }
     }
 
 }
