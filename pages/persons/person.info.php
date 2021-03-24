@@ -79,7 +79,7 @@ foreach ($results as $r) {
     ]);
     $row->add_value('event', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert) . ' ' . $r->event_name);
     $row->add_value('event_sort', $r->event_name);
-    $row->add_value('competition', competition::get_line($r->competition_id, $r->competition_name, $r->competition_country_name, $r->competition_country_iso2, "/{$r->event_id}/{$r->round_number}"));
+    $row->add_value('competition', competition::get_line($r->competition_id, $r->competition_name, $r->competition_country_name, $r->competition_country_iso2, "/results/{$r->event_id}/{$r->round_number}"));
     $row->add_value('competition_sort', $r->competition_end_date);
     $row->add_value('round_sort', $r->round_number);
     $row->add_value('round', str_replace('Combined ', '', $r->round_format));
