@@ -58,10 +58,10 @@ class centisecond {
 
         if ($full or $minute) {
             return
-                    "$minute:$second_str:$centisecond_str";
+                    "$minute:$second_str.$centisecond_str";
         } else {
             return
-                    "$second:$centisecond_str";
+                    "$second.$centisecond_str";
         }
     }
 
