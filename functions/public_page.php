@@ -8,6 +8,11 @@ function page_404() {
     );
 }
 
+function page_404_api() {
+    return
+            ["errors" => "The page you were looking for doesn't exist (404)"];
+}
+
 function page_401() {
     if (ob_get_contents())
         ob_end_clean();

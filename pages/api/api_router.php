@@ -1,10 +1,11 @@
 <?php
 
-$content = null;
 $main = request::get(1);
+$page = false;
 switch ($main) {
     case null:
         grand::include_check_grand('api.description');
+        $page = true;
         break;
     case 'v0':
         $section = request::get(2);
@@ -17,7 +18,7 @@ switch ($main) {
             case 'persons':
                 switch ($id) {
                     case null:
-                        page_404();
+                        break;
                     default:
                         $content = person::api($id);
                 }
@@ -25,7 +26,7 @@ switch ($main) {
             case 'competitions':
                 switch ($id) {
                     case null:
-                        page_404();
+                        break;
                     default:
                         $content = competition::api($id, $type);
                 }
@@ -33,15 +34,15 @@ switch ($main) {
             case 'records':
                 $content = results::api_records();
                 break;
-            default:
-                page_404_api();
         }
         break;
     default:
-        page_404_api();
 }
-if ($content !== null) {
+
+if (!$page) {
+    $content ??= page_404_api();
     ob_end_clean();
     header('Content-Type: application/json; charset=utf-8');
     exit(json::out($content));
 }
+
