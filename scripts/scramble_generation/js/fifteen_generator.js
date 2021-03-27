@@ -1,3 +1,4 @@
+// https://www.qqtimer.net 
 /*
  Random state sliding puzzle solver, written by Ben Whitmore (originally in C++).
  */

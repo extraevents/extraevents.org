@@ -1,0 +1,32 @@
+<!-- http://benwh.000webhostapp.com/software/15poprs/index.html -->
+<button onclick="run();">scramble</button><br>
+<textarea style="width: 100%; height: 80%;" spellcheck="false" id="output"></textarea>
+
+<script>
+var worker = new Worker("worker.js");
+var initialized = false;
+
+worker.addEventListener("message",
+    function(d){
+        if(d.data[0] == "initializing"){
+            console.log("initializing");
+        }
+        else if(d.data[0] == "initialized"){
+            console.log("initialized");
+            initialized = true;
+        }
+        else if(d.data[0] == "scramble"){
+            var output = document.getElementById("output");
+            output.value += d.data[2] + ". " + d.data[1] + "\n";
+        }
+    },
+false);
+
+function run(){
+    if(!initialized) return;
+
+    var n = parseInt(prompt("Number of scrambles:"));
+    document.getElementById("output").value = "Generating " + n + " scrambles\n";
+    worker.postMessage(["run", n]);
+}
+</script>
