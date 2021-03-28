@@ -3,10 +3,8 @@
     <?= $data->event->line() ?>
 </h1>
 <?= event::filter("scramble_training<>''") ?>
-<h2><?= $data->comments; ?></h2>
-<div class='training_scramble'>
-    <textarea readonly="readonly"><?= $data->scramble; ?></textarea>
-</div>
+<div><?= $data->comments; ?></div>
+<div class='training_scramble'><?= $data->scramble; ?></div>
 <div class='training_image'>
     <img src="%i/<?= $data->filename ?>?t=<?= time() ?>"/>
 </div>   

@@ -1,6 +1,11 @@
 div.training_scramble{
-    width:700px;
-    display: inline-block;
+    font-family: monospace;
+    white-space: pre-wrap;
+    font-size:24px; 
+    border:1px solid var(--black);
+    padding:10px;
+    margin: 10px 0 10px 0;
+    width:800px;
 }
 
 div.training_image{
