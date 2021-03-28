@@ -1,0 +1,15 @@
+<script src="ftosolver.js"></script>
+
+<div id="scrambles">
+</div>
+
+<script>
+    var items = '';
+    var n = 1;
+    generate_multiple_random_state_scrambles(1000).forEach((el) => {
+        items += '<br>' + n + '. ' + el;
+        n += 1;
+    });
+
+    document.getElementById('scrambles').innerHTML = items;
+</script>

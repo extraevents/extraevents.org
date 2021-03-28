@@ -188,7 +188,7 @@ curvycopter:
     scramble: generate_curvycopter
     scramble_training: generate_curvycopter_training    
     drawing: drawing_curvycopter
-    comment:
+    comments:
         - '[verify] - verify the puzzle by image'
         - '+ turn 60 degrees clockwise'
         - '++ turn 120 degrees clockwise'
@@ -199,7 +199,7 @@ dino:
     name: Dino Cube
     scramble: generate_dino
     drawing: drawing_dino
-    comment:
+    comments:
         - R - Right Front Up corner
         - L - Left Front Up corner  
     custom_wrap: true
@@ -207,18 +207,17 @@ dino:
 fto:
     name: Face-Turning Octahedron
     scramble: generate_fto
+    scramble_training: generate_fto_training
     drawing: drawing_fto
-    comment:
-        - The lightest face on the top
-        - (the base of the triangle faces itself)
-        - The darkest adjacent face on the front
-        - (out of the possible scrambling orientations)
+    comments:
+        - U - The lightest face
+        - F - The darkest face (possible scrambling orientations)
 
 ivy:
     name: Ivy Cube
     scramble: generate_ivy
     drawing: drawing_ivy
-    comment:
+    comments:
         - Up-White, Right-Green, Left-Orange
         - U - WBR, R - GRY, L - OYB, F - WGO
   

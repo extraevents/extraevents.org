@@ -2,163 +2,183 @@
 
 function drawing_fto($scramble) {
 
-    $Cell_Size = 50;
-    $Margin = 0.1;
+    $Cell_Size = 100;
+    $Margin = 0.2;
     $Padding = 0.1;
 
-    $Centers = array(
-        'U' => array('Flip' => 0, 'Padding' => [1, 0], 'x' => 0, 'y' => 0, 'Color' => 'White'),
-        'R' => array('Flip' => 0, 'Padding' => [2, 1], 'x' => 3, 'y' => 3, 'Color' => 'Grey'),
-        'F' => array('Flip' => 1, 'Padding' => [1, 1], 'x' => 0, 'y' => 3, 'Color' => 'Green'),
-        'L' => array('Flip' => 0, 'Padding' => [0, 1], 'x' => 0, 'y' => 3, 'Color' => 'Red'),
-        'BR' => array('Hidden' => true, 'Color' => 'Blue'),
-        'BL' => array('Hidden' => true, 'Color' => 'Violet'),
-        'D' => array('Hidden' => true, 'Color' => 'Yellow'),
-        'B' => array('Hidden' => true, 'Color' => 'Orange'),
-    );
+    $sides_config = [
+        'U' => ['color' => 'White', 'part_point' => [0, -2], 'part' => 'front', 'rotate' => 'up',],
+        'R' => ['color' => 'Green', 'part_point' => [2, 0], 'part' => 'front', 'rotate' => 'right',],
+        'F' => ['color' => 'Red', 'part_point' => [0, 2], 'part' => 'front', 'rotate' => 'down',],
+        'L' => ['color' => 'Violet', 'part_point' => [-2, 0], 'part' => 'front', 'rotate' => 'left',],
+        'B' => ['color' => 'Blue', 'part_point' => [0, -2], 'part' => 'back', 'rotate' => 'up'],
+        'BL' => ['color' => 'Orange', 'part_point' => [2, 0], 'part' => 'back', 'rotate' => 'right',],
+        'D' => ['color' => 'Yellow', 'part_point' => [0, 2], 'part' => 'back', 'rotate' => 'down',],
+        'BR' => ['color' => 'Grey', 'part_point' => [-2, 0], 'part' => 'back', 'rotate' => 'left',]
+    ];
 
+    $part = [
+        'front' => [3, 3],
+        'back' => [9, 3]
+    ];
 
-    foreach ($Centers as $center_name => $center) {
-        if (isset($center['Hidden'])) {
-            foreach (['1a', '2a', '3a', '1c', '2c', '3c', '1e', '2e', '3e'] as $coor_name) {
-                $Cells[$center_name][$coor_name] = FALSE;
+    $rotate = [
+        'up' => [[1, 0], [0, 1]],
+        'right' => [[0, -1], [1, 0]],
+        'down' => [[-1, 0], [0, -1]],
+        'left' => [[0, 1], [-1, 0]],
+    ];
+
+    $sides = [];
+
+    foreach ($sides_config as $side_name => $side_config) {
+        foreach ([0, 1] as $d) {
+            $side['base_point'][$d] = $side_config['part_point'][$d] +
+                    $part[$side_config['part']][$d];
+        }
+        $side['color'] = $side_config['color'];
+        $side['part'] = $side_config['part'];
+        $side['rotate'] = $rotate[$side_config['rotate']];
+        $sides[$side_name] = $side;
+    }
+
+    $cells = [];
+
+    $cells_config = [
+        'corner' => ['side_point' => [-3, -1], 'type' => 'v'],
+        'corner+' => ['side_point' => [1, -1], 'type' => 'v'],
+        'corner-' => ['side_point' => [-1, 1], 'type' => 'v'],
+        'edge' => ['side_point' => [-2, 0], 'type' => 'v'],
+        'edge+' => ['side_point' => [-1, -1], 'type' => 'v'],
+        'edge-' => ['side_point' => [0, 0], 'type' => 'v'],
+        'center' => ['side_point' => [-2, 0], 'type' => '^'],
+        'center+' => ['side_point' => [0, 0], 'type' => '^'],
+        'center-' => ['side_point' => [-1, 1], 'type' => '^'],
+    ];
+
+    $cells_type = [
+        'v' => [[0, 0], [2, 0], [1, 1]],
+        '^' => [[0, 0], [1, -1], [2, 0]],
+    ];
+
+    $cells_base_point = [];
+
+    foreach ($sides as $side_name => $side) {
+        foreach ($cells_config as $cell_name => $cell_config) {
+            $points = [];
+            foreach ($cells_type[$cell_config['type']] as $point_config) {
+                $point[0] = $side['base_point'][0] +
+                        ($cell_config['side_point'][0] + $point_config[0]) * $side['rotate'][0][0] +
+                        ($cell_config['side_point'][1] + $point_config[1]) * $side['rotate'][0][1];
+                $point[1] = $side['base_point'][1] +
+                        ($cell_config['side_point'][0] + $point_config[0]) * $side['rotate'][1][0] +
+                        ($cell_config['side_point'][1] + $point_config[1]) * $side['rotate'][1][1];
+                $points[] = $point;
             }
+            $cells[$side_name][$cell_name] = [
+                'color' => $side['color'],
+                'points' => $points,
+                'part' => $side['part']
+            ];
         }
     }
 
 
-    foreach (['2a' => [0, 0], '1e' => [1, 0], '3a' => [2, 0], '3e' => [1, 1], '2e' => [2, 1], '1a' => [2, 2]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['F'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 1 + $y]];
-    }
-
-    foreach (['2c' => [1, 0], '3c' => [2, 0], '1c' => [2, 1]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['F'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 1 + $y], ['x' => 0 + $x, 'y' => 1 + $y]];
-    }
-
-    foreach (['1a' => [0, 0], '2e' => [0, 1], '3e' => [1, 1], '3a' => [0, 2], '1e' => [1, 2], '2a' => [2, 2]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['U'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 0 + $x, 'y' => 1 + $y], ['x' => 1 + $x, 'y' => 1 + $y]];
-    }
-
-    foreach (['1c' => [0, 1], '3c' => [0, 2], '2c' => [1, 2]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['U'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 1 + $y]];
-    }
-
-    foreach (['3a' => [0, 0], '1e' => [0, 1], '2e' => [1, 1], '2a' => [0, 2], '3e' => [1, 2], '1a' => [2, 2]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['L'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 0 + $x, 'y' => 1 + $y], ['x' => 1 + $x, 'y' => 1 + $y]];
-    }
-
-    foreach (['3c' => [0, 1], '2c' => [0, 2], '1c' => [1, 2]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['L'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 1 + $y]];
-    }
-
-    foreach (['2a' => [0, 0], '3e' => [0, 1], '1e' => [1, 1], '1a' => [0, 2], '2e' => [1, 2], '3a' => [2, 2]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['R'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 0 + $x, 'y' => 1 + $y], ['x' => 1 + $x, 'y' => 1 + $y]];
-    }
-
-    foreach (['2c' => [0, 1], '1c' => [0, 2], '3c' => [1, 2]] as $coor_name => $coor_tmp) {
-        list($x, $y) = $coor_tmp;
-        $Cells['R'][$coor_name] = [['x' => 0 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 0 + $y], ['x' => 1 + $x, 'y' => 1 + $y]];
-    }
-
-
-    foreach (array_keys($Centers) as $center_name) {
-        foreach (array_keys($Cells[$center_name]) as $coor_name) {
-            $CellsColor[$center_name][$coor_name] = $Centers[$center_name]['Color'];
+    $cells_color = [];
+    foreach ($cells as $side_name => $side) {
+        foreach ($side as $cell_name => $cell) {
+            $cells_color[$side_name][$cell_name] = $cell['color'];
         }
     }
 
-
-    $Cycles = [];
-
-    $CenterCyrcles = [
-        ['1a', '2a', '3a'],
-        ['1c', '2c', '3c'],
-        ['1e', '2e', '3e']];
-
-
-    $EdgeType = [
-        'Count' => 5,
-        '1_side' => ['1a', '1c', '3e', '2c', '2a'],
-        '2_side' => ['3a', '3c', '2e', '1c', '1a'],
-        '3_side' => ['2a', '2c', '1e', '3c', '3a']
+    $cycles_side = [
+        ['corner', 'corner+', 'corner-'],
+        ['edge', 'edge+', 'edge-'],
+        ['center', 'center+', 'center-']
     ];
 
-    $EdgeTypeW = [
-        'Count' => 3,
-        '1_side' => ['2e', '3c', '1e'],
-        '2_side' => ['1e', '2c', '3e'],
-        '3_side' => ['3e', '1c', '2e']
+    $cycles_move = [];
+
+    $cycles_move['U'] = [
+        [['L', 'corner+'], ['B', 'corner'], ['R', 'corner-']],
+        [['L', 'corner-'], ['B', 'corner+'], ['R', 'corner']],
+        [['L', 'center+'], ['B', 'center'], ['R', 'center-']],
+        [['L', 'center-'], ['B', 'center+'], ['R', 'center']],
+        [['L', 'edge-'], ['B', 'edge+'], ['R', 'edge']],
+        [['F', 'corner-'], ['BL', 'corner'], ['BR', 'corner+']]
     ];
 
-    $EdgeMoveType = [
-        'F' => ['R' => '1_side', 'L' => '2_side', 'U' => '3_side'],
-        'R' => ['D' => '1_side', 'F' => '2_side', 'BR' => '3_side'],
-        'L' => ['F' => '1_side', 'D' => '2_side', 'BL' => '3_side'],
-        'U' => ['BL' => '1_side', 'BR' => '2_side', 'F' => '3_side'],
+    $cycles_move['D'] = [
+        [['BR', 'corner-'], ['BL', 'corner+'], ['F', 'corner']],
+        [['BR', 'corner'], ['BL', 'corner-'], ['F', 'corner+']],
+        [['BR', 'center-'], ['BL', 'center+'], ['F', 'center']],
+        [['BR', 'center'], ['BL', 'center-'], ['F', 'center+']],
+        [['BR', 'edge'], ['BL', 'edge-'], ['F', 'edge+']],
+        [['B', 'corner-'], ['L', 'corner'], ['R', 'corner+']]
     ];
 
-    $CornerType = [
-        'Count' => 1,
-        '1_side' => ['1a'],
-        '2_side' => ['2a'],
-        '3_side' => ['3a']
+    $cycles_move['R'] = [
+        [['U', 'corner+'], ['BR', 'corner'], ['F', 'corner-']],
+        [['U', 'corner-'], ['BR', 'corner+'], ['F', 'corner']],
+        [['U', 'center+'], ['BR', 'center'], ['F', 'center-']],
+        [['U', 'center-'], ['BR', 'center+'], ['F', 'center']],
+        [['U', 'edge-'], ['BR', 'edge+'], ['F', 'edge']],
+        [['L', 'corner-'], ['B', 'corner'], ['D', 'corner+']]
     ];
 
-    $CornerTypeW = [
-        'Count' => 3,
-        '1_side' => ['3e', '1c', '2e'],
-        '2_side' => ['1e', '2c', '3e'],
-        '3_side' => ['2e', '3c', '1e']
-    ];
-
-    $CornerMoveType = [
-        'F' => ['D' => '1_side', 'BL' => '2_side', 'BR' => '3_side'],
-        'R' => ['L' => '1_side', 'U' => '2_side', 'B' => '3_side'],
-        'L' => ['R' => '1_side', 'B' => '2_side', 'U' => '3_side'],
-        'U' => ['B' => '1_side', 'R' => '2_side', 'L' => '3_side']
+    $cycles_move['BL'] = [
+        [['D', 'corner-'], ['B', 'corner+'], ['L', 'corner']],
+        [['D', 'corner'], ['B', 'corner-'], ['L', 'corner+']],
+        [['D', 'center-'], ['B', 'center+'], ['L', 'center']],
+        [['D', 'center'], ['B', 'center-'], ['L', 'center+']],
+        [['D', 'edge'], ['B', 'edge-'], ['L', 'edge+']],
+        [['BR', 'corner-'], ['U', 'corner'], ['F', 'corner+']]
     ];
 
 
-    foreach (array_keys($CornerMoveType) as $centerName) {
-        foreach ($CenterCyrcles as $centerCyrcle) {
-            $cycle = [];
-            foreach ($centerCyrcle as $centerCyrcleCell) {
-                $cycle[] = [$centerName, $centerCyrcleCell];
+    $cycles_move['L'] = [
+        [['U', 'corner'], ['F', 'corner-'], ['BL', 'corner+']],
+        [['U', 'corner-'], ['F', 'corner+'], ['BL', 'corner']],
+        [['U', 'center'], ['F', 'center-'], ['BL', 'center+']],
+        [['U', 'center-'], ['F', 'center+'], ['BL', 'center']],
+        [['U', 'edge'], ['F', 'edge-'], ['BL', 'edge+']],
+        [['R', 'corner-'], ['D', 'corner'], ['B', 'corner+']]
+    ];
+
+    $cycles_move['BR'] = [
+        [['D', 'corner-'], ['R', 'corner+'], ['B', 'corner']],
+        [['D', 'corner+'], ['R', 'corner'], ['B', 'corner-']],
+        [['D', 'center-'], ['R', 'center+'], ['B', 'center']],
+        [['D', 'center+'], ['R', 'center'], ['B', 'center-']],
+        [['D', 'edge-'], ['R', 'edge+'], ['B', 'edge']],
+        [['BL', 'corner-'], ['F', 'corner'], ['U', 'corner+']]
+    ];
+
+    $cycles_move['F'] = [
+        [['L', 'corner-'], ['R', 'corner+'], ['D', 'corner']],
+        [['L', 'corner'], ['R', 'corner-'], ['D', 'corner+']],
+        [['L', 'center-'], ['R', 'center+'], ['D', 'center']],
+        [['L', 'center'], ['R', 'center-'], ['D', 'center+']],
+        [['L', 'edge'], ['R', 'edge-'], ['D', 'edge+']],
+        [['U', 'corner-'], ['BR', 'corner'], ['BL', 'corner+']]
+    ];
+
+    $cycles_move['B'] = [
+        [['BR', 'corner-'], ['U', 'corner+'], ['BL', 'corner']],
+        [['BR', 'corner+'], ['U', 'corner'], ['BL', 'corner-']],
+        [['BR', 'center-'], ['U', 'center+'], ['BL', 'center']],
+        [['BR', 'center+'], ['U', 'center'], ['BL', 'center-']],
+        [['BR', 'edge-'], ['U', 'edge+'], ['BL', 'edge']],
+        [['D', 'corner-'], ['R', 'corner'], ['L', 'corner+']]
+    ];
+
+    foreach ($sides as $side_name => $side) {
+        foreach ($cycles_side as $cycle_side) {
+            $cycle_elements = [];
+            foreach ($cycle_side as $cycle_element) {
+                $cycle_elements[] = [$side_name, $cycle_element];
             }
-            $Cycles[$centerName][] = $cycle;
-        }
-
-
-        $MetaMoves = [
-            ['type' => $EdgeType, 'movetype' => $EdgeMoveType, 'cyclenameadd' => ''],
-            ['type' => $EdgeTypeW, 'movetype' => $EdgeMoveType, 'cyclenameadd' => 'w'],
-            ['type' => $CornerType, 'movetype' => $CornerMoveType, 'cyclenameadd' => ''],
-            ['type' => $CornerTypeW, 'movetype' => $CornerMoveType, 'cyclenameadd' => 'w'],
-        ];
-
-        foreach ($MetaMoves as $metaMove) {
-            for ($et = 0; $et < $metaMove['type']['Count']; $et++) {
-                $cycle = [];
-                foreach ($metaMove['movetype'][$centerName] as $centerEdgeName => $edgeType) {
-                    $cycle[] = [$centerEdgeName, $metaMove['type'][$edgeType][$et]];
-                }
-                $Cycles[$centerName . $metaMove['cyclenameadd']][] = $cycle;
-            }
-        }
-    }
-
-    foreach ($Cycles as $centerName => $cycles) {
-        if (substr($centerName, -1, 1) != 'w') {
-            foreach ($cycles as $cycle) {
-                $Cycles[$centerName . "w"][] = $cycle;
-            }
+            $cycles_move[$side_name][] = $cycle_elements;
         }
     }
 
@@ -167,76 +187,61 @@ function drawing_fto($scramble) {
 
     foreach (explode(" ", $scramble) as $move) {
         $move_clear = str_replace(["\'", "'"], "", $move);
-        if ($move_clear <> "" and isset($Cycles[$move_clear])) {
-            $Paddingirect = !(strpos($move, "'") !== false);
-            $CellsColor = Rotate($CellsColor, $Cycles, $move_clear, $Paddingirect);
+        if ($move_clear <> "" and isset($cycles_move[$move_clear])) {
+            $direct = !(strpos($move, "'") !== false);
+            $cells_color = Rotate($cells_color, $cycles_move, $move_clear, $direct);
         }
     }
 
 
-    $im = imagecreate($Cell_Size * ($Margin * 2 + 6 + 2 * $Padding), $Cell_Size * ($Margin * 2 + (6 + $Padding) * (sqrt(3) / 2)));
+    $im = imagecreate($Cell_Size * ($Margin + 12 + 2 * $Padding), $Cell_Size * (6 + 2 * $Padding));
     $white = imagecolorallocate($im, 250, 255, 255);
     $black = imagecolorallocate($im, 0, 0, 0);
 
     $Colors = array(
-        'Grey' => imagecolorallocate($im, 153, 153, 153),
-        'Red' => imagecolorallocate($im, 200, 0, 0),
-        'Green' => imagecolorallocate($im, 0, 255, 0),
+        'Grey' => imagecolorallocate($im, 188, 188, 188),
+        'Red' => imagecolorallocate($im, 255, 0, 0),
+        'Green' => imagecolorallocate($im, 0, 233, 0),
         'White' => imagecolorallocate($im, 254, 254, 254),
-        'Blue' => imagecolorallocate($im, 35, 0, 186),
-        'Yellow' => imagecolorallocate($im, 255, 225, 34),
-        'Violet' => imagecolorallocate($im, 157, 0, 255),
-        'Orange' => imagecolorallocate($im, 255, 146, 20),
+        'Blue' => imagecolorallocate($im, 55, 0, 255),
+        'Yellow' => imagecolorallocate($im, 251, 255, 0),
+        'Violet' => imagecolorallocate($im, 140, 0, 130),
+        'Orange' => imagecolorallocate($im, 255, 170, 0),
     );
 
 
     $Polygons = array();
-    foreach ($Centers as $center_name => $center) {
-        if (!isset($center['Hidden'])) {
-            foreach ($Cells[$center_name] as $cell_name => $coor) {
-                $pairs = array();
-                foreach ($coor as $xy) {
-                    $X = $center['x'] + $xy['x'];
-                    $Y = $center['y'] + $xy['y'];
-                    $pairs[] = array(3 + $X - $Y / 2 + $center['Padding'][0] * $Padding, 0 + $Y * (sqrt(3) / 2) + $center['Padding'][1] * $Padding);
-                }
-                $Polygons[] = array($pairs, $Colors[$CellsColor[$center_name][$cell_name]]);
-            }
+
+    foreach ($cells as $side_name => $side_cells) {
+        foreach ($side_cells as $cell_name => $cell) {
+            $Polygons[] = [$cell['points'], $Colors[$cells_color[$side_name][$cell_name]], $cell['part']];
         }
     }
     foreach ($Polygons as $Polygon) {
-        imagesetthickness($im, 1);
-
+        imagesetthickness($im, 3);
         $Points = array();
-
         foreach ($Polygon[0] as $point) {
-            $point[0] = $Cell_Size * ($point[0] + $Margin);
-            $point[1] = $Cell_Size * ($point[1] + $Margin);
+            $point[0] = $Cell_Size * ($point[0] + $Padding + $Margin * ($Polygon[2] == 'back' ? 1 : 0));
+            $point[1] = $Cell_Size * ($point[1] + $Padding);
             $Points[] = $point[0];
             $Points[] = $point[1];
         }
-
         imagefilledpolygon($im, $Points, sizeof($Points) / 2, $Polygon[1]);
         imagepolygon($im, $Points, sizeof($Points) / 2, $black);
     }
+    imagesetthickness($im, 8);
+    imageline($im, $Cell_Size * $Padding, $Cell_Size * $Padding, $Cell_Size * (6 + $Padding), $Cell_Size * (6 + $Padding), $black);
+    imageline($im, $Cell_Size * $Padding, $Cell_Size * (6 + $Padding), $Cell_Size * (6 + $Padding), $Cell_Size * $Padding, $black);
+    imageline($im, $Cell_Size * (6 + $Padding + $Margin), $Cell_Size * $Padding, $Cell_Size * (12 + $Padding + $Margin), $Cell_Size * (6 + $Padding), $black);
+    imageline($im, $Cell_Size * (6 + $Padding + $Margin), $Cell_Size * (6 + $Padding), $Cell_Size * (12 + $Padding + $Margin), $Cell_Size * $Padding, $black);
 
-
-    foreach ($Centers as $name => $center) {
-        if (!isset($center['Hidden'])) {
-
-            $dx = 1;
-            $dy = 2;
-            if ($center['Flip']) {
-                $dx = 2;
-                $dy = 1;
-            }
-            $X = $Margin * $Cell_Size + (3 + ($center['x'] + $dx) - ($center['y'] + $dy) / 2 + $center['Padding'][0] * $Padding) * $Cell_Size;
-            $Y = $Margin * $Cell_Size + (0 + ($center['y'] + $dy) * (sqrt(3) / 2) + $center['Padding'][1] * $Padding) * $Cell_Size;
-            imagefilledellipse($im, $X, $Y, 30, 30, $Colors[$Centers[$name]['Color']]);
-            imageellipse($im, $X, $Y, 30, 30, $black);
-            $param = image_size(20, 'fonts/arial_bold.ttf', $name);
-            imagefttext($im, 20, 0, $X - $param['weith'] / 2 - $param['dx'], $Y + $param['height'] / 2 - $param['dy'], $black, 'fonts/arial_bold.ttf', $name);
-        }
+    foreach ($sides as $side_name => $side) {
+        $X = $Cell_Size * ($Padding + $side['base_point'][0] + $Margin * ($side['part'] == 'back' ? 1 : 0));
+        $Y = $Cell_Size * ($Padding + $side['base_point'][1]);
+        imagefilledellipse($im, $X, $Y, $Cell_Size, $Cell_Size, $white);
+        imageellipse($im, $X, $Y, $Cell_Size, $Cell_Size, $black);
+        $param = image_size($Cell_Size * 0.4, 'fonts/arial_bold.ttf', $side_name);
+        imagefttext($im, $Cell_Size * 0.4, 0, $X - $param['weith'] / 2 - $param['dx'], $Y + $param['height'] / 2 - $param['dy'], $black, 'fonts/arial_bold.ttf', $side_name);
     }
 
     return $im;
