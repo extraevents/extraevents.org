@@ -24,7 +24,7 @@ class import_team {
         }
 
         $validator = new json_schema();
-        $validator->validate($json, json_decode(file_get_contents('import/team_schema.json')));
+        $validator->validate($json, json_decode(file_get_contents('schema_json/team_schema.json')));
         if (!$validator->isValid()) {
             $errors = false;
             foreach ($validator->getErrors() as $error) {

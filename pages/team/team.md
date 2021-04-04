@@ -1,6 +1,23 @@
 
 # Format for Extra Events Team
 
+## Member creation template
+```json
+[
+    {
+        "id": "ENTER_WCAID",
+        "is_leader": false,
+        "description": "Trainee",
+        "contacts": [
+            {
+                "type": "email",
+                "value": "ENTER_EMAIL"
+            }
+        ]
+    }
+]
+```
+
 ## Objects
 
 The specification defines the following types:
