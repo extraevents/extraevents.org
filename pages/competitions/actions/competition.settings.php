@@ -62,7 +62,7 @@ if (!$api_competition) {
 }
 
 foreach ($json->organizers as $o => $organizer) {
-    $user = wcaapi::get("users/$organizer")->user??false;
+    $user = wcaapi::get("users/$organizer")->user ?? false;
     if (!$user) {
         $errors[] = "User $organizer not found in the WCA";
     } else {
@@ -74,7 +74,9 @@ foreach ($json->organizers as $o => $organizer) {
 $json->organizers = array_unique($json->organizers);
 
 $events = [];
-foreach ($json->events as $round) {
+foreach ($json->events as &$round) {
+    $round->cutoff *= 100;
+    $round->time_limit *= 100;
     $event = new event($round->id);
     if (!$event->id) {
         $errors[] = "Extra event $round->id not found.";
@@ -82,6 +84,7 @@ foreach ($json->events as $round) {
         $events[$round->id][] = $round->round;
     }
 }
+unset($round);
 
 if (sizeof($errors)) {
     message::set_custom('settings_error', implode('<br>', $errors));

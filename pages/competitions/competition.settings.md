@@ -15,7 +15,7 @@ The specification defines the following types:
       "id": "222pyra",
       "round": 1,
       "format": "a",
-      "time_limit": 60000,
+      "time_limit": 600,
       "competitor_limit": 12
     }
   ]
@@ -54,8 +54,8 @@ Represents data of an event held at the competition.
 | `id` | `String` | The extra event identifier. |
 | `round` | `Integer` | The round number. `1\|2\|3\|4` |
 | `format` | `String` | The round format. `"1"\|"2"\|"3"\|"a"\|"m"` |
-| `cutoff` | `Integer` | The cutoff in this round (in centiseconds). |
-| `time_limit` | `Integer` | The time limit in this round (in centiseconds). |
+| `cutoff` | `Integer` | The cutoff in this round (in seconds). |
+| `time_limit` | `Integer` | The time limit in this round (in seconds). |
 | `time_limit_cumulative` | `Boolean` | Is the cumulative limit used. |
 | `competitor_limit` | `Integer` | The competitors limit. |
 
@@ -66,18 +66,9 @@ Represents data of an event held at the competition.
     "id": 222pyra,
     "round": 1,
     "format": "a",
-    "cutoff": 3000,
-    "timeLimit": 60000,
+    "cutoff": 30,
+    "timeLimit": 600,
     "isCumulative": false,
     "competitorLimit": 12
-}
-```
-
-### Example
-
-```json
-{
-  "type": "email",
-  "value": "test@speedcubingextraevents.org"
 }
 ```

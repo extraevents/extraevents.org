@@ -582,8 +582,8 @@ class competition {
                 'round_number' => $round->round_number + 0,
                 'round_type_id' => $round->round_id,
                 'format' => $round->format_id,
-                'cutoff' => $round->cutoff + 0,
-                'time_limit' => $round->time_limit + 0,
+                'cutoff' => $round->cutoff / 100 + 0,
+                'time_limit' => $round->time_limit / 100 + 0,
                 'time_limit_cumulative' => boolval($round->time_limit_cumulative),
                 'competitor_limit' => $round->competitor_limit + 0
             ];
@@ -612,8 +612,8 @@ class competition {
                 'id' => $round->event_id,
                 'round' => $round->round_number + 0,
                 'format' => $round->format_id,
-                'cutoff' => $round->cutoff + 0,
-                'time_limit' => $round->time_limit + 0,
+                'cutoff' => $round->cutoff / 100 + 0,
+                'time_limit' => $round->time_limit / 100 + 0,
                 'time_limit_cumulative' => boolval($round->time_limit_cumulative),
                 'competitor_limit' => $round->competitor_limit + 0
             ];
