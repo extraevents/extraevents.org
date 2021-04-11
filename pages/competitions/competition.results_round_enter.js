@@ -181,9 +181,9 @@ function input_to_centisecond(el) {
     var value = el.val();
     if (value === '') {
         el.data('centisecond', 0);
-    } else if (value.indexOf('f') !== -1 || value.indexOf('F') !== -1) {
+    } else if (value.slice(-1) == 'f' || value.slice(-1) == 'F') {
         el.data('centisecond', -1);
-    } else if (value.indexOf('s') !== -1 || value.indexOf('S') !== -1) {
+    } else if (value.slice(-1) == 's' || value.slice(-1) == 'S') {
         el.data('centisecond', -2);
     } else {
         value = value.replace(/\D+/g, '');
