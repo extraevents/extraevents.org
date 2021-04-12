@@ -52,7 +52,7 @@ class grand {
     }
 
     static function resolve_access_global($dir, $file) {
-        $grand_dir = self::static_set_grand("includes/$dir");
+        $grand_dir = self::static_set_grand("pages/$dir");
         $grand_file = $grand_dir->$file ?? false;
         return
                 (new access($grand_file))->allowed;

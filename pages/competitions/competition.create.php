@@ -13,7 +13,7 @@ $settings = json::out(
                             'id' => 'ENTER_HERE_ID_EVENT',
                             'round' => 1,
                             'format' => 'a',
-                            'time_limit' => 60000,
+                            'time_limit' => 600,
                             'competitor_limit' => 12
                         ]
                     ]

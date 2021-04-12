@@ -75,6 +75,8 @@ $json->organizers = array_unique($json->organizers);
 
 $events = [];
 foreach ($json->events as &$round) {
+    $round->cutoff ??= 0;
+    $round->time_limit ??= 0;
     $round->cutoff *= 100;
     $round->time_limit *= 100;
     $event = new event($round->id);

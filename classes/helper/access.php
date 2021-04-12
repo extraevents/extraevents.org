@@ -95,7 +95,7 @@ class access {
 
     private function check_member() {
         return
-                $this->member;
+                $this->member ?? false;
     }
 
     private function check_leader() {
