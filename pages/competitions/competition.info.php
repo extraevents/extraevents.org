@@ -49,16 +49,21 @@ $table->add_head('format', t('round.format'));
 $table->add_head('time_limit', t('round.time_limit'));
 $table->add_head('cutoff', t('round.cutoff'));
 $table->add_head('competitor_limit', t('round.competitor_limit'));
-foreach ($competition->rounds as $r) {
+foreach ($competition->rounds as $round) {
     $row = new build_row();
-    $row->add_value('image', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert));
-    $row->add_value('name', $r->event_name);
-    $row->add_value('round', $r->round_format);
-    $row->add_value('format', $r->format_name);
-    $row->add_value('cutoff', centisecond::out($r->cutoff, true));
-    $row->add_value('time_limit', centisecond::out($r->time_limit, true) .
-            ($r->time_limit_cumulative ? (' ' . t('round.cumulative')) : ''));
-    $row->add_value('competitor_limit', $r->competitor_limit);
+    $row->add_value('image', event::get_image($round->event_id, $round->event_name, $round->icon_wca_revert));
+    if ($competition->show_results()) {
+        $results_view_link = "competitions/$competition->id/results/{$round->event_id}/{$round->round_number}";
+        $row->add_value('name', "<a href= '%i/$results_view_link' >$round->event_name</>");
+    } else {
+        $row->add_value('name', $round->event_name);
+    }
+    $row->add_value('round', $round->round_format);
+    $row->add_value('format', $round->format_name);
+    $row->add_value('cutoff', centisecond::out($round->cutoff, true));
+    $row->add_value('time_limit', centisecond::out($round->time_limit, true) .
+            ($round->time_limit_cumulative ? (' ' . t('round.cumulative')) : ''));
+    $row->add_value('competitor_limit', $round->competitor_limit);
     $table->add_tr($row);
 }
 

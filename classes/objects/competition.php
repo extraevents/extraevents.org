@@ -333,7 +333,7 @@ class competition {
     }
 
     static function get_line($id, $name, $country_name, $country_iso2, $ext = false) {
-        $url = strtolower("%i/competitions/$id$ext");
+        $url = "%i/competitions/$id$ext";
         $flag = region::flag($country_name, $country_iso2);
 
         return <<<out
