@@ -237,6 +237,8 @@ navigation:
     wca_delegates: WCA Delegates
     competition_create: Create competition
     team_import: Import Team
+    support: Support
+    support_login_share: Support / Login share
 api:
     title: Extra Events API
     

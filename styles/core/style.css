@@ -570,6 +570,10 @@ a{
     color:var(--red);
 }
 
+.message{
+    color:var(--green);
+}
+
 .table_double_info{
     width: 100%;
 }
@@ -715,5 +719,5 @@ textarea.settings{
 }
 
 textarea.json_invalid{
-   color: var(--light_red);
+    color: var(--light_red);
 }

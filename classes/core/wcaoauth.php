@@ -173,10 +173,7 @@ class wcaoauth {
             $row = self::$user;
         } else {
             $session = self::get_session();
-            $row = db::row("SELECT user_id, wca_id, name "
-                            . "FROM `" . self::table_log() . "` "
-                            . "WHERE session = '" . $session . "' and `auth_end` is null ",
-                            helper::db());
+            $row = self::get_user_by_session($session);
             if (!$row) {
                 unset($_SESSION[self::SESSION]);
             }
@@ -185,12 +182,21 @@ class wcaoauth {
         return $row;
     }
 
-    private static function get_session() {
+    static function get_user_by_session($session) {
+        return db::row("SELECT user_id, wca_id, name "
+                        . "FROM `" . self::table_log() . "` "
+                        . "WHERE session = '" . $session . "' and `auth_end` is null ",
+                        helper::db());
+    }
+
+    public static function get_session() {
         return $_SESSION[self::SESSION] ??= FALSE;
     }
 
-    private static function set_session() {
-        $session = bin2hex(random_bytes(16));
+    public static function set_session($session = false) {
+        if (!$session) {
+            $session = bin2hex(random_bytes(16));
+        }
         $_SESSION[self::SESSION] = $session;
         return $session;
     }
@@ -208,8 +214,8 @@ class wcaoauth {
                 )
         );
     }
-    
-    static function location(){
+
+    static function location() {
         form::return('');
     }
 

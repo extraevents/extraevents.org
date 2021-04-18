@@ -2,7 +2,7 @@
 
 ## Article E1: Redesign
 - E1a) New site is <https://extraevents.org>
-- E1b) The logo changes from <img src="https://speedcubingextraevents.org/Logo/Logo_Color.png" height="50" align="middle"/> to <img src="https://extraevents.org/logos/color.svg"  height="58" align="middle"/>
+- E1b) The logo changes to <img src="https://extraevents.org/logos/color.svg"  height="58" align="middle"/>
 
 ## Article E2: Renaming
 - E2a) `Speedcubing Extra Events` was replaced by `Extra Events`

@@ -66,3 +66,9 @@ export:
     
 evolution:
     file: evolution
+    
+info:
+    file: base_router
+    
+support:
+    file: base_router
