@@ -115,7 +115,6 @@ class competition {
 
     function import($json) {
 
-        $country_id = db::row("SELECT id FROM countries WHERE iso2 ='{$json->api_competition->country_iso2}'")->id ?? false;
         $registration_close = strtotime($json->registration_close);
 
         if (!$this->id) {
@@ -125,18 +124,12 @@ class competition {
             $this->log_status(false, self::DRAFT);
         }
 
-        db::exec("  UPDATE competitions 
-                    SET 
-                        country_id = '$country_id',
-                        name = '{$json->api_competition->name}',
-                        city = '{$json->api_competition->city}',
-                        start_date = '{$json->api_competition->start_date}',
-                        end_date = '{$json->api_competition->end_date}',
+        db::exec("  UPDATE competitions SET    
                         contact = '{$json->contact}',
                         registration_close = FROM_UNIXTIME($registration_close)
                     WHERE id = '{$json->id}'     
                 ");
-
+        self::update_from_wca();
         db::exec("DELETE FROM organizers WHERE competition_id = '$json->id'");
 
         foreach ($json->organizers as $organizer) {
@@ -151,6 +144,27 @@ class competition {
         }
         self::set_final($this->id);
         round::set_rounds_type();
+        return true;
+    }
+
+    function update_from_wca() {
+        $api_competition = wcaapi::get("competitions/$this->id");
+        if (!$api_competition) {
+            db::exec("  UPDATE competitions
+                        SET name = 'draft: {$this->id}'
+                        WHERE id = '{$this->id}' ");
+            return false;
+        }
+        $country_id = db::row("SELECT id FROM countries WHERE iso2 ='{$api_competition->country_iso2}'")->id ?? false;
+        db::exec("  UPDATE competitions 
+                            SET 
+                                country_id = '$country_id',
+                                name = '{$api_competition->name}',
+                                city = '{$api_competition->city}',
+                                start_date = '{$api_competition->start_date}',
+                                end_date = '{$api_competition->end_date}'
+                            WHERE id = '{$this->id}'     
+                ");
         return true;
     }
 
@@ -194,6 +208,13 @@ class competition {
     public function set_status($status) {
         if (in_array($status, $this->actions())) {
             $this->log_status($this->status, $status);
+
+            if ($this->status == self::DRAFT and $status == self::ANNOUNCEMENT_APPROVAL) {
+                if (!self::update_from_wca()) {
+                    return false;
+                }
+            }
+
             db::exec("  UPDATE competitions 
                         SET status ='$status'
                         WHERE id = '$this->id'");

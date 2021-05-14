@@ -7,8 +7,9 @@ message:
             not_post!: The page only supports post requests!
     competition:
         status_updated: Сompetition status has been updated
-        status_updated!: Сompetition status has not been updated!
+        status_updated!: Сompetition status has not been updated! Competitions announced at WCA?
         login_required!: Sign in with WCA required!
+        deleted: Сompetition deleted 
     competitor:
         login: You are logged in.
         logout: You are logged out.
@@ -65,7 +66,7 @@ competition:
             For more information, contact the Extra Events Organizer.
     actions:
         draft__delete: Delete the competition
-        draft__announcement_approval: Send the competition announcement for approval
+        draft__announcement_approval: Send the competition announcement for approval (update info from WCA)
         announcement_approval__draft: Take a step back
         announcement_approval__announced: Approve the competition announcement
         announced__announcement_approval: Take a step back

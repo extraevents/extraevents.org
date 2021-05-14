@@ -51,16 +51,6 @@ if ($competition->id) {
     }
 }
 
-
-$api_competition = wcaapi::get("competitions/$json->id");
-if (!$api_competition) {
-    message::set_custom('settings_error', "Сompetition $json->id not found on the WCA");
-    form::return();
-} else {
-    $json->id = $api_competition->id;
-    $json->api_competition = $api_competition;
-}
-
 foreach ($json->organizers as $o => $organizer) {
     $user = wcaapi::get("users/$organizer")->user ?? false;
     if (!$user) {
