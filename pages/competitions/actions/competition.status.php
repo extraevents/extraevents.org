@@ -11,11 +11,16 @@ if ($new_status == competition::DELETE) {
         form::process(false, ['status' => $new_status], 'competition.status_updated!');
     }
 } else {
-
-    if ($competition->set_status($new_status)) {
-        form::process(true, ['status' => $new_status], 'competition.status_updated');
-    } else {
-        form::process(false, ['status' => $new_status], 'competition.status_updated!');
+    switch ($competition->set_status($new_status)) {
+        case 'OK':
+            form::process(true, ['status' => $new_status], 'competition.status_updated');
+            break;
+        case 'ERROR':
+            form::process(false, ['status' => $new_status], 'competition.status_updated!');
+            break;
+        case 'NOT_FOUND':
+            form::process(false, ['status' => $new_status], 'competition.not_found!');
+            break;
     }
 }
 form::return();

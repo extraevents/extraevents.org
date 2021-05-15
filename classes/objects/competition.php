@@ -209,11 +209,15 @@ class competition {
         if (in_array($status, $this->actions())) {
             $this->log_status($this->status, $status);
 
-            if ($this->status == self::DRAFT and $status == self::ANNOUNCEMENT_APPROVAL) {
-                if (!self::update_from_wca()) {
-                    return false;
-                }
+            if ($this->status == self::DRAFT
+                    and in_array($status, [
+                        self::DRAFT,
+                        self::ANNOUNCEMENT_APPROVAL
+                    ])
+                    and!self::update_from_wca()) {
+                return 'NOT_FOUND';
             }
+
 
             db::exec("  UPDATE competitions 
                         SET status ='$status'
@@ -235,9 +239,9 @@ class competition {
                 results::update_rank();
                 results::update_records();
             }
-            return true;
+            return 'OK';
         }
-        return false;
+        return 'ERROR';
     }
 
     function get_round($event_id, $round_number) {
@@ -424,6 +428,7 @@ class competition {
         $flow = [
             self::DRAFT => [
                 self::DELETE,
+                self::DRAFT,
                 self::ANNOUNCEMENT_APPROVAL
             ],
             self::ANNOUNCEMENT_APPROVAL => [

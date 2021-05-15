@@ -34,6 +34,11 @@ if (!$validator->isValid()) {
     form::return();
 }
 
+if ($json->id == 'ENTER_HERE_ID_COMPETITION') {
+    message::set_custom('settings_error', "Requires a real competition id");
+    form::return();
+}
+
 if ($competition->id) {
     if ($competition->id != $json->id) {
         message::set_custom('settings_error', "Сompetition id does not change ");

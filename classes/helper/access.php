@@ -32,11 +32,6 @@ class access {
                 (new access('organizer'))->allowed;
     }
 
-    static function is_organizers() {
-        return
-                (new access('organizers'))->allowed;
-    }
-
     static function is_member() {
         return
                 (new access('member'))->allowed;
