@@ -5,7 +5,11 @@ $person = page::get_object('person');
 $results = results::get(false, ['is_publish', 'person' => $person->id]);
 $block = new build_block();
 $block->add_element(t('persons.country'), $person->country_name);
-$block->add_element(t('persons.wca_id'), "<a data-external-link='https://www.worldcubeassociation.org/persons/{$person->id}'>{$person->id}</a>");
+if ($person->is_real) {
+    $block->add_element(t('persons.wca_id'), "<a data-external-link='https://www.worldcubeassociation.org/persons/{$person->id}'>{$person->id}</a>");
+}else{
+    $block->add_element(t('persons.ee_id'), "{$person->id}");
+}
 
 $build_block_member = new build_block();
 $member = new member($person->id);
@@ -22,8 +26,7 @@ if ($member->id) {
     $build_block_member->add_element(t('team.description'), $member->description);
 }
 
-$ranks = db::rows(str_replace('@person', $person->id, $sql));
-
+$ranks = sql_query::rows('rank_by_person', ['person' => $person->id]);
 
 $table_personal = new build_table(t('persons.records'));
 $table_personal->add_head('event', t('results.event'));

@@ -176,6 +176,13 @@ import_team:
             name: import_team
             clear: #day
             depth: #month
+            
+update_wcaid:            
+    table:
+        log:
+            name: update_wcaid
+            clear: #day
+            depth: #year
 
 round:
     table:
@@ -267,3 +274,7 @@ cron:
         12: 
             command: build_info
             run: #hour 
+            
+        13: 
+            command: update_wcaid::cron
+            run: #week     

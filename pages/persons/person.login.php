@@ -1,7 +1,8 @@
 <?php
 
 $user = wcaoauth::authorize();
-if ($user->wca_id ?? false) {
-    person::update($user->wca_id, $user->name, false, $user->country_iso2);
+if ($user->ee_id != $user->wca_id) {
+    update_wcaid::update($user->ee_id, $user->wca_id);
 }
+person::update($user->wca_id, $user->name, false, $user->country_iso2);
 form::return('');

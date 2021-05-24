@@ -47,6 +47,8 @@ class wcaoauth {
             self::session_error(['id' => false]);
             self::location();
         } else {
+            $getMeCurl->ee_id = 'EE_' . $getMeCurl->id;
+            $getMeCurl->wca_id ??= $getMeCurl->ee_id;
             self::session_begin($getMeCurl);
         }
         return $getMeCurl;
@@ -145,8 +147,10 @@ class wcaoauth {
                 helper::db());
     }
 
-    public static function session_end_all() {
-        $user_id = self::user_id();
+    public static function session_end_all($user_id = false) {
+        if (!$user_id) {
+            $user_id = self::user_id();
+        }
         if (!$user_id) {
             return false;
         }

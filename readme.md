@@ -48,7 +48,6 @@ The organization of these events is based on the [`WCA Regulations`](https://www
 - 5b) Registration сonditions for extra events:
     - 5a1) The competitor sign in `Extra Events website` with `WCA website` authorization.
     - 5b2) Conditions on the `WCA website`:
-        - 5b2a) The competitor must have a `WCA ID`.
         - 5b2b) The competitor must already be registered to the same competition.
     - 5b3) Conditions on the `Extra Events website`:
         - 5b3a) Registration on extra events should not be finished yet.

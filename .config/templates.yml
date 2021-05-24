@@ -264,6 +264,7 @@ export:
 persons:
     country: Country
     wca_id: WCA ID
+    ee_id: Not a WCA ID 
     name: Name
     records: Current Personal Records
     results: Results
