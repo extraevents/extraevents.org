@@ -6,21 +6,18 @@ class person {
     public $name;
     public $country_name;
     public $country_iso2;
+    public $is_real = true;
 
     function __construct($id) {
-        $row = db::row("SELECT
-                p.id,
-                p.name,
-                cy.name country_name,
-                cy.iso2 country_iso2
-                FROM `persons` p 
-                JOIN `countries` cy ON cy.id=p.country_id
-                WHERE LOWER(p.id) = LOWER('$id')");
-        if ($row) {
-            $this->id = $row->id;
-            $this->name = $row->name;
-            $this->country_name = $row->country_name;
-            $this->country_iso2 = $row->country_iso2;
+
+        $person = sql_query::row('person_by_id', ['id' => $id]);
+
+        if ($person) {
+            $this->id = $person->id;
+            $this->name = $person->name;
+            $this->country_name = $person->country_name;
+            $this->country_iso2 = $person->country_iso2;
+            $this->is_real = substr($this->id, 0, 3) != 'EE_';
         }
     }
 
@@ -43,15 +40,13 @@ class person {
     static function update($id, $name, $country_id, $country_iso2 = false) {
 
         $name = db::escape(trim(preg_replace('/\(.*?\)/', '', $name)));
+
         if ($country_iso2) {
-            $country_id = db::row("SELECT * FROM countries WHERE iso2='$country_iso2'")->id ?? false;
+            $country = sql_query::row('country_by_iso2', ['iso2' => $country_iso2]);
+            $country_id = $country->id ?? false;
         }
 
-        db::exec("INSERT INTO persons (id,country_id,name)
-                        VALUES ('$id','$country_id','$name') 
-                        ON DUPLICATE KEY
-                        UPDATE country_id='$country_id', name='$name'
-                ");
+        sql_query::exec('person_actual', ['id' => $id, 'country' => $country_id, 'name' => $name]);
     }
 
     static function api($id) {
@@ -60,21 +55,7 @@ class person {
         if (!$api['person']->id) {
             return ['errors' => "Person with id $id not found"];
         }
-
-        $rows = db::rows("
-        SELECT 
-            e.id event_id,
-            r.result_type,
-            r.result,
-            r.world_rank,
-            r.continent_rank,
-            r.country_rank
-        FROM events e
-            JOIN ranks r ON r.event_id = e.id 
-        WHERE r.person='$id'        
-        order by e.id, r.result_type 
-        ");
-
+        $rows = sql_query::rows('rank_by_person_for_api', ['person' => $id]);
         $personal_records = [];
         foreach ($rows as $r) {
             $personal_records[$r->event_id][$r->result_type] = [

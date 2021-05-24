@@ -100,7 +100,15 @@ $results_count -= $affected;
 
 
 competition::generate_card_number();
-foreach (competition::get_list() as $competition) {
+
+$rows = db::rows("SELECT id FROM competitions");
+$list = [];
+foreach ($rows as $row) {
+    $competition = new self($row->id);
+    $list[] = $competition;
+}
+
+foreach ($list as $competition) {
     foreach ($competition->rounds as $round) {
         round::update_pos($round);
 

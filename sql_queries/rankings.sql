@@ -1,9 +1,9 @@
 
 SELECT 
     CASE
-            WHEN '@region' = 'world' THEN r.world_rank
-            WHEN '@region' = r.country_id THEN r.country_rank
-            WHEN '@region' = r.continent_id THEN r.continent_rank
+            WHEN '@:region:' = 'world' THEN r.world_rank
+            WHEN '@:region:' = r.country_id THEN r.country_rank
+            WHEN '@:region:' = r.continent_id THEN r.continent_rank
     END
     rank,
     r.result,
@@ -22,9 +22,9 @@ SELECT
     p_cy.name person_country_name,
     r.round_number
 FROM (SELECT * FROM ranks 
-        WHERE event_id = '@event_id' 
-        AND result_type = '@result_type'
-        AND ('@region' = 'world' or '@region' in (country_id, continent_id)))r
+        WHERE event_id = '@:event:' 
+        AND result_type = '@:type:'
+        AND ('@:region:' = 'world' or '@:region:' in (country_id, continent_id)))r
     JOIN persons p ON p.id=r.person
     JOIN countries p_cy on p_cy.id=r.country_id
     JOIN competitions cn ON cn.id=r.competition_id

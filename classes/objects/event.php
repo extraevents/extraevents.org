@@ -56,12 +56,7 @@ class event {
         $config = config::get(__CLASS__);
         return yml::get($config->yml);
     }
-
-    public static function get_list() {
-        return
-                db::rows("SELECT id FROM events");
-    }
-
+ 
     public function image() {
         return self::get_image($this->id, $this->name, $this->icon_wca_revert);
     }

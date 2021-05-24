@@ -101,9 +101,9 @@ if (sizeof($errors)) {
     form::return();
 }
 
-$import_result = $competition->import($json);
+$settings = $competition->set_settings($json);
 
-if ($import_result) {
+if ($settings) {
     form::process(true, ['settings' => $json], 'settings.save');
     form::get('save', 'settings');
     form::return("competitions/$json->id/settings");

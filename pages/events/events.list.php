@@ -1,7 +1,6 @@
 <?php
 
-$list = db::rows($sql);
-
+$list = sql_query::rows('events');
 
 $table = new build_table(false);
 $table->add_head('image', false);

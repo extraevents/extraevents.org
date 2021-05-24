@@ -4,18 +4,12 @@ $region = query::value('region');
 $result_type = db::escape(request::get(3));
 $event_id = db::escape(request::get(1));
 $event = new event($event_id);
-$list = db::rows(str_replace(
-                        [
-                            '@region',
-                            '@event_id',
-                            '@result_type'
-                        ],
-                        [
-                            $region ? $region : 'world',
-                            $event_id,
-                            $result_type
-                        ]
-                        , $sql));
+$list = sql_query::rows('rankings',
+                [
+                    'region' => $region ? $region : 'world',
+                    'event' => $event_id,
+                    'type' => $result_type
+        ]);
 
 $table = new build_table();
 $table->add_head('rank', t('rankings.rank'));
@@ -45,7 +39,7 @@ foreach ($list as $r) {
     }
     $row->add_value('rank', $r->rank);
     $row->add_value('competitor', person::get_line($r->person_id, $r->person_name));
-    $row->add_value('country',region::flag($r->person_country_name, $r->person_country_iso2) . ' ' . $r->person_country_name);
+    $row->add_value('country', region::flag($r->person_country_name, $r->person_country_iso2) . ' ' . $r->person_country_name);
     $row->add_value('result', centisecond::out($r->result));
     $row->add_value('competition', competition::get_line($r->competition_id, $r->competition_name, $r->competition_country_name, $r->competition_country_iso2, "/results/$event_id/$r->round_number"));
     if ($result_type == 'average') {

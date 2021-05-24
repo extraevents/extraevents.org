@@ -30,4 +30,4 @@ left outer join countries c1 on c1.id=p1.country_id
 left outer join countries c2 on c2.id=p2.country_id
 left outer join countries c3 on c3.id=p3.country_id
 left outer join countries c4 on c4.id=p4.country_id
-where rd.competition_id='@competition_id' and r.team_complete = 1 and rd.round_number = 1
+where rd.competition_id='@:competition:' and r.team_complete = 1 and rd.round_number = 1

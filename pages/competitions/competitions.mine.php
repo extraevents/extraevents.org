@@ -1,9 +1,12 @@
 <?php
-$person_id= wcaoauth::wca_id();
-if(!$person_id){
+
+$person_id = wcaoauth::wca_id();
+if (!$person_id) {
     page_404();
 }
-$list = db::rows(str_replace('@person',$person_id,$sql));
+
+$list = sql_query::rows('competitions_by_person', ['person' => $person_id]);
+
 $table = new build_table();
 $table->add_head('status', false);
 $table->add_head('date', t('competition.date'));
@@ -15,18 +18,18 @@ $table->add_filter(['name', 'country']);
 
 foreach ($list as $el) {
     $row = new build_row();
-    $row->add_value('date', competition::date_range($el->start_date,$el->end_date));
+    $row->add_value('date', competition::date_range($el->start_date, $el->end_date));
     $row->add_value('status', competition::get_status_icon($el->status));
-    $row->add_value('name', competition::get_line($el->id,$el->name,$el->country_name,$el->country_iso2));
-    $row->add_value('country', competition::country_line($el->country_name,$el->city));
-    $events=[];
-    foreach(explode(';',$el->events) as $event){
-        if($event){
-        $events[]=event::get_image(...explode(',',$event));
+    $row->add_value('name', competition::get_line($el->id, $el->name, $el->country_name, $el->country_iso2));
+    $row->add_value('country', competition::country_line($el->country_name, $el->city));
+    $events = [];
+    foreach (explode(';', $el->events) as $event) {
+        if ($event) {
+            $events[] = event::get_image(...explode(',', $event));
         }
     }
-    $row->add_value('events', implode(' ',$events));
-    
+    $row->add_value('events', implode(' ', $events));
+
     $row->add_value('start_date', $el->start_date);
     $row->add_value('end_date', $el->end_date);
     $table->add_tr($row);

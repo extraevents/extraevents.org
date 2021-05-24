@@ -2,7 +2,12 @@
 
 $competition = competition::get();
 $wca_id = wcaoauth::wca_id();
-$rows = db::rows(str_replace(['@person_id', '@competition_id'], [$wca_id ? $wca_id : '-', $competition->id], $sql));
+
+$rows = sql_query::rows('register',
+                [
+                    'person' => $wca_id ? $wca_id : '-',
+                    'competition' => $competition->id
+        ]);
 
 $enable_registration = $competition->show_register();
 

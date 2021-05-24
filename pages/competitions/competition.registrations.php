@@ -6,7 +6,7 @@ $table = new build_table(t('competition.registrations'));
 $table->add_head('competitor', t('results.competitor'));
 $table->add_head('country', t('results.country'));
 $table->add_filter(['competitor', 'country']);
-$rows = db::rows(str_replace('@competition_id', $competition->id, $sql));
+$rows = sql_query::rows('registrations', ['competition' => $competition->id]);
 $events = [];
 $competitors = [];
 $registrations = [];

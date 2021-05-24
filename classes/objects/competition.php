@@ -33,116 +33,74 @@ class competition {
     }
 
     function __construct($id) {
-        if ($id) {
-            $competition = db::row("SELECT
-                                c.id,
-                                c.city,
-                                c.start_date,
-                                c.end_date,
-                                c.contact,
-                                c.name,
-                                countries.name country_name,
-                                countries.iso2 country_iso2,
-                                UNIX_TIMESTAMP(c.registration_close) registration_close,
-                                c.registration_close > current_timestamp registration_open,
-                                c.status
-                                FROM competitions c 
-                                LEFT OUTER JOIN countries on countries.id=c.country_id 
-                                WHERE lower(c.id) = lower('$id')");
-            if ($competition) {
-                $this->id = $competition->id;
-                $organizers_rows = db::rows("select * from organizers where competition_id='$id'");
-
-                foreach ($organizers_rows as $organizer) {
-                    $this->organizers[] = $organizer->person;
-                }
-                $this->contact = $competition->contact;
-
-                $this->registration_enable = boolval($competition->registration_open
-                        and $competition->status == self::ANNOUNCED);
-                $this->registration_close = date('Y-m-d\TH:i:s\Z', $competition->registration_close);
-                $this->status = $competition->status;
-                $this->rounds = self::get_rounds($id);
-
-                $this->country = (object) [
-                            'name' => $competition->country_name,
-                            'iso2' => $competition->country_iso2
-                ];
-
-                $this->name = $competition->name;
-                $this->city = $competition->city;
-                $this->start_date = $competition->start_date;
-                $this->end_date = $competition->end_date;
+        if (!$id) {
+            return;
+        }
+        $competition = sql_query::row('competition_by_id', ['id' => $id]);
+        $organizers = sql_query::rows('competition_organizers', ['competition' => $id]);
+        if ($competition) {
+            $this->id = $competition->id;
+            foreach ($organizers as $organizer) {
+                $this->organizers[] = $organizer->person;
             }
+            $this->status = $competition->status;
+            $this->rounds = sql_query::rows('competition_rounds', ['competition' => $id]);
+            $this->contact = $competition->contact;
+            $this->registration_close = date('Y-m-d\TH:i:s\Z', $competition->registration_close);
+
+            $this->country = (object) [
+                        'name' => $competition->country_name,
+                        'iso2' => $competition->country_iso2
+            ];
+
+            $this->name = $competition->name;
+            $this->city = $competition->city;
+            $this->end_date = $competition->end_date;
+            $this->start_date = $competition->start_date;
         }
         self::$object = $this;
     }
 
-    static function get_rounds($competition_id) {
-        return db::rows("SELECT 
-                    r.competition_id,
-                    c.name competition_name,
-                    e.id event_id,
-                    e.name event_name,
-                    e.icon_wca_revert,
-                    r.round_number,
-                    e.person_count,
-                    e.scramble,
-                    e.scramble_tnoodle_format,
-                    rt.name round_format,
-                    rt.id round_id,
-                    f.name format_name,
-                    f.id format_id,
-                    f.sort_by format_sort_by,
-                    f.sort_by_second format_sort_by_second,
-                    f.solve_count format_solve_count,
-                    f.extra_count format_extra_count,
-                    f.cutoff_count format_cutoff_count,
-                    r.time_limit,
-                    r.time_limit_cumulative,
-                    r.cutoff,
-                    r.competitor_limit,
-                    r.final
-                    FROM rounds r
-                    JOIN competitions c on c.id=r.competition_id
-                    JOIN events e on e.id=r.event_id
-                    JOIN round_types rt on rt.id = r.round_type
-                    JOIN formats f on f.id = r.round_format
-                    WHERE competition_id = '$competition_id'
-                    ORDER BY e.name, r.round_number
-        ");
-    }
-
-    function import($json) {
-
-        $registration_close = strtotime($json->registration_close);
+    function set_settings($settings) {
 
         if (!$this->id) {
-            db::exec("INSERT INTO competitions  (id, status) VALUES 
-                ('$json->id', '" . self::DRAFT . "') ");
-            $this->id = $json->id;
-            $this->log_status(false, self::DRAFT);
+            $status = self::DRAFT;
+            sql_query::exec('insert_competition', ['id' => $settings->id, 'status' => $status]);
+            $this->id = $settings->id;
+            $this->log_status(false, $status);
         }
 
-        db::exec("  UPDATE competitions SET    
-                        contact = '{$json->contact}',
-                        registration_close = FROM_UNIXTIME($registration_close)
-                    WHERE id = '{$json->id}'     
-                ");
+        self::update_from_settings($settings);
         self::update_from_wca();
-        db::exec("DELETE FROM organizers WHERE competition_id = '$json->id'");
+        return true;
+    }
 
-        foreach ($json->organizers as $organizer) {
-            db::exec("INSERT INTO organizers  (competition_id, person) VALUES 
-                ('$json->id', '$organizer') ");
+    function update_from_settings($settings) {
+        self::update_organizers($settings->organizers);
+        self::update_rounds($settings->events);
+        $values = [];
+        $values['id'] = $this->id;
+        $values['contact'] = $settings->contact;
+        $values['registration_close'] = strtotime($settings->registration_close);
+        sql_query::exec('update_competition_settings', $values);
+        return true;
+    }
+
+    function update_organizers($organizers) {
+
+        sql_query::exec('delete_organizers_by_competition', ['competition' => $this->id]);
+        foreach ($organizers as $person) {
+            sql_query::exec('insert_organizer', ['competition' => $this->id, 'person' => $person]);
         }
+        return true;
+    }
 
-        db::exec("DELETE FROM rounds WHERE competition_id = '$json->id'");
-
-        foreach ($json->events as $event) {
-            round::import($json->id, $event);
+    function update_rounds($events) {
+        sql_query::exec('delete_rounds_by_competition', ['competition' => $this->id]);
+        foreach ($events as $event) {
+            round::import($this->id, $event);
         }
-        self::set_final($this->id);
+        sql_query::exec('update_rounds_final_by_competition', ['competition' => $this->id]);
         round::set_rounds_type();
         return true;
     }
@@ -150,98 +108,73 @@ class competition {
     function update_from_wca() {
         $api_competition = wcaapi::get("competitions/$this->id");
         if (!$api_competition) {
-            db::exec("  UPDATE competitions
-                        SET name = 'draft: {$this->id}'
-                        WHERE id = '{$this->id}' ");
+            sql_query::exec('update_competition_draft', ['id' => $this->id]);
             return false;
         }
-        $country_id = db::row("SELECT id FROM countries WHERE iso2 ='{$api_competition->country_iso2}'")->id ?? false;
-        db::exec("  UPDATE competitions 
-                            SET 
-                                country_id = '$country_id',
-                                name = '{$api_competition->name}',
-                                city = '{$api_competition->city}',
-                                start_date = '{$api_competition->start_date}',
-                                end_date = '{$api_competition->end_date}'
-                            WHERE id = '{$this->id}'     
-                ");
+        $country_iso2 = $api_competition->country_iso2;
+        $country = sql_query::row('country_by_iso2', ['iso2' => $country_iso2]);
+        $values = [];
+        $values['id'] = $this->id;
+        $values['name'] = $api_competition->name;
+        $values['city'] = $api_competition->city;
+        $values['country'] = $country->id ?? false;
+        $values['end_date'] = $api_competition->end_date;
+        $values['start_date'] = $api_competition->start_date;
+        sql_query::exec('update_competition_wca', $values);
         return true;
     }
 
-    public static function set_final($competition_id = false) {
-        if ($competition_id) {
-            $where = "WHERE competition_id='$competition_id'";
-        } else {
-            $where = '';
-        }
-        $rows = db::rows("SELECT t2.competition_id, t2.event_id, t2.round_number
-            FROM (SELECT competition_id,event_id, max(round_number) round_number FROM rounds 
-                $where
-                GROUP BY competition_id, event_id) t1 
-            JOIN rounds t2 ON t2.competition_id = t1.competition_id
-                AND t2.event_id = t1.event_id
-                AND t2.round_number = t1.round_number");
-        foreach ($rows as $row) {
-            db::exec("UPDATE rounds SET final = 1 
-                    WHERE competition_id = '$row->competition_id' 
-                    AND event_id = '$row->event_id' 
-                    AND round_number = '$row->round_number' ");
-        }
-    }
-
-    private function select() {
-        $id = $this->get_id();
-        $this->competition = db::row("SELECT * FROM competitions WHERE lower(id) = lower('$id')");
-    }
-
     public function delete() {
-        if (in_array(self::DELETE, $this->actions())) {
-            db::exec("DELETE  FROM competitions WHERE id = '$this->id'");
-            db::exec("DELETE  FROM organizers WHERE competition_id = '$this->id'");
-            db::exec("DELETE  FROM rounds WHERE competition_id = '$this->id'");
-            $this->log_status($this->status, self::DELETE);
+        if (!in_array(self::DELETE, $this->actions())) {
+            return false;
+        }
+        sql_query::exec('delete_competition', ['id' => $this->id]);
+        sql_query::exec('delete_rounds_by_competition', ['competition' => $this->id]);
+        sql_query::exec('delete_organizers_by_competition', ['competition' => $this->id]);
+        sql_query::exec('update_results_notpublish_by_competition', ['competition' => $this->id]);
+
+        $this->log_status($this->status, self::DELETE);
+        return true;
+    }
+
+    public function set_status($new_status) {
+        $old_status = $this->status;
+        if (!in_array($new_status, $this->actions())) {
+            return 'ERROR';
+        }
+        $update_from_wca = self::update_from_wca();
+        $need_update_from_wca = self::need_update_from_wca($old_status, $new_status);
+        if (!$update_from_wca and $need_update_from_wca) {
+            return 'NOT_FOUND';
+        }
+        self::update_results($old_status, $new_status);
+        sql_query::exec('update_competition_status', ['id' => $this->id, 'status' => $new_status]);
+
+        $this->log_status($old_status, $new_status);
+        return 'OK';
+    }
+
+    private function need_update_from_wca($old_status, $new_status) {
+        if ($old_status == self::DRAFT and $new_status == self::DRAFT) {
+            return true;
+        }
+        if ($old_status == self::DRAFT and $new_status == self::ANNOUNCEMENT_APPROVAL) {
             return true;
         }
         return false;
     }
 
-    public function set_status($status) {
-        if (in_array($status, $this->actions())) {
-            $this->log_status($this->status, $status);
-
-            if ($this->status == self::DRAFT
-                    and in_array($status, [
-                        self::DRAFT,
-                        self::ANNOUNCEMENT_APPROVAL
-                    ])
-                    and!self::update_from_wca()) {
-                return 'NOT_FOUND';
-            }
-
-
-            db::exec("  UPDATE competitions 
-                        SET status ='$status'
-                        WHERE id = '$this->id'");
-
-            if ($status == self::COMPLETED) {
-                db::exec(" UPDATE results 
-                        SET is_publish = true
-                        WHERE competition_id = '$this->id' 
-                        AND best > 0
-                        AND pos > 0 ");
-            } else {
-                db::exec("  UPDATE results 
-                        SET is_publish = null
-                        WHERE competition_id = '$this->id' ");
-            }
-
-            if ($status == self::COMPLETED or $this->status == self::COMPLETED) {
-                results::update_rank();
-                results::update_records();
-            }
-            return 'OK';
+    private function update_results($old_status, $new_status) {
+        if ($new_status == self::COMPLETED) {
+            sql_query::exec('update_results_publish_by_competition', ['competition' => $this->id]);
+        } else {
+            sql_query::exec('update_results_notpublish_by_competition', ['competition' => $this->id]);
         }
-        return 'ERROR';
+
+        if ($new_status == self::COMPLETED or $old_status == self::COMPLETED) {
+            results::update_rank();
+            results::update_records();
+        }
     }
 
     function get_round($event_id, $round_number) {
@@ -251,26 +184,6 @@ class competition {
             }
         }
         return false;
-    }
-
-    static function get_list_id() {
-        $rows = db::rows("SELECT id FROM competitions");
-        $list_id = [];
-        foreach ($rows as $row) {
-            $list_id[] = $row->id;
-        }
-        return $list_id;
-    }
-
-    static function get_list_announced() {
-        $rows = db::rows("SELECT id 
-                            FROM competitions 
-                            WHERE status='" . SELF::ANNOUNCED . "'");
-        $list = [];
-        foreach ($rows as $row) {
-            $list[$row->id] = new competition($row->id);
-        }
-        return $list;
     }
 
     static function get_statuses() {
@@ -310,7 +223,7 @@ class competition {
                 in_array($this->status, [
                     self::ANNOUNCED
                 ])
-                and $this->registration_enable;
+                and strtotime($this->registration_close) > strtotime('now');
     }
 
     function show_scrambles() {
@@ -396,16 +309,6 @@ class competition {
                 t("competition.statuses.$status");
     }
 
-    static function get_list() {
-        $rows = db::rows("SELECT id FROM competitions");
-        $list = [];
-        foreach ($rows as $row) {
-            $competition = new self($row->id);
-            $list[] = $competition;
-        }
-        return $list;
-    }
-
     function actions() {
         $access_organizer = access::is_organizer();
         $access_leader = access::is_leader();
@@ -477,43 +380,29 @@ class competition {
     }
 
     private function log_status($status_old, $status_new) {
-        $person = wcaoauth::wca_id();
-        if (!$person) {
-            $person = wcaoauth::user_id();
-        }
-        db::exec(" INSERT INTO `" . self::table_status() . "`"
-                . " (`person`,`competition`,`status_old`,`status_new`) "
-                . " VALUES ('$person','$this->id','$status_old','$status_new')",
-                helper::db());
+        $values = [];
+        $values['person'] = wcaoauth::wca_id();
+        $values['status_old'] = $status_old;
+        $values['status_new'] = $status_new;
+        $values['competition'] = $this->id;
+        $values['table'] = self::table_status();
+        sql_query::exec('log_competition_status', $values, helper::db());
     }
 
     static function generate_card_number() {
 
+        $select_max_card = sql_query::rows('results_max_card');
         $max_card_rows = [];
-        foreach (db::rows("SELECT 
-                        max(card_id) card_id, competition_id, event_id, round_number
-                        from `results`
-                        WHERE card_id is not null
-                        group by event_id, competition_id, round_number") as $row) {
-            $max_card_rows[$row->competition_id][$row->event_id][$row->round_number] = $row->card_id;
+        foreach ($select_max_card as $row) {
+            $max_card_rows[$row->competition][$row->event][$row->round] = $row->card;
         }
 
-        foreach (db::rows("SELECT id, competition_id, event_id, round_number
-                            FROM `results`
-                            WHERE card_id is null
-                            ORDER BY id") as $row) {
-            $max_card_rows[$row->competition_id][$row->event_id][$row->round_number] ??= 0;
-            $max_card_rows[$row->competition_id][$row->event_id][$row->round_number]++;
-            $card_id = $max_card_rows[$row->competition_id][$row->event_id][$row->round_number];
-            db::exec("UPDATE `results`
-                    SET card_id = $card_id
-                    WHERE id = $row->id");
+        $select_null_card = sql_query::rows('results_null_card');
+        foreach ($select_null_card as $row) {
+            $card = ($max_card_rows[$row->competition][$row->event][$row->round] ?? 0) + 1;
+            $max_card_rows[$row->competition][$row->event][$row->round] = $card;
+            sql_query::exec('update_result_card', ['id' => $row->id, 'card' => $card]);
         }
-    }
-
-    static function api_list() {
-        return
-                self::get_list();
     }
 
     static function api($id, $type) {
@@ -696,22 +585,6 @@ class competition {
     static function country_line($country_name, $city) {
         return
                 "<b>{$country_name}</b>, {$city}";
-    }
-
-    static function __recreater() {
-        $table = self::table_status();
-        db::exec(" DROP TABLE IF EXISTS `$table`",
-                helper::db());
-        db::exec(" CREATE TABLE `$table` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `person` varchar(10),
-                    `competition` varchar(50),
-                    `status_old` varchar(50),
-                    `status_new` varchar(50),
-                    `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-                helper::db());
     }
 
     private static function table_status() {

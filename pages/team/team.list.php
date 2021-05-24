@@ -1,6 +1,6 @@
 <?php
 
-$list = db::rows($sql);
+$list = sql_query::rows('team');
 
 $table = new build_table(false);
 $table->add_head('name', t('persons.name'));
@@ -12,7 +12,6 @@ $table->add_head('description', t('team.description'));
 $table->add_filter(['name', 'country', 'description']);
 foreach ($list as $member) {
     $row = new build_row();
-    //$person = new person($member->id);
     $row->add_value('name', person::get_line($member->id, $member->name, $member->country_name, $member->country_iso2));
     $row->add_value('wcaid', $member->id);
     $row->add_value('country', $member->country_name);

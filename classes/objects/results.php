@@ -109,7 +109,8 @@ class results {
 
     static function update_rank() {
         db::exec(" DELETE FROM `ranks`");
-        foreach (event::get_list() as $event) {
+        $events = db::rows("SELECT * FROM events");
+        foreach ($events as $event) {
             foreach (['best' => 'single', 'average' => 'average'] as $k => $v) {
                 $ranks = [];
                 $countries_rank = [];

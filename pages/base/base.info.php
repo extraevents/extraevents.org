@@ -2,7 +2,8 @@
 
 $statistics = [];
 $statistics_out = [];
-foreach (db::rows("SELECT * FROM info ORDER BY count desc") as $row) {
+$rows = sql_query::rows('info');
+foreach ($rows as $row) {
     $statistics[$row->id][] = $row;
 }
 

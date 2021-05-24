@@ -1,0 +1,1 @@
+SELECT * FROM info ORDER BY count desc

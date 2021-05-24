@@ -14,11 +14,11 @@ FROM events e
     LEFT OUTER JOIN ranks r_single 
         ON r_single.event_id = e.id 
         AND r_single.result_type='single'
-        AND r_single.person='@person'
+        AND r_single.person='@:person:'
     LEFT OUTER JOIN ranks r_average 
         ON r_average.event_id = e.id 
         AND r_average.result_type='average'
-	AND r_average.person='@person'
+	AND r_average.person='@:person:'
 WHERE r_single.event_id is not null or r_average.event_id is not null
 order by e.name
 

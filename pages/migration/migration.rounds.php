@@ -22,10 +22,11 @@ $round_count = 0;
 $rounds_skip = [];
 db::exec("DELETE FROM rounds");
 
+$competitions = [];
 foreach ($rows_rounds as $round) {
     $event_id = $events_map[$round->event_id] ?? false;
     $competition = db::row("SELECT id FROM competitions WHERE id='$round->competition_id' ");
-
+    $competitions[$round->competition_id] = true;
     if ($event_id and $competition) {
         db::exec(" INSERT INTO `rounds` "
                 . " (`competition_id`,`event_id`,`round_number`,`round_format`,`cutoff`,`time_limit`,`time_limit_cumulative`,`competitor_limit`) "
@@ -35,7 +36,9 @@ foreach ($rows_rounds as $round) {
         $rounds_skip[] = $round->id;
     }
 }
-competition::set_final();
+foreach (array_keys($competitions) as $competition_id) {
+    sql_query::exec('update_rounds_final_by_competition', ['competition' => $competition_id]);
+}
 round::set_rounds_type();
 ?>
 <p>migration.rounds / - <?= $round_count ?></p>

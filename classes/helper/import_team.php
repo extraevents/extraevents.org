@@ -68,23 +68,6 @@ class import_team {
         form::return();
     }
 
-    static function __recreater() {
-        $table = self::table_log();
-        db::exec(" DROP TABLE IF EXISTS `$table`",
-                helper::db());
-
-        db::exec(" CREATE TABLE `$table` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `person` varchar(10),
-                    `member` varchar(10),
-                    `message` text,
-                    `details` text,
-                    `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-                helper::db());
-    }
-
     private static function table_log() {
         return
                 self::$config->table->log->name;

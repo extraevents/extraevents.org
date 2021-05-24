@@ -21,4 +21,4 @@ FROM `records` r
     JOIN `competitions` cn on cn.id = r.competition_id
     JOIN `countries` c_cy on c_cy.id = cn.country_id 
     JOIN events e on e.id=r.event_id
-WHERE '@region' = r.region
+WHERE '@:region:' = r.region
