@@ -3,6 +3,7 @@
 `Extra Events` - events that are not currently held by the WCA.  
 The organization of these events is based on the [`WCA Regulations`](https://www.worldcubeassociation.org/regulations/) and [`Extra Events Regulations`](https://extraevents.org/regulations).
 
+Note: Because Article and Regulation numbers are not reassigned when Regulations are deleted, there may be gaps in numbering.
 <table-of-contents>
 
 ##  Article 1: Definitions
@@ -10,12 +11,12 @@ The organization of these events is based on the [`WCA Regulations`](https://www
 - 1a) `Extra Events Team` - team of the organization `Extra Events`.
 - 1b) `Extra Events Organizer` - the person responsible for ensuring that the competition adheres to the `Regulations for Extra Events`.
 - 1c) `Extra Events Leaders` - leaders of the organization `Extra Events`, contact email <leaders@extraevents.org>.
-- 1d) `Extra Events website` -  [extraevents.org](https://www.extraevents.org)
+- 1d) `Extra Events website` - [extraevents.org](https://www.extraevents.org)
 - 1e) WCA definitions
   - 1e1) `WCA Delegate` - role in WCA organization. 
   - 1e2) `WCA Organizer` - organizer of the WCA competition.
-  - 1e3) `WCA website`  - [worldcubeassociation.org](https://www.worldcubeassociation.org)
-  - 1e4) `WCA ID`  - person id on the `WCA website`.
+  - 1e3) `WCA website` - [worldcubeassociation.org](https://www.worldcubeassociation.org)
+  - 1e4) `WCA ID` - person id on the `WCA website`.
 
 ## Article 2: Substitution
 
