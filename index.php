@@ -1,27 +1,32 @@
 <?php
-include_once 'autoload.php';
+session_start();
+require 'autoload.php';
+new autoload();
 ob_start();
 ?>
 <!DOCTYPE HTML>
 <html lang='en'>
     <head>
-        <meta name='Description' content='<?= config::get()->title ?>'>
         <meta charset='utf-8'>
-        <title>{%title}</title>
-        <?php page::include('index.head'); ?>
+        <title>%title</title>
+        <link rel="icon" href="%i/logos/color.png" >
+
+        <link rel="stylesheet" href="%i/styles/core/style.css" type="text/css"/>
+        <link rel="stylesheet" href="%i/styles/core/icons-extra-event/css/Extra-Events.css" type="text/css"/>    
+        <link rel="stylesheet" href="%i/styles/external/fontawesome-free-5.15.1-web/css/all.css" type="text/css"/>
+        <link rel="stylesheet" href="%i/styles/external/flag-icon-css/css/flag-icon.css" type="text/css"/>
+        <link rel="stylesheet" href="%i/styles/external/markdown.css" type="text/css"/>
+
+        <script src="%i/scripts/external/jquery-3.4.1.min.js" type="text/javascript"></script>
+
+        <link rel="stylesheet" href="%i/scripts/external/chosen_v1/chosen.css" type="text/css"/>
+        <script src="%i/scripts/external/chosen_v1/chosen.jquery.js" type="text/javascript"></script> 
     </head>
-    <body id='variables' data-index='%i/'>
+    <body>        
         <?php page::include('body'); ?>
     </body>
 </html> 
 
 <script src="%i/index.js"></script>
-<?php
-db::close();
-$ob = ob_get_contents();
-ob_clean();
-$ob1 = str_replace(
-        ['{%title}', "%i/"],
-        [page::get_title(), PageIndex() . "/"],
-        $ob);
-echo $ob1;
+<?= page::push() ?>
+<?= db::close() ?>

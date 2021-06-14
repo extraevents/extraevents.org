@@ -1,26 +1,38 @@
 <?php
 
-session_start();
+class autoload {
 
-include 'vendor/autoload.php';
-spl_autoload_register(function ($class) {
-    foreach (glob("classes/*/$class.php") as $file) {
-        require_once $file;
-        if (method_exists($class, '__autoload')) {
-            $class::__autoload();
+    CONST VENDOR_DIR = 'vendor';
+    CONST CLASSES_DIR = 'classes';
+    CONST FUNCTIONS_DIR_PREFIX = 'functions';
+
+    function __construct() {
+        $this->vendor();
+        $this->classes();
+        $this->functions();
+        new errors();
+        new template();
+    }
+
+    private function vendor() {
+        include_once self::VENDOR_DIR . '/autoload.php';
+    }
+
+    private function classes() {
+        spl_autoload_register(function ($class_name) {
+            foreach (glob(self::CLASSES_DIR . "/*/$class_name.php") as $file_name) {
+                require_once $file_name;
+                if (method_exists($class_name, '__autoload')) {
+                    $class_name::__autoload();
+                }
+            }
+        });
+    }
+
+    private function functions() {
+        foreach (glob(self::FUNCTIONS_DIR_PREFIX . "*/*/*.php") as $file_name) {
+            require_once $file_name;
         }
     }
-});
-new errors();
-new template();
 
-foreach (['functions', 'functions_scramble'] as $dir) {
-    $objects = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir),
-            RecursiveIteratorIterator::SELF_FIRST);
-    foreach ($objects as $name => $object) {
-        if (strpos($name, '.php') !== false) {
-            require_once $name;
-        }
-    }
 }

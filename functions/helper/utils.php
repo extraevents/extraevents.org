@@ -12,17 +12,6 @@ function random_string($length) {
     return $key;
 }
 
-function PageIndex() {
-    $index = "//" . $_SERVER['HTTP_HOST'] . str_replace("index.php", "", $_SERVER['PHP_SELF']);
-    if (substr("$index", -1) == '/') {
-        $index = substr_replace($index, '', -1);
-    }
-    if (substr("$index", -1) == '/') {
-        $index = substr_replace($index, '', -1);
-    }
-    return $index;
-}
-
 function PageLocal() {
     return str_replace("index.php", "", $_SERVER['PHP_SELF']);
 }

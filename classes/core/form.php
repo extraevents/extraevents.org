@@ -103,7 +103,7 @@ class form {
 
     public static function return($path = false) {
         if ($path !== false) {
-            header('Location: ' . PageIndex() . '/' . $path);
+            header('Location: ' . page::get_index() . '/' . $path);
         } else {
             header('Location: ' . filter_input(INPUT_SERVER, 'HTTP_REFERER'));
         }

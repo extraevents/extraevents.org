@@ -136,7 +136,7 @@ $instruction = $ee_option->format == 'json' ?
 </a>
 
 <h3>Step 2. Download ZIP archive from TNoodle</h3>
-<a target='_blank'href='http:<?= PageIndex() ?>/tnoodle_redirect.php/?data=<?= json_encode($data_tnoodle) ?>&filename=<?= $ee_option->competition_id ?>&allowed=<?= $scramble_allowed ?>'>
+<a target='_blank'href='http:%i/tnoodle_redirect.php/?data=<?= json_encode($data_tnoodle) ?>&filename=<?= $ee_option->competition_id ?>&allowed=<?= $scramble_allowed ?>'>
     Generate and download
 </a>
 <h3>Step 3. Unpack the downloaded archive</h3>

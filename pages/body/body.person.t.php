@@ -40,7 +40,7 @@
             <?= t('aouth.logout') ?>
         </a>
 
-        <a href="#" data-form-post='<?= PageIndex() ?>/persons/logout_all'>
+        <a href="#" data-form-post='%i/persons/logout_all'>
             <span class="color_red">
                 <i class="fas fa-sign-out-alt"></i> 
                 <?= t('aouth.logout_all') ?> (<?= $data->person->auth_count ?>)
