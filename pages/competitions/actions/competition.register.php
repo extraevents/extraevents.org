@@ -17,14 +17,10 @@ if (!$competition->show_register()) {
 $action = form::action();
 $team_key = form::value('team-key');
 $user_id = wcaoauth::user_id();
-$wca_id = wcaapi::get("users/$user_id")->user->wca_id ?? false;
+$wca_id = wcaoauth::wca_id();
 $round = $competition->get_round($event_id, 1);
 
 if ($action == 'register') {
-    if (!$wca_id) {
-        form::process(false, $details, 'round.not_wca_id!');
-        form::return();
-    }
 
     $registrations = wcaapi::get("competitions/$competition->id/registrations") ?? [];
     $wca_registred = false;

@@ -25,7 +25,6 @@ message:
         not_wca_registration!: >-
             You are not registered for the competition on the WCA website
             (or try again later)!
-        not_wca_id!: You don't have a WCA ID.
         registration_disabled!: Registration cannot be changed!
     scrambles_generate:
         done: Scrambles were generated.
@@ -117,8 +116,7 @@ competition:
     registrations: Registrations for Extra Events
     register_descriptions:
         open: >-
-            You must have a WCA ID and have already been registered to the competition on the WCA
-            website.
+            You must have already been registered to the competition on the WCA website.
         close: Registration cannot be changed.
     settings: Competition settings
     create: Create competition
