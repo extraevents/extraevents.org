@@ -257,7 +257,7 @@ cron:
 
         8:
             command: support_error
-            run: #day
+            run: #hour
             
         9:
             command: support_checker
