@@ -29,8 +29,10 @@ function registration_sort_name($a, $b) {
 foreach ($rows as $row) {
     $keys = [];
     foreach (range(1, 4) as $i) {
-        $keys[] = $row->{"person{$i}_id"};
-        $competitors[] = $row->{"person{$i}_id"};
+        if ($row->{"person{$i}_id"}) {
+            $keys[] = $row->{"person{$i}_id"};
+            $competitors[] = $row->{"person{$i}_id"};
+        }
     }
     sort($keys);
     $persons_key = implode(' ', $keys);
