@@ -317,7 +317,7 @@ class round {
         $persons[2] ??= '';
         $persons[3] ??= '';
         $exec = db::exec("UPDATE results
-                            SET team_ complete = $team_complete,
+                            SET team_complete = $team_complete,
                             person1 = '$persons[0]',
                             person2 = '$persons[1]',
                             person3 = '$persons[2]',
