@@ -3,8 +3,10 @@ competition.navigation: +
 competition.register: user
 competition.settings: organizer
 competition.registrations: +
+competition.scorecards: organizer
 competition.scorecards_rounds: organizer
 competition.scorecards_round_print: organizer
+competition.scrambles: organizer
 competition.scrambles_rounds: organizer
 competition.scrambles_round_generate: organizer
 competition.scrambles_round_generate_tnoodle: organizer
