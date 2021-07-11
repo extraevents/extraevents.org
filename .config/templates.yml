@@ -1,3 +1,6 @@
+notification:
+    competition_status: |
+        Changed status from "{%status_old}" to "{%status_new}".
 message:
     form:
         errors:
@@ -106,6 +109,7 @@ competition:
     statuses:
         field: Status
         delete: Deleted
+        none: None
         draft: Draft
         announcement_approval: Awaiting approval of the announcement
         results_approval: Awaiting approval of the results

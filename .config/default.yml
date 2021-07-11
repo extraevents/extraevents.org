@@ -277,4 +277,9 @@ cron:
             
         13: 
             command: update_wcaid::cron
-            run: #week     
+            run: #week    
+            
+        14:
+            command: notifications_competition_change_status
+            run: #hour
+           

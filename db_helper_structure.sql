@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : utf-8
 
- Date: 05/24/2021 08:03:57 AM
+ Date: 07/11/2021 07:53:53 AM
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `backup` (
   `size` int(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `competition_status`
@@ -43,8 +43,9 @@ CREATE TABLE `competition_status` (
   `status_old` varchar(50) DEFAULT NULL,
   `status_new` varchar(50) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `send_notification` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `cron`
@@ -59,7 +60,7 @@ CREATE TABLE `cron` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=252 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=346 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `db_count`
@@ -72,7 +73,7 @@ CREATE TABLE `db_count` (
   `is_post` bit(1) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6856 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6943 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `db_size`
@@ -100,7 +101,7 @@ CREATE TABLE `file_clear` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `filemtime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=195 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `file_size`
@@ -114,7 +115,7 @@ CREATE TABLE `file_size` (
   `files` int(11) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `form`
@@ -130,7 +131,7 @@ CREATE TABLE `form` (
   `server` text,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1197 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1210 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `form_process`
@@ -146,7 +147,7 @@ CREATE TABLE `form_process` (
   `message` varchar(255) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=559 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=572 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `import_team`
@@ -160,7 +161,7 @@ CREATE TABLE `import_team` (
   `details` text,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `register`
@@ -205,7 +206,7 @@ CREATE TABLE `smtp` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `smtp` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1287 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1300 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `update_wcaid`
@@ -227,7 +228,7 @@ CREATE TABLE `wcaapi` (
   `status` varchar(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=417 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=428 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `wcaoauth`
@@ -244,6 +245,6 @@ CREATE TABLE `wcaoauth` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `session` (`session`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
