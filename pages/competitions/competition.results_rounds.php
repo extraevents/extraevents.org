@@ -14,7 +14,7 @@ foreach ($competition->rounds as $round) {
     $results_view_link = "competitions/$competition->id/results/{$round->event_id}/{$round->round_number}";
     $row->add_value('name', "<a href='%i/$results_view_link'>{$round->event_name}</a>");
     $row->add_value('round', $round->round_format);
-    if (grand::resolve_access('competition.results_enter') ) {
+    if (grand::resolve_access('competition.results_round_enter') ) {
         $results_enter_link = "competitions/$competition->id/results/{$round->event_id}/{$round->round_number}/enter";
         $row->add_value('results_enter',
                 "<a href='%i/$results_enter_link'>"

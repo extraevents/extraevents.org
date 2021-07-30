@@ -110,20 +110,38 @@ function result_format_out(result) {
     result = result - second * 100;
     var centisecond = result;
 
+    var second_format = '00';
+    var centisecond_format = '00';
+    var minute_format = '';
     if (minute) {
-        return minute + ':' + second + '.' + centisecond;
+        minute_format = minute + ':';
     }
-    if (second) {
-        if (centisecond < 10) {
-            return second + '.0' + centisecond;
+
+    if (minute) {
+        if (second < 10) {
+            second_format = '0' + second;
         } else {
-            return second + '.' + centisecond;
+            second_format = second;
         }
+    } else {
+        second_format = second;
     }
+
     if (centisecond < 10) {
-        return '0.0' + centisecond;
+        centisecond_format = '0' + centisecond;
+    } else {
+        centisecond_format = centisecond;
     }
-    return '0.' + centisecond;
+
+    if (minute) {
+        return minute_format + '' + second_format + '.' + centisecond_format;
+    }
+
+    if (second) {
+        return second_format + '.' + centisecond_format;
+    }
+
+    return '0.' + centisecond_format;
 
 }
 
@@ -149,7 +167,7 @@ function result_format_enter(result) {
         minute_format = minute + ':';
     }
 
-    if (second && minute) {
+    if (minute) {
         if (second < 10) {
             second_format = '0' + second;
         } else {
@@ -159,12 +177,10 @@ function result_format_enter(result) {
         second_format = second;
     }
 
-    if (centisecond) {
-        if (centisecond < 10) {
-            centisecond_format = '0' + centisecond;
-        } else {
-            centisecond_format = centisecond;
-        }
+    if (centisecond < 10) {
+        centisecond_format = '0' + centisecond;
+    } else {
+        centisecond_format = centisecond;
     }
 
     return  minute_format + second_format + '.' + centisecond_format;

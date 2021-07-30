@@ -13,7 +13,7 @@ competition.scrambles_round_generate_tnoodle: organizer
 competition.scrambles_round_print: organizer
 competition.results_rounds: +
 competition.results_round: +
-competition.results_enter: organizer
+competition.results_round_enter: organizer
 competition.results_print: +
 competition.status: organizer
 competition.title: +

@@ -37,7 +37,9 @@ function support_checker() {
     curl_close($file);
 
     if ($code != 200) {
-        trigger_error($code, E_USER_ERROR);
+        return
+                smtp::put($email, "$short: support_checker",
+                        "$short: support_checker. whois.ru - $code");
     }
 
     preg_match("/Registry Expiry Date: (.*Z)/", $data, $matches);
