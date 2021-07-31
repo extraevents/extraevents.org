@@ -12,6 +12,9 @@ $http_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
     var filename = '<?= $filename ?>';
 
     function get_version(data, key_version) {
+        if ($('#version').html() !== '') {
+            return;
+        }
         $.each(data, function (key, val) {
             if (key === key_version) {
                 $('#version').html(val);
@@ -22,14 +25,14 @@ $http_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
         var error = true;
         $.map($.parseJSON('<?= $allowed ?>'),
                 function (value, key) {
-                    if (current === value) {
+                    if (current != '' && value.indexOf(current) != -1) {
                         error = false;
                     }
                 });
 
         $.map($.parseJSON('<?= $allowed ?>'),
                 function (value, key) {
-                    if (current === value) {
+                    if (current != '' && value.indexOf(current) != -1) {
                         downoad();
                         return;
                     }
@@ -48,7 +51,7 @@ $http_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
         $.getJSON('http://localhost:2014/version',
                 function (data) {
                     get_version(data, 'runningVersion');
-
+                    get_version(data, 'projectVersion');
                 })
                 .fail(function () {
                     $.getJSON('http://localhost:2014/version.json',
