@@ -198,6 +198,10 @@ round:
         scramble:
             parent: main 
             name: scrambles
+cash:
+    table:
+        log:
+            name: cash
 
 helper:
     db: helper
@@ -282,4 +286,7 @@ cron:
         14:
             command: notifications_competition_change_status
             run: #hour
+        15:
+            command: update_events
+            run: #5minutes
            

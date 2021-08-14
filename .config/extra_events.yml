@@ -227,7 +227,7 @@ kilo:
     scramble_training: generate_kilo_training
     drawing: drawing_kilo
     comments:
-        - flip executed as x2
+        - '{Flip} executed as {x2}'
     
 444pyra:
     name: Master Pyraminx 
