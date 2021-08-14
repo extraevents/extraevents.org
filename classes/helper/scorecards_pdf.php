@@ -14,13 +14,12 @@ class scorecards_pdf {
 
     public function __construct($round) {
         $this->round = $round;
-        //$this->wca_competition = new wca_competition($this->ee_round->competition_id);
-        //$this->event = new event($this->ee_round->event_id);
+        $this->event = new event($this->round->event_id);
         $this->registrations = results::get($round, ['team_complete'], 'card_id');
 
-        //$this->person_count = $this->event->person_count;
-        //$this->need_scrambler = $this->event->need_scrambler();
-        //$this->long_inspection = $this->event->long_inspection;
+        $this->person_count = $this->event->person_count;
+        $this->need_scrambler = !($this->event->scrambling ??= false);
+        $this->long_inspection = $this->event->long_inspection;
     }
 
     public function pdf() {
@@ -54,7 +53,7 @@ class scorecards_pdf {
                                 'person1_name' => false,
                                 'person2_name' => false,
                                 'person3_name' => false,
-                                'person4_name' => false 
+                                'person4_name' => false
                     ];
                 }
                 $point = $points[$i];
