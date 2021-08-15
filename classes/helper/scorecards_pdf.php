@@ -72,7 +72,7 @@ class scorecards_pdf {
                 $pdf->text_cursor($round->event_name . ', round ' . $round->round_number, 5);
 
                 $pdf->set_cursor('persons', 3, 3, 'header_2');
-                $this->draw_persons([$team->person1_name, $team->person2_name, $team->person3_name, $team->person3_name]);
+                $this->draw_persons([$team->person1_name, $team->person2_name, $team->person3_name, $team->person4_name]);
 
                 $pdf->set_cursor('marks', 0, 7, ['point', 'last']);
                 $this->draw_marks();
@@ -93,7 +93,7 @@ class scorecards_pdf {
 
                 $pdf->set_cursor('wca_id', 5, $pdf->h / 2 - 10, 'point');
                 $this->font('small');
-                $pdf->text_cursor(implode(' ', [$team->person1_id, $team->person2_id, $team->person3_id, $team->person3_id]));
+                $pdf->text_cursor(implode(' ', [$team->person1_id, $team->person2_id, $team->person3_id, $team->person4_id]));
             }
         }
 
@@ -126,14 +126,14 @@ class scorecards_pdf {
         }
 
         if ($person_count == 3) {
-            $pdf->line_cursor(80 + 15, 0, 80 + 7.5, 6.5);
-            $pdf->line_cursor(80, 0, 80 + 7.5, 6.5);
-            $pdf->line_cursor(80 + 7.5, 13, 80 + 7.5, 6.5);
+            $pdf->line_cursor(0, 0, $dx / 2, $dy / 2);
+            $pdf->line_cursor($dx, 0, $dx / 2, $dy / 2);
+            $pdf->line_cursor($dx / 2, $dy, $dx / 2, $dy / 2);
         }
 
         if ($person_count == 4) {
-            $pdf->line_cursor(80 + 7.5, 13, 7.5, 0);
-            $pdf->line_cursor(80 + 15, 6.5, 0, 6.5);
+            $pdf->line_cursor($dx, 0, 0, $dy);
+            $pdf->line_cursor(0, 0, $dx, $dy);
         }
 
         $pdf->set_current($name);
