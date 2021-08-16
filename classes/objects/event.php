@@ -56,7 +56,7 @@ class event {
         $config = config::get(__CLASS__);
         return yml::get($config->yml);
     }
- 
+
     public function image() {
         return self::get_image($this->id, $this->name, $this->icon_wca_revert);
     }
@@ -64,10 +64,10 @@ class event {
     static public function get_image($id, $name, $icon_wca_revert) {
         if ($icon_wca_revert) {
             return
-                    "<i title='$name' class='cubing-icon event-$icon_wca_revert icon_revert'></i>";
+                    "<i title='$name' data-id='$id' class='cubing-icon event-$icon_wca_revert icon_revert'></i>";
         } else {
             return
-                    "<i title='$name' class='fas ee-$id'></i>";
+                    "<i title='$name' data-id='$id' class='fas ee-$id'></i>";
         }
     }
 
@@ -112,11 +112,16 @@ class event {
         return $image;
     }
 
-    static function filter($where = false) {
+    static function filter($where = false, $show_all = false) {
         $where = $where ? " AND $where " : '';
         ob_start();
         ?>
         <select data-navigation-event>
+            <?php if ($show_all) { ?>
+                <option value='all' >
+                    <?= $show_all ?>
+                </option>
+            <?php } ?>
             <?php foreach (db::rows("
                     SELECT id, name 
                     FROM events 

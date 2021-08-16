@@ -46,6 +46,8 @@ aouth:
     logout: Sign out
     logout_all: Sign out from all devices
 competition:
+    event_filter:
+        all_events: All events
     statuses_extended:
         draft: |
             Waiting for Extra Events Organizer

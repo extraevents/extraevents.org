@@ -23,7 +23,6 @@ foreach ($list as $el) {
         }
     }
     $row->add_value('events', implode(' ', $events));
-
     $row->add_value('start_date', $el->start_date);
     $row->add_value('end_date', $el->end_date);
     $table->add_tr($row);
@@ -34,5 +33,6 @@ $table->sort([
     'name' => 'asc']);
 
 $data = (object) [
-            'competitions' => $table->out()
+            'competitions' => $table->out(),
+            'event_filter' => event::filter(false, t('competition.event_filter.all_events'))
 ];
