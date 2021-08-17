@@ -203,6 +203,16 @@ cash:
         log:
             name: cash
 
+telegram:
+    token: #telegram_token
+    chat_id:
+        support: #telegram_support_chatid
+    table:
+        log:
+            name: telegram
+            clear: #week
+            depth: #month
+
 helper:
     db: helper
     

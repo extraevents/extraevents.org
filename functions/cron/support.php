@@ -1,20 +1,19 @@
 <?php
 
 function support_error() {
-    $email = config::get()->email->support;
     $short = config::get()->short;
-
     $count = sizeof(errors::get());
     if (!$count) {
         return
                 false;
     }
-    return
-            smtp::put($email, "$short: support_error $count", "$short: support_error $count");
+    $subject = "$short: support_error $count";
+    $text = "$short: support_error $count";
+
+    return support_notification($subject, $text);
 }
 
 function support_checker() {
-    $email = config::get()->email->support;
     $short = config::get()->short;
 
     $site = config::get()->site;
@@ -37,27 +36,33 @@ function support_checker() {
     curl_close($file);
 
     if ($code != 200) {
-        return
-                smtp::put($email, "$short: support_checker",
-                        "$short: support_checker. whois.ru - $code");
+        $text = "$short: support_checker. whois.ru - $code";
+        return support_notification($email, $subject, $text);
     }
-
     preg_match("/Registry Expiry Date: (.*Z)/", $data, $matches);
     $expiry = $matches[1];
     $exptime = strtotime($expiry);
     $expdays = round(($exptime - time()) / 84600);
     $site_expired = date("d.m.y", $exptime);
-
-    return
-            smtp::put($email, "$short: support_checker",
-                    "$short: support_checker. ssl_expired = $ssl_expired, site_expired=$site_expired");
+    $text = "$short: support_checker. ssl_expired = $ssl_expired, site_expired=$site_expired";
+    $subject = "$short: support_checker";
+    return support_notification($subject, $text);
 }
 
 function support_backup() {
     $email = config::get()->email->support;
     $short = config::get()->short;
 
-    return
-            smtp::put($email, "$short: support_backup",
-                    "You need to create a backup!");
+    $subject = "$short: support_backup";
+    $text = "You need to create a backup!";
+
+    return support_notification($subject, $text);
+}
+
+function support_notification($subject, $text) {
+    $email = config::get()->email->support;
+    return [
+        'smtp' => smtp::put($email, $subject, $text),
+        'telegram' => telegram::send('support', $subject, $text)
+    ];
 }
