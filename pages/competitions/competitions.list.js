@@ -11,7 +11,7 @@ $('select[data-navigation-event]').change(function () {
         var tr = $(this);
         var show = false;
         tr.find('td[data-tr-events] i').each(function () {
-            if ($(this).data('id') === event_id || event_id === 'all') {
+            if ($(this).data('id').toString() === event_id || event_id === 'all') {
                 show = true;
             }
         });
