@@ -1,21 +1,32 @@
 <?php
 
+function support_ping() {
+    $text = "Ping";
+    return
+            support_notification($text, $text);
+}
+
 function support_error() {
-    $short = config::get()->short;
-    $count = sizeof(errors::get());
+    $process = 'support_error';
+    $errors = errors::get();
+    $count = sizeof($errors);
     if (!$count) {
         return
                 false;
     }
-    $subject = "$short: support_error $count";
-    $text = "$short: support_error $count";
-
-    return support_notification($subject, $text);
+    $cash_new = md5(serialize($errors));
+    $cash_old = cash::get($process);
+    if ($cash_new == $cash_old) {
+        return
+                false;
+    }
+    cash::set($process, $cash_new);
+    $text = "support_error $count";
+    return
+            support_notification($text, $text);
 }
 
 function support_checker() {
-    $short = config::get()->short;
-
     $site = config::get()->site;
     $get = @stream_context_create(array("ssl" => array("capture_peer_cert" => TRUE)));
     $read = @stream_socket_client("ssl://$site:443", $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $get);
@@ -36,33 +47,35 @@ function support_checker() {
     curl_close($file);
 
     if ($code != 200) {
-        $text = "$short: support_checker. whois.ru - $code";
-        return support_notification($email, $subject, $text);
+        $text = "support_checker. whois.ru - $code";
+        return
+                support_notification($subject, $text);
     }
     preg_match("/Registry Expiry Date: (.*Z)/", $data, $matches);
     $expiry = $matches[1];
     $exptime = strtotime($expiry);
     $expdays = round(($exptime - time()) / 84600);
     $site_expired = date("d.m.y", $exptime);
-    $text = "$short: support_checker. ssl_expired = $ssl_expired, site_expired=$site_expired";
-    $subject = "$short: support_checker";
-    return support_notification($subject, $text);
+    $text = "support_checker. ssl_expired = $ssl_expired, site_expired=$site_expired";
+    $subject = "support_checker";
+    return
+            support_notification($subject, $text);
 }
 
 function support_backup() {
-    $email = config::get()->email->support;
-    $short = config::get()->short;
-
-    $subject = "$short: support_backup";
+    $subject = "support_backup";
     $text = "You need to create a backup!";
 
-    return support_notification($subject, $text);
+    return
+            support_notification($subject, $text);
 }
 
 function support_notification($subject, $text) {
+    $short = config::get()->short;
     $email = config::get()->email->support;
-    return [
-        'smtp' => smtp::put($email, $subject, $text),
-        'telegram' => telegram::send('support', $subject, $text)
+    return
+            [
+                'smtp' => smtp::put($email, $subject, $text),
+                'telegram' => telegram::send('support', $subject, $text)
     ];
 }

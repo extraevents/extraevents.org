@@ -282,21 +282,27 @@ cron:
             run: #week
             
         11:
+            command: support_ping
+            run: #day        
+            
+        12:
             command: file_size::save
             run: #week 
             
-        12: 
+        13: 
             command: build_info
             run: #hour 
             
-        13: 
+        14: 
             command: update_wcaid::cron
             run: #week    
-            
-        14:
+           
+        15:
             command: notifications_competition_change_status
             run: #hour
-        15:
+            
+        16:
             command: update_events
             run: #5minutes
+            
            
