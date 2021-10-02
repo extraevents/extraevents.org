@@ -46,8 +46,10 @@ function support_checker() {
     $code = curl_getinfo($file, CURLINFO_HTTP_CODE);
     curl_close($file);
 
+    $subject = "support_checker";
+
     if ($code != 200) {
-        $text = "support_checker. whois.ru - $code";
+        $text = "whois.ru - $code";
         return
                 support_notification($subject, $text);
     }
@@ -56,8 +58,7 @@ function support_checker() {
     $exptime = strtotime($expiry);
     $expdays = round(($exptime - time()) / 84600);
     $site_expired = date("d.m.y", $exptime);
-    $text = "support_checker. ssl_expired = $ssl_expired, site_expired=$site_expired";
-    $subject = "support_checker";
+    $text = "ssl_expired = $ssl_expired, site_expired=$site_expired";
     return
             support_notification($subject, $text);
 }
