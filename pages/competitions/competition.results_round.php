@@ -89,7 +89,10 @@ $table->sort([
 $data = arrayToObject(
         [
             'title' => $event->line() . ', ' . $round->round_format,
-            'table' => $table->out(),
-            'results_print_link' => "competitions/$round->competition_id/results/$round->event_id/{$round->round_number}/print"
+            'table' => $table->out()
         ]
 );
+
+if (grand::resolve_access_global('competitions', 'competition.results_round_print')) {
+    $data->results_print_link = "competitions/$round->competition_id/results/$round->event_id/{$round->round_number}/print";
+}
