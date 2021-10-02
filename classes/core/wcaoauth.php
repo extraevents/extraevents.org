@@ -72,17 +72,19 @@ class wcaoauth {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         $result = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        $error = curl_error($ch);
         curl_close($ch);
-
         if (json_decode($result)->error ?? FALSE) {
             trigger_error(__CLASS__ . ".getToken: $result <br>" . print_r($postdata, true), E_USER_ERROR);
         }
 
         if ($status != 200) {
-            trigger_error(__CLASS__ . ".getToken: $status<br>$url", E_USER_ERROR);
+            trigger_error(__CLASS__ . ".getToken: $status<br>" . print_r($error, true) . "<br>$url", E_USER_ERROR);
         }
 
         return json_decode($result)->access_token;
@@ -96,6 +98,8 @@ class wcaoauth {
                 ]
         );
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         $result = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
