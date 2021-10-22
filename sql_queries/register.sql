@@ -1,7 +1,7 @@
 select 
 (r.event_id is not null) registred,
 e.id event_id,
-e.id event_name,
+e.name event_name,
 e.icon_wca_revert,
 e.person_count,
 p1.id person1_id,
@@ -15,7 +15,7 @@ p4.name person4_name,
 r.team_complete,
 r.key,
 rd.competitor_limit,
-r_count.count registred_count
+coalesce(r_count.count, 0) registred_count
 from rounds rd
 join events e on e.id=rd.event_id
 left outer join results r 
