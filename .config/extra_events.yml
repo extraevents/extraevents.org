@@ -220,6 +220,14 @@ ivy:
     comments:
         - Up-White, Right-Green, Left-Orange
         - U - WBR, R - GRY, L - OYB, F - WGO
+        
+rex:
+    name: Rex Cube
+    scramble: generate_rex
+    drawing: drawing_rex
+    comments:
+        - R - Right Front Up corner
+        - L - Left Front Up corner
   
 kilo:
     name: Kilominx
