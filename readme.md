@@ -37,8 +37,8 @@ Note: Because Article and Regulation numbers are not reassigned when Regulations
 - 4b) A member of `Extra Events Team` or `WCA delegate` can be a `Extra Events Organizer`.
 - 4c) The `WCA organizer` sends a request for an extra event (events) and who will be the `Extra Events Organizer` to `Extra Events Leaders`.
 - 4d) Requirements for the opening of registration on extra events:
-  - 4d1) Extra events can be included in the schedule on the `WCA website` in the following format: "{time} Extra Event: {event name}" . (e.g. [Sariki in Moscow 2020](https://www.worldcubeassociation.org/competitions/SarikiInMoscow2020#competition-schedule)).
-  - 4d2) The competition information on the `WCA website` must be an "Extra Events" section with information about extra events and links to the registration page on extraevents.org (e.g. [NIS Aktobe Cube Days 2020](https://www.worldcubeassociation.org/competitions/NISAktobeCubeDays2020#13239-extra-events)).
+  - 4d1) Extra events can be included in the schedule on the `WCA website` in the following format: "{time} Extra Event: {event name}" . (e.g. [GA Cubers Return B 2021](https://www.worldcubeassociation.org/competitions/GACubersReturnB2021#competition-schedule)).
+  - 4d2) The competition information on the `WCA website` must be an "Extra Events" section with information about extra events and links to the registration page on extraevents.org (e.g. [GA Cubers Return B 2021](https://www.worldcubeassociation.org/competitions/GACubersReturnB2021#15749-extra-event-face-turning-octahedron)).
 - 4e) Within two weeks, the `Extra Events Organizer` must send a report `Extra Events Leaders` about the competition.
  
 ## Article 5: Registration
