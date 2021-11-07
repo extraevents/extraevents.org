@@ -9,6 +9,8 @@ $table = new build_table();
 $table->add_head('current_status', false);
 $table->add_head('status', t('competition.status'));
 $table->add_head('action', t('competition.action'));
+$table->add_head('details', false);
+
 foreach (competition::get_statuses() as $action) {
     $row = new build_row();
     $row->add_value('status', $competition->status_line($action));
@@ -18,13 +20,19 @@ foreach (competition::get_statuses() as $action) {
     }
 
     if (in_array($action, $actions)) {
+        $key = "competition.actions." . $status . '__' . $action;
         $button = "<form data-confirm>"
                 . "<input hidden name='status' value='$action'>"
                 . "<button>"
-                . t("competition.actions." . $status . '__' . $action)
+                . t($key)
                 . "</button>"
                 . "</form>";
         $row->add_value('action', $button);
+        $key_details = $key . '__details';
+        $details = t($key_details);
+        if ($details != "{%$key_details}") {
+            $row->add_value('details', '<i class="color_red fas fa-exclamation-triangle"></i> ' . $details);
+        }
     }
     $table->add_tr($row);
 }

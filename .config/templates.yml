@@ -73,11 +73,13 @@ competition:
         draft__delete: Delete the competition
         draft__draft: Update the competition information from WCA
         draft__announcement_approval: Send the competition announcement for approval
+        draft__announcement_approval__details: see Regulation 4d
         announcement_approval__draft: Take a step back
         announcement_approval__announced: Approve the competition announcement
         announced__announcement_approval: Take a step back
         announced__running: Start the competition
-        running__results_approval: Send the competition results for approval (see Regulation 4e)
+        running__results_approval: Send the competition results for approval
+        running__results_approval__details: see Regulation 4e
         running__announced: Take a step back
         results_approval__running: Take a step back
         results_approval__completed: Approve the competition results
