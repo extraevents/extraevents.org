@@ -299,7 +299,7 @@ cron:
            
         15:
             command: notifications_competition_change_status
-            run: #hour
+            run: #5minutes
             
         16:
             command: update_events

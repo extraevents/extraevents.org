@@ -19,7 +19,8 @@
             }
         },
         "contact": {
-            "type": "string"
+            "type": "string",
+            "format": "email"
         },
         "registration_close": {
             "type": "string",

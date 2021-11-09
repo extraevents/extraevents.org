@@ -1,11 +1,10 @@
 <?php
 
 function notifications_competition_change_status() {
-    $email = config::get()->email->leaders;
-    $short = config::get()->short;
+    $email_leaders = config::get()->email->leaders;
+    $title = config::get()->title;
 
     $competitions_status = sql_query::rows('notifications_competition_change_status', [], helper::db());
-    $notification_body = [];
     foreach ($competitions_status as $competition_status) {
         $competition = new Competition($competition_status->competition);
         $person = new person($competition_status->person);
@@ -21,7 +20,7 @@ function notifications_competition_change_status() {
         $notification_competition_status = t('notification.competition_status', $competition_status_values);
         $page_index = page::get_index();
         if ($competition->id) {
-            $competition_line = "<a href='http://$page_index/competitions/$competition->id'>$competition->name</a>";
+            $competition_line = "<a href='http:$page_index/competitions/$competition->id'>$competition->name</a>";
         } else {
             $competition_line = "[DEL] $competition_status->competition";
         }
@@ -31,15 +30,21 @@ function notifications_competition_change_status() {
             $person_line = "[DEL] $competition_status->person";
         }
         $timestamp = $competition_status->timestamp;
-        $notification_body [] = "<p>$competition_line. <b>$person_line</b>: $notification_competition_status ($timestamp)</p>";
+        $notification_body = "<p>$competition_line. <b>$person_line</b>: $notification_competition_status ($timestamp)</p>";
+        if ($competition_status->description) {
+            $notification_body .= '<p>' . $competition_status->description . '</p>';
+        }
+
+        $emails = [$email_leaders];
+        if ($competition->contact) {
+            $emails[] = $competition->contact;
+        }
+        foreach ($emails as $email) {
+            smtp::put($email,
+                    "$competition->name: $title (" . $competition_status_values['status_new'] . ")",
+                    $notification_body);
+        }
     }
-    $count = sizeof($notification_body);
-    if (!$count) {
-        return false;
-    } else {
-        smtp::put($email,
-                "$short: Сhange of competition statuses",
-                implode("", $notification_body));
-        return $count;
-    }
+
+    return sizeof($competitions_status);
 }

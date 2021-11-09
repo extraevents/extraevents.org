@@ -124,7 +124,7 @@ class competition {
         return true;
     }
 
-    public function delete() {
+    public function delete($description = false) {
         if (!in_array(self::DELETE, $this->actions())) {
             return false;
         }
@@ -133,11 +133,11 @@ class competition {
         sql_query::exec('delete_organizers_by_competition', ['competition' => $this->id]);
         sql_query::exec('update_results_notpublish_by_competition', ['competition' => $this->id]);
 
-        $this->log_status($this->status, self::DELETE);
+        $this->log_status($this->status, self::DELETE, $description);
         return true;
     }
 
-    public function set_status($new_status) {
+    public function set_status($new_status, $description = false) {
         $old_status = $this->status;
         if (!in_array($new_status, $this->actions())) {
             return 'ERROR';
@@ -150,7 +150,7 @@ class competition {
         self::update_results($old_status, $new_status);
         sql_query::exec('update_competition_status', ['id' => $this->id, 'status' => $new_status]);
 
-        $this->log_status($old_status, $new_status);
+        $this->log_status($old_status, $new_status, $description);
         return 'OK';
     }
 
@@ -379,12 +379,13 @@ class competition {
                 $flow[$this->status] ?? [];
     }
 
-    private function log_status($status_old, $status_new) {
+    private function log_status($status_old, $status_new, $description = false) {
         $values = [];
         $values['person'] = wcaoauth::wca_id();
         $values['status_old'] = $status_old;
         $values['status_new'] = $status_new;
         $values['competition'] = $this->id;
+        $values['description'] = $description;
         $values['table'] = self::table_status();
         sql_query::exec('log_competition_status', $values, helper::db());
     }

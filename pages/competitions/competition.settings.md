@@ -31,7 +31,7 @@ Represents the root object.
 | `id` | `String` | Competition identifier on the WCA. |
 | `organizers` |  `[String]` | List of WCA ID of the organizers of extra events in the competition. |
 | `registration_close` | `DateTime` | The point in time when the registering ends on the site ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)) |
-| `contact` | `String` | Email for contacts with organizers. |
+| `contact` | `Email` | Email for contacts with organizers. |
 | `events` | [`[Event]`](#event) | List of all events held at the competition. |
 
 ### Example
