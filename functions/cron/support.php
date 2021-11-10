@@ -37,28 +37,27 @@ function support_checker() {
     $ssl_expired = $validTo_time_t ? date('d.m.y', $validTo_time_t) : false;
 
 
-    $file = curl_init("http://whois.ru/$site");
+    $file = curl_init("https://whois.ru/$site");
     curl_setopt($file, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($file, CURLOPT_HEADER, false);
     curl_setopt($file, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($file, CURLOPT_MAXREDIRS, 5);
+    curl_setopt($file,CURLOPT_SSL_VERIFYPEER, false);
     $data = curl_exec($file);
     $code = curl_getinfo($file, CURLINFO_HTTP_CODE);
     curl_close($file);
 
-    $subject = "support_checker";
-
     if ($code != 200) {
-        $text = "whois.ru - $code";
-        return
-                support_notification($subject, $text);
+        $site_expired = "whois.ru: $code";
+    } else {
+        preg_match("/Registry Expiry Date: (.*Z)/", $data, $matches);
+        $expiry = $matches[1];
+        $exptime = strtotime($expiry);
+        $expdays = round(($exptime - time()) / 84600);
+        $site_expired = date('d.m.y', $exptime);
     }
-    preg_match("/Registry Expiry Date: (.*Z)/", $data, $matches);
-    $expiry = $matches[1];
-    $exptime = strtotime($expiry);
-    $expdays = round(($exptime - time()) / 84600);
-    $site_expired = date("d.m.y", $exptime);
-    $text = "ssl_expired = $ssl_expired, site_expired=$site_expired";
+    $text = "ssl_expired = $ssl_expired, site_expired = $site_expired";
+    $subject = "support_checker";
     return
             support_notification($subject, $text);
 }
