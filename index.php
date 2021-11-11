@@ -29,4 +29,4 @@ ob_start();
 
 <script src="%i/index.js"></script>
 <?= page::push() ?>
-<?= db::close() ?>
+<?= db::close() ?> 
