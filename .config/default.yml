@@ -213,6 +213,15 @@ telegram:
             clear: #week
             depth: #month
 
+discort:
+    webhookurl:
+        competition: #discort_webhookurl_competition
+    table:
+        log:
+            name: discort
+            clear: #week
+            depth: #month
+
 helper:
     db: helper
     

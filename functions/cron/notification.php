@@ -30,20 +30,29 @@ function notifications_competition_change_status() {
             $person_line = "[DEL] $competition_status->person";
         }
         $timestamp = $competition_status->timestamp;
-        $notification_body = "<p>$competition_line. <b>$person_line</b>: $notification_competition_status ($timestamp)</p>";
+        $body = "<p>$competition_line. <b>$person_line</b>: $notification_competition_status ($timestamp)</p>";
         if ($competition_status->description) {
-            $notification_body .= '<p>' . $competition_status->description . '</p>';
+            $body .= '<p>' . $competition_status->description . '</p>';
         }
 
         $emails = [$email_leaders];
         if ($competition->contact) {
             $emails[] = $competition->contact;
         }
+        $subject = "$competition->name: $title (" . $competition_status_values['status_new'] . ")";
         foreach ($emails as $email) {
             smtp::put($email,
-                    "$competition->name: $title (" . $competition_status_values['status_new'] . ")",
-                    $notification_body);
+                    $subject,
+                    $body);
         }
+
+        $body_discort = "**$competition->name**: " . $competition_status_values['status_new'] . " / $person->name $timestamp";
+
+        if ($competition_status->description) {
+            $body_discort .= "\n" . $competition_status->description;
+        }
+
+        discort::send('competition', $body_discort);
     }
 
     return sizeof($competitions_status);
