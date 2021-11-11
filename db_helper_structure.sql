@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : utf-8
 
- Date: 11/08/2021 17:10:23 PM
+ Date: 11/11/2021 10:12:45 AM
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `backup` (
   `size` int(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `cash`
@@ -57,7 +57,7 @@ CREATE TABLE `competition_status` (
   `send_notification` tinyint(4) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `cron`
@@ -72,7 +72,7 @@ CREATE TABLE `cron` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=543 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=608 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `db_count`
@@ -85,7 +85,7 @@ CREATE TABLE `db_count` (
   `is_post` bit(1) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7517 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7558 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `db_size`
@@ -101,6 +101,19 @@ CREATE TABLE `db_size` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=755 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `discort`
+-- ----------------------------
+DROP TABLE IF EXISTS `discort`;
+CREATE TABLE `discort` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `webhookurl` varchar(256) DEFAULT NULL,
+  `text` text,
+  `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
+  `result` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `file_clear`
@@ -143,7 +156,7 @@ CREATE TABLE `form` (
   `server` text,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1258 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1262 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `form_process`
@@ -159,7 +172,7 @@ CREATE TABLE `form_process` (
   `message` varchar(255) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=606 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=609 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `import_team`
@@ -218,7 +231,7 @@ CREATE TABLE `smtp` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `smtp` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1330 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1368 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `telegram`
@@ -232,7 +245,7 @@ CREATE TABLE `telegram` (
   `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   `result` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `update_wcaid`
@@ -254,7 +267,7 @@ CREATE TABLE `wcaapi` (
   `status` varchar(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `wcaoauth`
