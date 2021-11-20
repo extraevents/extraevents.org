@@ -70,6 +70,7 @@ competition:
             Extra Events Leaders canceled the results of the competition.
             For more information, contact the Extra Events Organizer.
     actions:
+        expired: Expired
         description: Comment on changing status
         log:
             timestamp: Timestamp
@@ -83,7 +84,7 @@ competition:
             button:  Update the competition information from WCA
         draft__announcement_approval: 
             button:  Send the competition announcement for approval
-            details: see Regulation 4d
+            details: see Regulation 4d, deadline {%deadline}
         announcement_approval__draft: 
             button:  Take a step back
         announcement_approval__announced: 
@@ -94,7 +95,7 @@ competition:
             button:  Start the competition
         running__results_approval: 
             button:  Send the competition results for approval
-            details: see Regulation 4e
+            details: see Regulation 4e, deadline {%deadline}
         running__announced: 
             button:  Take a step back
         results_approval__running: 

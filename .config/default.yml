@@ -10,6 +10,12 @@ config:
         url: https://www.worldcubeassociation.org/persons/2015SOLO01
         name: Konstantin Solovyov
                 
+regulation:                
+    deadline:
+        draft__announcement_approval: 14
+        running__results_approval: 14
+        required: false
+    
 file:
     tmp: .files_tmp
     main: .files

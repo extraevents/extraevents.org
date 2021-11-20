@@ -20,7 +20,8 @@ foreach (competition::get_statuses() as $action) {
     }
 
     if (in_array($action, $actions)) {
-        $key = "competition.actions." . $status . '__' . $action;
+        $status_action = $status . '__' . $action;
+        $key = "competition.actions." . $status_action;
         $key_button = $key . '.button';
         $key_details = $key . '.details';
         $button = "<form data-available_action data-confirm>"
@@ -30,10 +31,29 @@ foreach (competition::get_statuses() as $action) {
                 . t($key_button)
                 . "</button>"
                 . "</form>";
-        $row->add_value('action', $button);
-        $details = t($key_details);
+        $deadline_config = (config::get('regulation')->deadline->$status_action ?? false);
+        $deadline_details = null;
+        $is_deadline_expired = false;
+        $is_deadline_required = config::get('regulation')->deadline->required ?? false;
+        if ($deadline_config) {
+            $deadline_date = strtotime($competition->start_date . " - $deadline_config day");
+            $now_00 = strtotime(gmdate("Y-m-d\T00:00:00\Z"));
+            $deadline_details = date('Y-m-d', $deadline_date) . ' 00:00 UTC';
+            if ($deadline_date <= $now_00) {
+                $is_deadline_expired = true;
+                $deadline_details = "<span class='color_red'>$deadline_details</span>";
+            }
+        }
+        if ($is_deadline_expired and $is_deadline_required) {
+            $row->add_value('action', '<i class="color_red fas fa-times-circle"></i> ' . t('competition.actions.expired'));
+        } else {
+            $row->add_value('action', $button);
+        }
+        $details = t($key_details,
+                ['deadline' => $deadline_details]
+        );
         if ($details != "{%$key_details}") {
-            $row->add_value('details', '<i class="color_red fas fa-exclamation-triangle"></i> ' . $details);
+            $row->add_value('details', '<i class="color_orange fas fa-exclamation-triangle"></i>' . ' ' . $details);
         }
     }
     $table->add_tr($row);
