@@ -6,7 +6,7 @@ $settings = json::out(
                 [
                     'id' => "ENTER_HERE_ID_COMPETITION",
                     'organizers' => [$wca_id],
-                    'contact' => "",
+                    'contact' => "ENTER_HERE_EMAIL",
                     'registration_close' => date('Y-m-d', strtotime('+4 week')) . 'T00:00:00Z',
                     'events' => [
                         [

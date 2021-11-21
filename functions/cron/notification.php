@@ -46,7 +46,7 @@ function notifications_competition_change_status() {
                     $body);
         }
 
-        $body_discort = "**$competition->name**: " . $competition_status_values['status_new'] . " / $person->name $timestamp";
+        $body_discort = "**$competition->name**: " . $competition_status_values['status_old'] . ' -> ' . $competition_status_values['status_new'] . " / $person->name $timestamp";
 
         if ($competition_status->description) {
             $body_discort .= "\n" . $competition_status->description;

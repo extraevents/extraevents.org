@@ -79,7 +79,12 @@ class wcaoauth {
         $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         $error = curl_error($ch);
         curl_close($ch);
-        if (json_decode($result)->error ?? FALSE) {
+        $json_result = json_decode($result);
+        if ($json_result->error ?? FALSE) {
+            if ($json_result->error == 'invalid_grant') {
+                message::set($json_result->error_description);
+                return false;
+            }
             trigger_error(__CLASS__ . ".getToken: $result <br>" . print_r($postdata, true), E_USER_ERROR);
         }
 
@@ -87,7 +92,7 @@ class wcaoauth {
             trigger_error(__CLASS__ . ".getToken: $status<br>" . print_r($error, true) . "<br>$url", E_USER_ERROR);
         }
 
-        return json_decode($result)->access_token;
+        return $json_result->access_token ?? false;
     }
 
     private static function getMeCurl($accessToken) {
@@ -230,26 +235,6 @@ class wcaoauth {
     static function table_log() {
         return
                 self::$config->table->log->name;
-    }
-
-    static function __recreater() {
-        $table = self::table_log();
-        db::exec(" DROP TABLE IF EXISTS `$table`",
-                helper::db());
-        db::check_table($table,
-                " CREATE TABLE `$table` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `session` varchar(52) NULL,
-                    `wca_id` varchar(10) NULL,
-                    `user_id` int(11) NULL,
-                    `name` varchar(50) NULL,
-                    `auth_begin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    `auth_end` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                    `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (`id`),
-                    UNIQUE  (`session`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-                helper::db());
     }
 
 }

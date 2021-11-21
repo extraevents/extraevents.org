@@ -41,6 +41,11 @@ Note: Because Article and Regulation numbers are not reassigned when Regulations
   - 4d2) The competition information on the `WCA website` must be an "Extra Events" or "Extra Event: {event name}" section with information about extra events and links to the registration page on extraevents.org (e.g. [GA Cubers Return B 2021](https://www.worldcubeassociation.org/competitions/GACubersReturnB2021#15749-extra-event-face-turning-octahedron)).
   - 4d3) The competition should be announced on the `Extra Events Website` at least 14 days (two weeks) before 00:00 UTC of the start date of the competition.
 - 4e) Within two weeks, the `Extra Events Organizer` should send a report `Extra Events Leaders` about the competition.
+  - 4e1) Recommendations for the preparation of the report:   
+    - 4e1a) Give some information about pre-competition preparation of Extra Events.
+    - 4e1b) Give some information about the equipment and competition room used.
+    - 4e1c) **Most important**. Write carefully about all incidents (extra solves, disqualifications, etc.).  Number each one.
+    - 4e1d) Some other comments and/or points.
  
 ## Article 5: Registration
 

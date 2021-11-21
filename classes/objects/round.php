@@ -90,7 +90,7 @@ class round {
                     AND card_id = '$card_id'");
 
         $affected = db::affected();
-        if($affected){
+        if ($affected) {
             self::log_scoretaker($round, $card_id, $result);
         }
         return
@@ -396,42 +396,10 @@ class round {
 
     static function log_scoretaker($round, $card_id, $details) {
         $person = wcaoauth::wca_id();
-        $details=json_encode($details);
+        $details = json_encode($details);
         db::exec(" INSERT INTO `" . self::table_scoretaker() . "` "
                 . " (`competition_id`,`event_id`,`round_number`,`person`,`card_id`,`details`) "
                 . " VALUES ('$round->competition_id','$round->event_id','$round->round_number','$person','$card_id','$details')",
-                helper::db());
-    }
-
-    static function __recreater() {
-        $table_register = self::table_register();
-        db::exec(" DROP TABLE IF EXISTS `$table_register`",
-                helper::db());
-        db::exec(" CREATE TABLE `$table_register` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `person` varchar(10),
-                    `competition_id` text,
-                    `event_id` text,
-                    `action` text,
-                    `result_id` int(11),
-                    `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-                helper::db());
-
-
-        $table_scoretaker = self::table_scoretaker();
-        db::exec(" DROP TABLE IF EXISTS `$table_scoretaker`",
-                helper::db());
-        db::exec(" CREATE TABLE `$table_scoretaker` (
-                    `competition_id` varchar(50),
-                    `event_id` varchar(50),
-                    `round_number` int(1),
-                    `person` varchar(10),
-                    `card_id` int(11),
-                    `details` varchar(255),
-                    `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
                 helper::db());
     }
 

@@ -58,6 +58,7 @@ class results {
                 SELECT 
                     r.*,
                     cn.name competition_name,
+                    cn.status competition_status,
                     cn.end_date competition_end_date,
                     rt.name round_format,
                     e.name event_name,

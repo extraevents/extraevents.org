@@ -2,12 +2,12 @@
 
 $person = page::get_object('person');
 
-$results = results::get(false, ['is_publish', 'person' => $person->id]);
+$results = results::get(false, ['person' => $person->id]);
 $block = new build_block();
 $block->add_element(t('persons.country'), $person->country_name);
 if ($person->is_real) {
     $block->add_element(t('persons.wca_id'), "<a data-external-link='https://www.worldcubeassociation.org/persons/{$person->id}'>{$person->id}</a>");
-}else{
+} else {
     $block->add_element(t('persons.ee_id'), "{$person->id}");
 }
 
@@ -59,6 +59,7 @@ $table_personal->sort(['event_sort' => 'asc']);
 
 $table_results = new build_table(t('persons.results'));
 $table_results->add_head('event', t('results.event'));
+$table_results->add_head('publish', false);
 $table_results->add_head('competition', t('results.competition'));
 $table_results->add_head('round', t('results.round'));
 $table_results->add_head('pos', t('persons.position'));
@@ -82,6 +83,12 @@ foreach ($results as $r) {
     ]);
     $row->add_value('event', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert) . ' ' . $r->event_name);
     $row->add_value('event_sort', $r->event_name);
+    if ($r->reason_not_publish) {
+        $title = t('results.not_publish', ['reason' => $r->reason_not_publish]);
+        $row->add_value('publish', "<i title='$title' class='far fa-times-circle'></i>");
+    } else {
+        $row->add_value('publish', competition::get_status_icon($r->competition_status));
+    }
     $row->add_value('competition', competition::get_line($r->competition_id, $r->competition_name, $r->competition_country_name, $r->competition_country_iso2, "/results/{$r->event_id}/{$r->round_number}"));
     $row->add_value('competition_sort', $r->competition_end_date);
     $row->add_value('round_sort', $r->round_number);

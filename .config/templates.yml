@@ -84,7 +84,7 @@ competition:
             button:  Update the competition information from WCA
         draft__announcement_approval: 
             button:  Send the competition announcement for approval
-            details: see Regulation 4d, deadline {%deadline}
+            details: Before performing this action, you must enter the details on the WCA website.<br>Regulation 4d, deadline {%deadline}
         announcement_approval__draft: 
             button:  Take a step back
         announcement_approval__announced: 
@@ -95,7 +95,7 @@ competition:
             button:  Start the competition
         running__results_approval: 
             button:  Send the competition results for approval
-            details: see Regulation 4e, deadline {%deadline}
+            details: Before proceeding with this action, you must send a competition report.<br>Regulation 4e, deadline {%deadline}
         running__announced: 
             button:  Take a step back
         results_approval__running: 
@@ -231,6 +231,7 @@ results:
     continent: Continent
     country: Country
     attempts: Solves
+    not_publish: 'Results not published - {%reason}'
 records:    
     title: Records
 region_filter:

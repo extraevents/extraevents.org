@@ -36,23 +36,9 @@ class wcaapi {
                 helper::db());
     }
 
-        static function table_log() {
+    static function table_log() {
         return
                 self::$config->table->log->name;
-    }
-    
-    static function __recreater() {
-        $table = self::table_log();
-        db::exec(" DROP TABLE IF EXISTS `$table`",
-                helper::db());
-        db::exec(" CREATE TABLE `$table` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `path` varchar(255) NOT NULL,
-                    `status` varchar(11) DEFAULT NULL,
-                    `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-                helper::db());
     }
 
 }
