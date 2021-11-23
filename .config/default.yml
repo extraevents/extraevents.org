@@ -12,8 +12,10 @@ config:
                 
 regulation:                
     deadline:
-        draft__announcement_approval: 14
-        running__results_approval: 14
+        draft__announcement_approval:
+            start_date: -14
+        running__results_approval: 
+            end_date: +14
         required: false
     
 file:

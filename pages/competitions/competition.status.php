@@ -35,8 +35,14 @@ foreach (competition::get_statuses() as $action) {
         $deadline_details = null;
         $is_deadline_expired = false;
         $is_deadline_required = config::get('regulation')->deadline->required ?? false;
+        $deadline_date = false;
         if ($deadline_config) {
-            $deadline_date = strtotime($competition->start_date . " - $deadline_config day");
+            if ($deadline_config->start_date ?? false) {
+                $deadline_date = strtotime($competition->start_date . " $deadline_config->start_date day");
+            }
+            if ($deadline_config->end_date ?? false) {
+                $deadline_date = strtotime($competition->end_date . " $deadline_config->end_date day");
+            }
             $now_00 = strtotime(gmdate("Y-m-d\T00:00:00\Z"));
             $deadline_details = date('Y-m-d', $deadline_date) . ' 00:00 UTC';
             if ($deadline_date <= $now_00) {
@@ -52,7 +58,7 @@ foreach (competition::get_statuses() as $action) {
         $details = t($key_details,
                 ['deadline' => $deadline_details]
         );
-        if ($details != "{%$key_details}") {
+        if ($deadline_date and $details != "{%$key_details}") {
             $row->add_value('details', '<i class="color_orange fas fa-exclamation-triangle"></i>' . ' ' . $details);
         }
     }
