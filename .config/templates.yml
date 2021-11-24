@@ -29,6 +29,7 @@ message:
             You are not registered for the competition on the WCA website
             (or try again later)!
         registration_disabled!: Registration cannot be changed!
+        results_disabled!: Results cannot be changed!
     scrambles_generate:
         done: Scrambles were generated.
         wrong_file!: Wrong file!
@@ -147,6 +148,8 @@ competition:
     register_descriptions:
         open: >-
             You must have already been registered to the competition on the WCA website.
+        open_organizer: >-
+            Extra Events Organizer may not have registration for the competition on the WCA website.
         close: Registration cannot be changed.
     settings: Competition settings
     create: Create competition

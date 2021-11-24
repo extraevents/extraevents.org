@@ -56,6 +56,7 @@ Note: Because Article and Regulation numbers are not reassigned when Regulations
     - 5a1) The competitor sign in `Extra Events website` with `WCA website` authorization.
     - 5b2) Conditions on the `WCA website`:
         - 5b2b) The competitor must already be registered to the same competition.
+            - 5b2b1) Exception: `Extra Events Organizer` may not have registration.
     - 5b3) Conditions on the `Extra Events website`:
         - 5b3a) Registration on extra events should not be finished yet.
         - 5b3b) The competitors limit has not been reached.

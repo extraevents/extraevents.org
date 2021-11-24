@@ -79,7 +79,7 @@ foreach ($rows as $r) {
     $table->add_tr($row);
 }
 $registation_description = $competition->show_register() ?
-        t('competition.register_descriptions.open') :
+        (access::is_organizer()?t('competition.register_descriptions.open_organizer'):t('competition.register_descriptions.open')) :
         t('competition.register_descriptions.close');
 
 $data = arrayToObject(

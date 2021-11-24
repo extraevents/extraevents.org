@@ -31,7 +31,7 @@ if ($action == 'register') {
         }
     }
 
-    if (!$wca_registred) {
+    if (!$wca_registred and!in_array($wca_id, $competition->organizers)) {
         form::process(false, $details, 'round.not_wca_registration!');
         form::return();
     }
