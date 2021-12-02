@@ -52,15 +52,23 @@
                     "cutoff": {
                         "type": "number"
                     }
-                },
-                "time_limit": {
-                    "type": "integer"
-                },
-                "time_limit_cumulative": {
-                    "type": "boolean"
-                },
-                "competitor_limit": {
-                    "type": "integer"
+                    ,
+                    "time_limit": {
+                        "type": "integer"
+                    },
+                    "time_limit_cumulative": {
+                        "type": "boolean"
+                    },
+                    "competitor_limit": {
+                        "type": "integer"
+                    },
+                    "settings": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": ["autoteam"]
+                        } 
+                    }
                 }
             }
         }

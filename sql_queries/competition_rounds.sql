@@ -21,7 +21,8 @@ SELECT
     r.time_limit_cumulative,
     r.cutoff,
     r.competitor_limit,
-    r.final
+    r.final,
+    r.settings
 FROM rounds r
 JOIN competitions c on c.id=r.competition_id
 JOIN events e on e.id=r.event_id

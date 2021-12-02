@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : utf-8
 
- Date: 11/11/2021 10:12:45 AM
+ Date: 12/02/2021 20:09:41 PM
 */
 
 SET NAMES utf8mb4;
@@ -57,7 +57,7 @@ CREATE TABLE `competition_status` (
   `send_notification` tinyint(4) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `cron`
@@ -85,7 +85,7 @@ CREATE TABLE `db_count` (
   `is_post` bit(1) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7558 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8302 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `db_size`
@@ -156,7 +156,7 @@ CREATE TABLE `form` (
   `server` text,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1262 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1466 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `form_process`
@@ -172,7 +172,7 @@ CREATE TABLE `form_process` (
   `message` varchar(255) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=609 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=728 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `import_team`
@@ -200,8 +200,9 @@ CREATE TABLE `register` (
   `action` text,
   `result_id` int(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `scoretaker`
@@ -267,7 +268,7 @@ CREATE TABLE `wcaapi` (
   `status` varchar(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `wcaoauth`
@@ -284,6 +285,6 @@ CREATE TABLE `wcaoauth` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `session` (`session`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

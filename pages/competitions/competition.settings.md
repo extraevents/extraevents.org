@@ -57,18 +57,20 @@ Represents data of an event held at the competition.
 | `cutoff` | `Integer` | The cutoff in this round (in seconds). |
 | `time_limit` | `Integer` | The time limit in this round (in seconds). |
 | `time_limit_cumulative` | `Boolean` | Is the cumulative limit used. |
-| `competitor_limit` | `Integer` | The competitors limit. |
+| `competitor_limit` | `Integer` | Competitor limit, or team limit for team competition. |
+| `settings` | `[String]` | Additional settings for the event round. `autoteam` - Automatic team completion. |
 
 ### Example
 
 ```json
- {
-    "id": 222pyra,
+{
+    "id": "teambld",
     "round": 1,
     "format": "a",
-    "cutoff": 30,
-    "timeLimit": 600,
-    "isCumulative": false,
-    "competitorLimit": 12
+    "cutoff": 40,
+    "time_limit": 60,
+    "time_limit_cumulative": false,
+    "competitor_limit": 75,
+    "settings": ["autoteam"]
 }
 ```

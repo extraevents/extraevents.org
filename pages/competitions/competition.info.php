@@ -36,10 +36,16 @@ if ($competition->contact) {
             "</a>");
 }
 
-
 $block->add_element(t('competition.registration'),
         t('competition.registration_date_close') .
         " <span data-utc-time='$competition->registration_close'>$competition->registration_close</span>");
+
+$settings_exists = [];
+$settings = [
+    'autoteam' => (object) [
+        'icon' => '<i class="fas fa-hands-helping"></i>',
+        'title' => t('round.settings.autoteam')]
+];
 
 $table = new build_table(false);
 $table->add_head('image', false);
@@ -49,6 +55,7 @@ $table->add_head('format', t('round.format'));
 $table->add_head('time_limit', t('round.time_limit'));
 $table->add_head('cutoff', t('round.cutoff'));
 $table->add_head('competitor_limit', t('round.competitor_limit'));
+$table->add_head('settings', false);
 foreach ($competition->rounds as $round) {
     $row = new build_row();
     $row->add_value('image', event::get_image($round->event_id, $round->event_name, $round->icon_wca_revert));
@@ -63,15 +70,28 @@ foreach ($competition->rounds as $round) {
     $row->add_value('cutoff', centisecond::out($round->cutoff, true));
     $row->add_value('time_limit', centisecond::out($round->time_limit, true) .
             ($round->time_limit_cumulative ? (' ' . t('round.cumulative')) : ''));
-    $row->add_value('competitor_limit', $round->competitor_limit);
+    $row->add_value('competitor_limit', $round->competitor_limit . ($round->person_count > 1 ? ' teams' : false));
+    if ($round->person_count > 1 and round::check_settings('autoteam', $round->settings)) {
+        $row->add_value('settings', "<span title='{$settings['autoteam']->title}'>{$settings['autoteam']->icon}</span>");
+        $settings_exists['autoteam'] = true;
+    }
     $table->add_tr($row);
 }
 
 $rounds_block = $table->out();
 
+$legend = new build_block(false);
+if (sizeof($settings_exists)) {
+    $legend->set_title(t('competition.legend'));
+}
+foreach (array_keys($settings_exists) as $setting) {
+    $legend->add_element($settings[$setting]->icon, $settings[$setting]->title);
+}
+
 $data = (object) [
             'competition_line' => $competition->line(),
             'info' => $block->out(),
-            'rounds' => $rounds_block
+            'rounds' => $rounds_block,
+            'legend' => $legend->out(),
 ];
 

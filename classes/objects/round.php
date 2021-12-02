@@ -13,48 +13,14 @@ class round {
     public $time_limit;
     public $time_limit_cumulative;
     public $competitor_limit;
+    public $settings;
     private static $config;
-    private $where;
+    private static $last_key;
+
+    const AUTOTEAM = 'autoteam:';
 
     static function __autoload() {
         self::$config = config::get(__CLASS__);
-    }
-
-    function construct($competition_id, $event_id, $round_number) {
-        $this->where = "WHERE competition_id = '$competition_id' 
-                        AND event_id = '$event_id'
-                        AND round_number = '$round_number'";
-        $row = db::row("SELECT r.*, 
-                c.name competition_name,
-                f.name format_name,
-                f.sort_by format_sort_by,
-                f.sort_by_second format_sort_by_second,
-                f.solve_count format_solve_count,
-                f.extra_count format_extra_count,
-                f.cutoff_count format_cutoff_count
-                FROM rounds r 
-                JOIN competition c on c.id=r.competition_id
-                JOIN formats f on f.id = r.round_format $this->where");
-        if ($row) {
-            $this->id = true;
-            $this->competition_id = $row->competition_id;
-            $this->competition_name = $row->competition_name;
-            $this->event_id = $row->event_id;
-            $this->round_number = $row->round_number;
-            #$this->round = new wca_round_type($row->round_number, $row->cutoff, $row->final);
-            $this->format = (object) [
-                        'sort_by' => $row->format_sort_by,
-                        'sort_by_second' => $row->format_sort_by_second,
-                        'solve_count' => $row->format_solve_count,
-                        'extra_count' => $row->format_extra_count,
-                        'cutoff_count' => $row->format_cutoff_count,
-            ];
-            $this->cutoff = $row->cutoff + 0;
-            $this->final = $row->final;
-            $this->time_limit = $row->time_limit + 0;
-            $this->time_limit_cumulative = boolval($row->time_limit_cumulative);
-            $this->competitor_limit = $row->competitor_limit + 0;
-        }
     }
 
     static function get_list_by_competition($competition) {
@@ -66,6 +32,10 @@ class round {
         }
         return
                 $list;
+    }
+
+    static function check_settings($key, $settings) {
+        return in_array($key, explode(";", $settings));
     }
 
     static function set_result($round, $card_id, $result) {
@@ -267,21 +237,133 @@ class round {
                 $exec;
     }
 
-    private static function register_create($person, $round) {
+    static function autoteam($round) {
+
+        $rows_incomplete = db::rows("SELECT person1, person2, person3, person4 FROM results 
+                WHERE competition_id='$round->competition_id'
+                AND event_id ='$round->event_id' 
+                AND round_number = 1
+                AND team_complete = 0 ");
+        $persons_incomplete = [];
+        $persons_complete = [];
+        foreach ($rows_incomplete as $row) {
+            foreach (range(1, 4) as $i) {
+                if ($row->{"person{$i}"}) {
+                    $persons_incomplete[] = $row->{"person{$i}"};
+                }
+            }
+        }
+
+        $rows_complete = db::rows("SELECT person1, person2, person3, person4 FROM results 
+                WHERE competition_id='$round->competition_id'
+                AND event_id ='$round->event_id' 
+                AND round_number = 1
+                AND team_complete = 1 ");
+
+        foreach ($rows_complete as $row) {
+            foreach (range(1, 4) as $i) {
+                if ($row->{"person{$i}"}) {
+                    $persons_complete[] = $row->{"person{$i}"};
+                }
+            }
+        }
+
+        $persons_incomplete = array_unique($persons_incomplete);
+        $persons_incomplete = array_diff($persons_incomplete, $persons_complete);
+
+        $persons_selected = [];
+        foreach ($persons_incomplete as $person) {
+            $register_order = self::get_log_register_id($person, $round);
+            $persons_selected[] = ['id' => $person, 'order' => $register_order];
+        }
+
+        usort($persons_selected, function ($a, $b) {
+            $a_r = $a['order'];
+            $b_r = $b['order'];
+            if (!$a_r) {
+                return +1;
+            }
+            if (!$b_r) {
+                return -1;
+            }
+            return $a_r > $b_r;
+        });
+
+        $person_count = $round->person_count;
+        $free_places = ($round->competitor_limit - sizeof($rows_complete)) * $person_count;
+        $excluded = [];
+        foreach ($persons_selected as $key => $person) {
+            if ($free_places <= 0) {
+                $excluded[] = $person['id'];
+                unset($persons_selected[$key]);
+            }
+            $free_places--;
+        }
+        shuffle($persons_selected);
+
+        $teams = [];
+        $team = [];
+        foreach ($persons_selected as $person) {
+            if (sizeof($team) < $person_count) {
+                $team[] = $person['id'];
+            }
+            if (sizeof($team) == $person_count) {
+                $teams[] = $team;
+                $team = [];
+            }
+        }
+
+        foreach ($teams as $team) {
+            foreach ($team as $p => $person) {
+                if ($p == 0) {
+                    self::register_create($team[$p], $round, self::AUTOTEAM);
+                } else {
+                    self::register_join($team[$p], $round, self::$last_key, self::AUTOTEAM);
+                }
+            }
+        }
+        competition::generate_card_number();
+        if (sizeof($excluded)) {
+            return
+                    "{{$round->event_id}.autoteam} Excluded: " . implode(", ", $excluded);
+        }
+    }
+
+    static function autoteam_rollback($round) {
+        $rows = db::rows("SELECT id,person1,person2,person3,person4 FROM results 
+                WHERE competition_id='$round->competition_id'
+                AND event_id ='$round->event_id' 
+                AND round_number = 1
+                AND autoteam = 1");
+        foreach ($rows as $row) {
+            db::exec("DELETE FROM results WHERE id = $row->id");
+            $persons = [$row->person1, $row->person2, $row->person3, $row->person4];
+            self::log_register($row->id, $round, self::AUTOTEAM . __FUNCTION__, ['before' => $persons, 'after' => null]);
+        }
+    }
+
+    private static function register_create($person, $round, $option = false) {
         $complete = ($round->person_count == 1) + 0;
         $key = random_string(6);
+        self::$last_key = $key;
 
         $exec = db::exec("INSERT INTO results
                     (competition_id, event_id, round_number, person1, team_complete, `key`) VALUES
                     ('$round->competition_id', '$round->event_id', '$round->round_number', '$person', $complete, '$key') ");
+        $results_id = db::id();
         if ($exec) {
-            self::log_register(db::id(), $round, __FUNCTION__);
+            self::log_register($results_id, $round, $option . __FUNCTION__, ['before' => null, 'after' => [$person]]);
         }
+
+        if ($option == self::AUTOTEAM) {
+            db::exec("UPDATE results set autoteam = 1 where id = $results_id");
+        }
+
         return
                 $exec;
     }
 
-    private static function register_join($person, $round, $key) {
+    private static function register_join($person, $round, $key, $option = false) {
 
         $row = db::row("SELECT id, person1, person2, person3 ,person4
                 FROM results
@@ -302,6 +384,7 @@ class round {
                 $persons[] = $person_i;
             }
         }
+        $persons_before = $persons;
         $persons[] = $person;
         sort($persons);
         if (sizeof(array_unique($persons)) != sizeof($persons)) {
@@ -324,12 +407,12 @@ class round {
                             person4 = '$persons[3]'
                             WHERE id = '$row->id'");
         if ($exec) {
-            self::log_register($row->id, $round, __FUNCTION__);
+            self::log_register($row->id, $round, $option . __FUNCTION__, ['before' => $persons_before, 'after' => $persons]);
         }
         return $exec;
     }
 
-    static function unregister($person, $round) {
+    static function unregister($person, $round, $prefix = false) {
         $row = db::row("SELECT id,person1,person2,person3,person4 FROM results 
                 WHERE competition_id='$round->competition_id'
                 AND event_id ='$round->event_id' 
@@ -339,6 +422,7 @@ class round {
             return false;
         }
         $persons = [$row->person1, $row->person2, $row->person3, $row->person4, ''];
+        $persons_before = $persons;
 
         $key = false;
         if (($key = array_search($person, $persons)) !== FALSE) {
@@ -359,7 +443,7 @@ class round {
                     WHERE id = $row->id");
         }
         if ($exec) {
-            self::log_register($row->id, $round, __FUNCTION__);
+            self::log_register($row->id, $round, $prefix . __FUNCTION__, ['before' => $persons_before, 'after' => $persons]);
         }
         return $exec;
     }
@@ -381,16 +465,28 @@ class round {
         $round->cutoff ??= 0;
         $round->time_limit_cumulative ??= 0;
         $round->time_limit_cumulative += 0;
+        $settings = implode(';', $round->settings ?? []);
         db::exec(" INSERT INTO `rounds` "
-                . " (`competition_id`,`event_id`,`round_number`,`round_format`,`cutoff`,`time_limit`,`time_limit_cumulative`,`competitor_limit`) "
-                . " VALUES ('$competition_id','$round->id','$round->round','$round->format','$round->cutoff','$round->time_limit',$round->time_limit_cumulative,'$round->competitor_limit')");
+                . " (`competition_id`,`event_id`,`round_number`,`round_format`,`cutoff`,`time_limit`,`time_limit_cumulative`,`competitor_limit`,`settings`) "
+                . " VALUES ('$competition_id','$round->id','$round->round','$round->format','$round->cutoff','$round->time_limit',$round->time_limit_cumulative,'$round->competitor_limit','$settings')");
     }
 
-    static function log_register($id, $round, $action) {
+    static function get_log_register_id($person, $round) {
+        return
+                db::row("SELECT max(id) id FROM " . self::table_register() . " 
+                                WHERE competition_id = '$round->competition_id'
+                                    AND event_id = '$round->event_id'
+                                    AND person = '$person'
+                                    AND action not like '" . self::AUTOTEAM . "%'",
+                        helper::db())->id ?? false;
+    }
+
+    static function log_register($id, $round, $action, $details = false) {
         $person = wcaoauth::wca_id();
+        $details = json_encode($details);
         db::exec(" INSERT INTO `" . self::table_register() . "` "
-                . " (`result_id`,`person`,`competition_id`,`event_id`,`action`) "
-                . " VALUES ($id,'$person','$round->competition_id','$round->event_id','$action')",
+                . " (`result_id`,`person`,`competition_id`,`event_id`,`action`,`details`) "
+                . " VALUES ($id,'$person','$round->competition_id','$round->event_id','$action','$details')",
                 helper::db());
     }
 

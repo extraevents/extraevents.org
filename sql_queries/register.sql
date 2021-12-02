@@ -15,7 +15,8 @@ p4.name person4_name,
 r.team_complete,
 r.key,
 rd.competitor_limit,
-coalesce(r_count.count, 0) registred_count
+coalesce(r_count.count, 0) registred_count,
+rd.settings
 from rounds rd
 join events e on e.id=rd.event_id
 left outer join results r 

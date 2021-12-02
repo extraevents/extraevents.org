@@ -153,6 +153,7 @@ competition:
         close: Registration cannot be changed.
     settings: Competition settings
     create: Create competition
+    legend: Legend
 contact:
     leaders: Mail to leaders
     support: Report a bug
@@ -200,7 +201,7 @@ round:
             register: Register!
             unregister: Unregister
         registrations_count: Registrations   
-        team_key: Team key
+        team_key: Pass this key to team members &#58; {%key}
         team_key_join: |
             Enter team key for join the team
             or leave it empty to create a new team.
@@ -211,6 +212,8 @@ round:
     scorecards:
     registrations:
         total: Total
+    settings:
+        autoteam: Competitors from incomplete teams are automatically combined into new teams at the start of the competition.    
 results:
     position: '#'
     sort_by:

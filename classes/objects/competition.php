@@ -147,7 +147,7 @@ class competition {
         if (!$update_from_wca and $need_update_from_wca) {
             return 'NOT_FOUND';
         }
-        self::update_results($old_status, $new_status);
+        $description .= self::update_results($old_status, $new_status);
         sql_query::exec('update_competition_status', ['id' => $this->id, 'status' => $new_status]);
 
         $this->log_status($old_status, $new_status, $description);
@@ -165,6 +165,7 @@ class competition {
     }
 
     private function update_results($old_status, $new_status) {
+        $description = false;
         if ($new_status == self::COMPLETED) {
             sql_query::exec('update_results_publish_by_competition', ['competition' => $this->id]);
         } else {
@@ -175,6 +176,23 @@ class competition {
             results::update_rank();
             results::update_records();
         }
+
+        if ($new_status == self::RUNNING and $old_status == self::ANNOUNCED) {
+            foreach ($this->rounds as $round) {
+                if ($round->person_count > 1 and round::check_settings('autoteam', $round->settings)) {
+                    $description .= round::autoteam($round);
+                }
+            }
+        }
+
+        if ($new_status == self::ANNOUNCED and $old_status == self::RUNNING) {
+            foreach ($this->rounds as $round) {
+                if ($round->person_count > 1 and round::check_settings('autoteam', $round->settings)) {
+                    round::autoteam_rollback($round);
+                }
+            }
+        }
+        return $description;
     }
 
     function get_round($event_id, $round_number) {
@@ -232,7 +250,25 @@ class competition {
                 in_array($this->status, [
             self::ANNOUNCED,
             self::RUNNING,
-            self::RESULTS_APPROVAL
+            self::RESULTS_APPROVAL,
+            self::COMPLETED
+        ]);
+    }
+
+    function enable_regenerate_scrambles() {
+
+        return
+                in_array($this->status, [
+            self::ANNOUNCED,
+            self::RUNNING
+        ]);
+    }
+
+    function enable_enter_results() {
+
+        return
+                in_array($this->status, [
+            self::RUNNING
         ]);
     }
 
@@ -524,15 +560,19 @@ class competition {
         $rounds = [];
         foreach ($this->rounds as $round) {
 
-            $rounds[] = [
+            $add_round = [
                 'id' => $round->event_id,
                 'round' => $round->round_number + 0,
                 'format' => $round->format_id,
                 'cutoff' => $round->cutoff / 100 + 0,
                 'time_limit' => $round->time_limit / 100 + 0,
                 'time_limit_cumulative' => boolval($round->time_limit_cumulative),
-                'competitor_limit' => $round->competitor_limit + 0
+                'competitor_limit' => $round->competitor_limit + 0,
             ];
+            if ($round->settings) {
+                $add_round['settings'] = explode(";", $round->settings);
+            }
+            $rounds[] = $add_round;
         }
 
         return[

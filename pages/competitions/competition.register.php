@@ -17,6 +17,12 @@ $table->add_head('registation_status', false);
 $table->add_head('register', false);
 $table->add_head('competitor_registered', t('round.register.registrations_count'));
 foreach ($rows as $r) {
+
+    $autoteam = false;
+    if ($r->person_count > 1 and round::check_settings('autoteam', $r->settings)) {
+        $autoteam = " <p><i class='fas fa-hands-helping'></i> " . t('round.settings.autoteam') . "</span></p>";
+    }
+
     $team_person_registred = ($r->person1_id != '') + ($r->person2_id != '') + ($r->person3_id != '') + 1;
     $row = new build_row();
     $row->add_value('event', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert) . ' ' . $r->event_name);
@@ -49,10 +55,8 @@ foreach ($rows as $r) {
                 t('round.register.statuses.part') .
                 ' (' . $team_person_registred . '/' . $r->person_count . ')' .
                 '<p><i class="fas fa-key"></i> ' .
-                t('round.register.team_key')
-                . ': '
-                . $r->key
-                . '</p>';
+                t('round.register.team_key', ['key' => "<b>$r->key</b>"])
+                . '</p>' . $autoteam;
     } elseif ($r->registred_count >= $r->competitor_limit) {
         $registation_status = '<i class="fas fa-battery-full"></i> ' .
                 t('round.register.statuses.full');
@@ -79,7 +83,7 @@ foreach ($rows as $r) {
     $table->add_tr($row);
 }
 $registation_description = $competition->show_register() ?
-        (access::is_organizer()?t('competition.register_descriptions.open_organizer'):t('competition.register_descriptions.open')) :
+        (access::is_organizer() ? t('competition.register_descriptions.open_organizer') : t('competition.register_descriptions.open')) :
         t('competition.register_descriptions.close');
 
 $data = arrayToObject(

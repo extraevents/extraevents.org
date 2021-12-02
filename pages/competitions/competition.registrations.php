@@ -15,9 +15,10 @@ foreach ($competition->rounds as $round) {
     $events[$round->event_id] = (object) [
                 'id' => $round->event_id,
                 'name' => $round->event_name,
+                'person_count' => $round->person_count,
                 'icon' => event::get_image($round->event_id, $round->event_name, $round->icon_wca_revert)
     ];
-    $registration_event[$round->event_id] = 0;
+    $registration_event[$round->event_id] = (object) ['team' => 0, 'persons' => 0];
 }
 
 function registration_sort_name($a, $b) {
@@ -55,8 +56,15 @@ foreach ($rows as $row) {
                     'events' => []
         ];
     }
-    $registrations[$persons_key]->events[] = $row->event_id;
-    $registration_event[$row->event_id]++;
+    $registrations[$persons_key]->events[] = (object) [
+                'id' => $row->event_id,
+                'team_complete' => $row->team_complete,
+                'autoteam' => $row->autoteam,
+                'persons' => $row->persons
+    ];
+
+    $registration_event[$row->event_id]->team += $row->team_complete;
+    $registration_event[$row->event_id]->persons += $row->persons;
 }
 uasort($registrations, 'registration_sort_name');
 foreach ($events as $event) {
@@ -74,9 +82,15 @@ foreach ($registrations as $persons_key => $registration) {
     }
     $row->add_value('competitor', implode('<br>', $persons_out));
     $row->add_value('country', implode('<br>', $countries_out));
-    foreach ($registration->events as $event_id) {
-        $event = $events[$event_id];
-        $row->add_value($event->id, $event->icon);
+    foreach ($registration->events as $event) {
+        $ee_event = $events[$event->id];
+        if ($event->autoteam) {
+            $row->add_value($ee_event->id, '<i class="fas fa-hands-helping"></i>');
+        } elseif ($event->team_complete) {
+            $row->add_value($ee_event->id, $ee_event->icon);
+        } else {
+            $row->add_value($ee_event->id, "{$event->persons}/{$ee_event->person_count}");
+        }
     }
     $table->add_tr($row);
 }
@@ -84,11 +98,11 @@ $row = new build_row();
 
 $row->add_value('competitor', t('table.total') . ' ' . sizeof(array_unique($competitors)));
 foreach ($events as $event) {
-    $row->add_value($event->id, $registration_event[$event->id]);
+    $person_count_out = $event->person_count > 1 ? " ({$registration_event[$event->id]->persons})" : false;
+    $row->add_value($event->id, $registration_event[$event->id]->team . $person_count_out);
 }
 $table->add_foot($row);
 
 $data = (object) [
             'out_registrations' => $table->out()
 ];
-

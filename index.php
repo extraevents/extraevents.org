@@ -3,6 +3,7 @@ session_start();
 require 'autoload.php';
 new autoload();
 ob_start();
+date_default_timezone_set('UTC');
 ?>
 <!DOCTYPE HTML>
 <html lang='en'>

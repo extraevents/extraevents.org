@@ -15,19 +15,28 @@ c1.iso2 person1_country_iso2,
 c2.iso2 person2_country_iso2,
 c3.iso2 person3_country_iso2,
 c4.iso2 person4_country_iso2,
+case when p1.id then 1 else 0 end +
+case when p2.id then 1 else 0 end +
+case when p3.id then 1 else 0 end +
+case when p4.id then 1 else 0 end persons,
 e.id event_id,
 e.name event_name,
 e.icon_wca_revert,
-rd.round_number
+rd.round_number,
+r.team_complete,
+r.autoteam
 from rounds rd
-join results r on r.competition_id=rd.competition_id and r.event_id=rd.event_id and r.round_number=rd.round_number
+join results r on r.competition_id=rd.competition_id and r.event_id = rd.event_id and r.round_number = rd.round_number
 join events e on e.id=r.event_id
-left outer join persons p1 on p1.id=r.person1
-left outer join persons p2 on p2.id=r.person2
-left outer join persons p3 on p3.id=r.person3
-left outer join persons p4 on p4.id=r.person4
-left outer join countries c1 on c1.id=p1.country_id
-left outer join countries c2 on c2.id=p2.country_id
-left outer join countries c3 on c3.id=p3.country_id
-left outer join countries c4 on c4.id=p4.country_id
-where rd.competition_id='@:competition:' and r.team_complete = 1 and rd.round_number = 1
+join competitions c on c.id = r.competition_id
+left outer join persons p1 on p1.id = r.person1
+left outer join persons p2 on p2.id = r.person2
+left outer join persons p3 on p3.id = r.person3
+left outer join persons p4 on p4.id = r.person4
+left outer join countries c1 on c1.id = p1.country_id
+left outer join countries c2 on c2.id = p2.country_id
+left outer join countries c3 on c3.id = p3.country_id
+left outer join countries c4 on c4.id = p4.country_id
+where rd.competition_id='@:competition:' 
+    and (r.team_complete = 1 or (c.status = 'announced' and rd.settings like '%autoteam%' ))
+    and rd.round_number = 1
