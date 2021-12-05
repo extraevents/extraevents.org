@@ -9,7 +9,7 @@ competition.scorecards_round_print: organizer
 competition.scrambles: organizer
 competition.scrambles_rounds: organizer
 competition.scrambles_round_generate: organizer
-competition.scrambles_round_generate_tnoodle: organizer
+competition.scrambles_round_generate_wca: organizer
 competition.scrambles_round_print: organizer
 competition.results_rounds: +
 competition.results_round: +
