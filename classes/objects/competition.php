@@ -173,7 +173,7 @@ class competition {
         }
 
         if ($new_status == self::COMPLETED or $old_status == self::COMPLETED) {
-            results::update_rank();
+            $description .= results::update_rank();
             results::update_records();
         }
 

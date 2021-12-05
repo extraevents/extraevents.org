@@ -109,6 +109,9 @@ class results {
     }
 
     static function update_rank() {
+
+        $rows_before = sql_query::rows('ranks_top');
+
         db::exec(" DELETE FROM `ranks`");
         $events = db::rows("SELECT * FROM events");
         foreach ($events as $event) {
@@ -171,6 +174,77 @@ class results {
                 }
             }
         }
+
+        $rows_after = sql_query::rows('ranks_top');
+
+        return
+                self::notification_record($rows_before, $rows_after);
+    }
+
+    private static function notification_record($rows_before, $rows_after) {
+        $records_before = [];
+        foreach ($rows_before as $row) {
+            $records_before
+                    [$row->event_id]
+                    [$row->country_id]
+                    [$row->result_type] = $row;
+        }
+
+        $notifications = [];
+        foreach ($rows_after as $row_after) {
+            $row_before = $records_before
+                    [$row_after->event_id]
+                    [$row_after->country_id]
+                    [$row_after->result_type] ?? false;
+            if (!$row_before or $row_before->result > $row_after->result) {
+                if ($row_before) {
+                    $result_before = centisecond::out($row_before->result);
+                }
+                $competition_after = new competition($row_after->competition_id);
+                $person_after = new person($row_after->person);
+                $result_after = centisecond::out($row_after->result);
+
+                $event = new event($row_after->event_id);
+
+                $notifications
+                        [$competition_after->id]
+                        [$event->name]
+                        [] = (object) [
+                            'after' => (object) [
+                                'person' => $person_after->name,
+                                'country' => $person_after->country_name,
+                                'result' => $result_after],
+                            'before' => $row_before ? ((object) [
+                                'result' => $result_before]) : null,
+                            'NR' => $row_after->country_rank == 1,
+                            'CR' => $row_after->continent_rank == 1,
+                            'WR' => $row_after->world_rank == 1,
+                            'result_type' => $row_after->result_type
+                ];
+            }
+        }
+
+        $notification_out = false;
+        if (sizeof($notifications) > 0) {
+            foreach ($notifications as $competition => $notifications_2) {
+                $notification_out .= "**$competition** records\n";
+                foreach ($notifications_2 as $event_name => $notifications_3) {
+                    foreach ($notifications_3 as $row) {
+                        $before = $row->before ?
+                                " [previous {$row->before->result}]" :
+                                false;
+                        $record_type = $row->WR ? 'WR' : ($row->CR ? 'CR' : ($row->NR ? 'NR' : ''));
+                        $notification_out .= "[$record_type] **$event_name** $row->result_type:"
+                                . " **{$row->after->result}** {$row->after->person} from {$row->after->country}$before\n";
+                    }
+                }
+            }
+        }
+        if ($notification_out) {
+            discort::send('records', $notification_out);
+        }
+        return
+                str_replace("\n", '<br>', markdown::convertToHtml($notification_out));
     }
 
     private static function resolve_rank(&$object, $value) {

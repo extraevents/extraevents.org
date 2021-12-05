@@ -224,6 +224,7 @@ telegram:
 discort:
     webhookurl:
         competition: #discort_webhookurl_competition
+        records: #discort_webhookurl_records
     table:
         log:
             name: discort
