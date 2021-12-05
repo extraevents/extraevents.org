@@ -239,7 +239,7 @@ function check_results() {
     $('#cutoff').removeClass('incorrect');
     $('#time_limit').removeClass('incorrect');
 
-    $('[data-enter-solve]').each(function () {
+    $('[data-enter-solve]:visible').each(function () {
         var attempt = +$(this).data('enter-solve');
         var centisecond = +$(this).data('centisecond')
 
@@ -281,11 +281,12 @@ function check_results() {
         }
 
         if (attempt >= cutoff_solve_count
-                && cutoff_is_set
-                && cutoff_over
+                && (!cutoff_is_set || cutoff_over)
                 && centisecond == 0) {
             $(this).addClass('result_incorrect');
             disabled_submit = true;
+            
+            console.log(cutoff_is_set);
         }
 
         if ((!time_limit_cumulative && centisecond >= time_limit)
