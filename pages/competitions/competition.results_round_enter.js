@@ -281,6 +281,7 @@ function check_results() {
         }
 
         if (attempt >= cutoff_solve_count
+                && cutoff_is_set
                 && cutoff_over
                 && centisecond == 0) {
             $(this).addClass('result_incorrect');
