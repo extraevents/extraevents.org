@@ -269,10 +269,10 @@ function check_results() {
             $(this).attr('disabled', true);
         }
 
-        if (cumulative_over) {
-            $(this).addClass('result_blank');
-            $(this).attr('disabled', true);
-        }
+//        if (cumulative_over) {
+//            $(this).addClass('result_blank');
+//            $(this).attr('disabled', true);
+//        }
 
         if (attempt < cutoff_solve_count
                 && centisecond == 0) {
