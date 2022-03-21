@@ -31,6 +31,17 @@ if ($action == 'register') {
         }
     }
 
+    $register_round = sql_query::row('register_round',
+                    [
+                        'competition' => $competition->id,
+                        'event' => $event_id
+    ]);
+
+    if ($register_round->register_count >= $register_round->competitor_limit) {
+        form::process(false, $details, 'round.register_full!');
+        form::return();
+    }
+
     if (!$wca_registred and!in_array($wca_id, $competition->organizers)) {
         form::process(false, $details, 'round.not_wca_registration!');
         form::return();

@@ -30,6 +30,7 @@ message:
             (or try again later)!
         registration_disabled!: Registration cannot be changed!
         results_disabled!: Results cannot be changed!
+        register_full!: There are no more spots available
     scrambles_generate:
         done: Scrambles were generated.
         wrong_file!: Wrong file!
@@ -238,6 +239,9 @@ results:
     country: Country
     attempts: Solves
     not_publish: 'Results not published - {%reason}'
+    enter:
+        DNF: Press "f" or "F" to enter DNF
+        DNS: Press "s" or "S" to enter DNS
 records:    
     title: Records
 region_filter:

@@ -17,6 +17,8 @@ if (!$round->final) {
     $details[] = t('round.competitor_limit_next', ['level' => $round->competitor_limit]);
 }
 
+$details[]=t('results.enter.DNF');
+$details[]=t('results.enter.DNS');
 
 foreach ($registrations as &$r) {
     $r->names ??= [];

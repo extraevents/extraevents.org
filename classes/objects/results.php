@@ -156,7 +156,7 @@ class results {
                             self::resolve_rank($word_rank, $row->result);
                             self::resolve_rank($country_rank, $row->result);
                             self::resolve_rank($continent_rank, $row->result);
-                            $rank = $row;
+                            $rank = clone($row);
                             $rank->world_rank = $word_rank->rank;
                             $rank->country_rank = $country_rank->rank;
                             $rank->continent_rank = $continent_rank->rank;

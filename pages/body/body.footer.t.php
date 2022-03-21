@@ -24,10 +24,12 @@
         <i class="fas fa-code"></i>
         <?= t('navigation.api') ?>
     </a>
-    
-    
+
+
     <a target="_blank"  href="<?= $data->owner->url ?>">
         <i class="fas fa-laptop-code"></i>
-        <?= $data->owner->name ?>
+        <?= $data->owner->name ?> 
+        <i class="flag-icon flag-icon-ru"></i>
     </a>
+
 </div>    

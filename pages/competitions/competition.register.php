@@ -18,34 +18,7 @@ $table->add_head('register', false);
 $table->add_head('competitor_registered', t('round.register.registrations_count'));
 foreach ($rows as $r) {
 
-    $autoteam = false;
-    if ($r->person_count > 1 and round::check_settings('autoteam', $r->settings)) {
-        $autoteam = " <p><i class='fas fa-hands-helping'></i> " . t('round.settings.autoteam') . "</span></p>";
-    }
-
-    $team_person_registred = ($r->person1_id != '') + ($r->person2_id != '') + ($r->person3_id != '') + 1;
-    $row = new build_row();
-    $row->add_value('event', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert) . ' ' . $r->event_name);
-    $row->add_value('competitor_registered',
-            "$r->registred_count / $r->competitor_limit");
-    if ($competition->show_register()) {
-        if (!$r->registred) {
-            $row->add_value('register',
-                    "<form data-event='$r->event_id' data-action='register'>"
-                    . '<button> '
-                    . '<i class="fas fa-user-plus"></i> '
-                    . t('round.register.buttons.register')
-                    . '</button></form>');
-        } else {
-            $row->add_value('register',
-                    "<form data-event='$r->event_id' data-action='unregister' data-confirm>"
-                    . '<button> '
-                    . '<i class="fas fa-user-minus"></i> '
-                    . t('round.register.buttons.unregister')
-                    . '</button>'
-                    . '</form>');
-        }
-    }
+    $register_enable = true;
     $registation_status = false;
     if ($r->team_complete) {
         $registation_status = '<i class="fas fa-check"></i> ' .
@@ -60,11 +33,42 @@ foreach ($rows as $r) {
     } elseif ($r->registred_count >= $r->competitor_limit) {
         $registation_status = '<i class="fas fa-battery-full"></i> ' .
                 t('round.register.statuses.full');
+        $register_enable = false;
     } elseif ($r->person_count > 1) {
         $registation_status = t('round.register.team_key_join') .
                 '<p><i class="fas fa-key"></i>'
                 . ' <input maxlength="6" size="10" data-team-key/>'
                 . '</p>';
+    }
+
+    $autoteam = false;
+    if ($r->person_count > 1 and round::check_settings('autoteam', $r->settings)) {
+        $autoteam = " <p><i class='fas fa-hands-helping'></i> " . t('round.settings.autoteam') . "</span></p>";
+    }
+
+    $team_person_registred = ($r->person1_id != '') + ($r->person2_id != '') + ($r->person3_id != '') + 1;
+    $row = new build_row();
+    $row->add_value('event', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert) . ' ' . $r->event_name);
+    $row->add_value('competitor_registered',
+            "$r->registred_count / $r->competitor_limit");
+    if ($competition->show_register()) {
+        if (!$r->registred and $register_enable) {
+            $row->add_value('register',
+                    "<form data-event='$r->event_id' data-action='register'>"
+                    . '<button> '
+                    . '<i class="fas fa-user-plus"></i> '
+                    . t('round.register.buttons.register')
+                    . '</button></form>');
+        }
+        if ($r->registred) {
+            $row->add_value('register',
+                    "<form data-event='$r->event_id' data-action='unregister' data-confirm>"
+                    . '<button> '
+                    . '<i class="fas fa-user-minus"></i> '
+                    . t('round.register.buttons.unregister')
+                    . '</button>'
+                    . '</form>');
+        }
     }
 
     $persons = [];
