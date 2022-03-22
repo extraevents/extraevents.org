@@ -30,7 +30,7 @@ message:
             (or try again later)!
         registration_disabled!: Registration cannot be changed!
         results_disabled!: Results cannot be changed!
-        register_full!: There are no more spots available
+        register_full!: There are no more spots available!
     scrambles_generate:
         done: Scrambles were generated.
         wrong_file!: Wrong file!
