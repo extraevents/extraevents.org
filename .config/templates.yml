@@ -31,6 +31,9 @@ message:
         registration_disabled!: Registration cannot be changed!
         results_disabled!: Results cannot be changed!
         register_full!: There are no more spots available!
+        not_publish_register: Registration outside the rankings was done.
+        not_publish_register!: Registration outside the rankings was failed!
+        not_publish_register_wcaid!: The WCA ID was not found on the WCA website!
     scrambles_generate:
         done: Scrambles were generated.
         wrong_file!: Wrong file!
@@ -238,7 +241,8 @@ results:
     continent: Continent
     country: Country
     attempts: Solves
-    not_publish: 'Results not published - {%reason}'
+    not_publish_reasons:
+        overdue: 'Results outside the rankings - overdue registration'
     enter:
         DNF: Press "f" or "F" to enter DNF
         DNS: Press "s" or "S" to enter DNS

@@ -421,7 +421,7 @@ class competition {
         $values['status_old'] = $status_old;
         $values['status_new'] = $status_new;
         $values['competition'] = $this->id;
-        $values['description'] = $description;
+        $values['description'] = db::escape($description);
         $values['table'] = self::table_status();
         sql_query::exec('log_competition_status', $values, helper::db());
     }

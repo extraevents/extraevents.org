@@ -285,7 +285,7 @@ function check_results() {
                 && centisecond == 0) {
             $(this).addClass('result_incorrect');
             disabled_submit = true;
-            
+
             console.log(cutoff_is_set);
         }
 

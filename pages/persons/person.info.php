@@ -83,9 +83,9 @@ foreach ($results as $r) {
     ]);
     $row->add_value('event', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert) . ' ' . $r->event_name);
     $row->add_value('event_sort', $r->event_name);
-    if ($r->reason_not_publish) {
-        $title = t('results.not_publish', ['reason' => $r->reason_not_publish]);
-        $row->add_value('publish', "<i title='$title' class='far fa-times-circle'></i>");
+    $publish = results::info_reason_not_publish($r);
+    if ($publish) {
+        $row->add_value('publish', $publish);
     } else {
         $row->add_value('publish', competition::get_status_icon($r->competition_status));
     }

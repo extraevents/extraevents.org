@@ -68,11 +68,7 @@ foreach ($results as $r) {
                         $r->attempt4,
                         $r->attempt5))
     ]);
-    $not_publish = null;
-    if ($r->reason_not_publish) {
-        $title = t('results.not_publish', ['reason' => $r->reason_not_publish]);
-        $not_publish = " <i title='$title' class='color_red far fa-times-circle'></i>";
-    }
+    $not_publish = results::info_reason_not_publish($r);
     $row->add_value('position', $r->pos . $not_publish);
     $row->add_value('position_sort', $r->pos ?? PHP_INT_MAX);
     $row->add_value('competitor', implode('<br>', $persons_out));

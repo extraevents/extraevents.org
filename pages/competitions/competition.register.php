@@ -20,6 +20,13 @@ foreach ($rows as $r) {
 
     $register_enable = true;
     $registation_status = false;
+    $autoteam = false;
+    if ($r->person_count > 1 and round::check_settings('autoteam', $r->settings)) {
+        $autoteam = " <p><i class='fas fa-hands-helping'></i> " . t('round.settings.autoteam') . "</span></p>";
+    }
+
+    $team_person_registred = ($r->person1_id != '') + ($r->person2_id != '') + ($r->person3_id != '') + 1;
+    
     if ($r->team_complete) {
         $registation_status = '<i class="fas fa-check"></i> ' .
                 t('round.register.statuses.complete');
@@ -41,12 +48,6 @@ foreach ($rows as $r) {
                 . '</p>';
     }
 
-    $autoteam = false;
-    if ($r->person_count > 1 and round::check_settings('autoteam', $r->settings)) {
-        $autoteam = " <p><i class='fas fa-hands-helping'></i> " . t('round.settings.autoteam') . "</span></p>";
-    }
-
-    $team_person_registred = ($r->person1_id != '') + ($r->person2_id != '') + ($r->person3_id != '') + 1;
     $row = new build_row();
     $row->add_value('event', event::get_image($r->event_id, $r->event_name, $r->icon_wca_revert) . ' ' . $r->event_name);
     $row->add_value('competitor_registered',

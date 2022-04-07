@@ -18,6 +18,7 @@ class round {
     private static $last_key;
 
     const AUTOTEAM = 'autoteam:';
+    const NOT_PUBLISH = 'not_publish';
 
     static function __autoload() {
         self::$config = config::get(__CLASS__);
@@ -216,7 +217,7 @@ class round {
         return;
     }
 
-    static function register($person, $round, $key = false) {
+    static function register($person, $round, $key = false, $not_publish = false) {
         $row = db::row("SELECT id,person1,person2,person3,person4 FROM results 
                 WHERE competition_id='$round->competition_id'
                 AND event_id ='$round->event_id' 
@@ -228,7 +229,11 @@ class round {
         if ($key) {
             $exec = self::register_join($person, $round, $key);
         } else {
-            $exec = self::register_create($person, $round);
+            if ($not_publish) {
+                $exec = self::register_create($person, $round, round::NOT_PUBLISH, $not_publish);
+            } else {
+                $exec = self::register_create($person, $round);
+            }
         }
         if ($exec) {
             competition::generate_card_number();
@@ -342,7 +347,7 @@ class round {
         }
     }
 
-    private static function register_create($person, $round, $option = false) {
+    private static function register_create($person, $round, $option = false, $ext_option = false) {
         $complete = ($round->person_count == 1) + 0;
         $key = random_string(6);
         self::$last_key = $key;
@@ -357,6 +362,9 @@ class round {
 
         if ($option == self::AUTOTEAM) {
             db::exec("UPDATE results set autoteam = 1 where id = $results_id");
+        }
+        if ($option == self::NOT_PUBLISH) {
+            db::exec("UPDATE results set reason_not_publish = '$ext_option' where id = $results_id");
         }
 
         return

@@ -7,6 +7,8 @@ class results {
     public $round;
     protected $round_number;
 
+    const OVERDUE = 'overdue';
+
     function __construct($round_id) {
         ee_round::init($round_id, $competition_id, $event_id, $round_number);
         $this->event_id = $event_id;
@@ -378,6 +380,18 @@ class results {
         }
         return
                 $records;
+    }
+
+    static function info_reason_not_publish($result = false) {
+        if (!$result) {
+            $title = false;
+        } elseif ($result->reason_not_publish) {
+            $title = t("results.not_publish_reasons." . $result->reason_not_publish);
+        } else {
+            return null;
+        }
+        return
+                " <i title='$title' class='color_red far fa-times-circle'></i>";
     }
 
 }

@@ -17,8 +17,8 @@ if (!$round->final) {
     $details[] = t('round.competitor_limit_next', ['level' => $round->competitor_limit]);
 }
 
-$details[]=t('results.enter.DNF');
-$details[]=t('results.enter.DNS');
+$details[] = t('results.enter.DNF');
+$details[] = t('results.enter.DNS');
 
 foreach ($registrations as &$r) {
     $r->names ??= [];
@@ -47,7 +47,7 @@ unset($r);
 <form data-action="results" class="result">
     <input hidden name='card_id'/>
     <?php for ($attempt = $round->format_solve_count; $attempt < 5; $attempt++) { ?>
-            <input hidden data-enter-solve='<?= $attempt ?>' >
+        <input hidden data-enter-solve='<?= $attempt ?>' >
     <?php } ?>
     <?php for ($attempt = 0; $attempt < $round->format_solve_count; $attempt++) { ?>
         <p>
@@ -55,7 +55,7 @@ unset($r);
             <input disabled data-enter-solve='<?= $attempt ?>' >
         </p>
     <?php } ?>
-    <?php if ($competition->show_results()) { ?>
+    <?php if ($competition->enable_enter_results()) { ?>
         <button disabled>
             <?= t('results.save') ?>
         </button>
@@ -69,6 +69,16 @@ unset($r);
 <p>
     <?= implode('</p><p>', $details) ?>
 </p>
+
+<?php if ($competition->enable_enter_results()) { ?>
+    <hr>
+    <form data-action="competitor_not_publish" >
+        <?= results::info_reason_not_publish() ?>
+        Registration outside the rankings
+        <input name="wca_id" pattern="[0-9]{4}[A-Za-z]{4}[0-9]{2}" required placeholder="WCA ID" title="Example: 2015SOLO01"></input>
+        <button>Add <i class="fas fa-user-plus"></i></button>
+    </form>
+<?php } ?>
 <?php
 $select_competitor = ob_get_clean();
 $table = new build_table(false);
@@ -105,7 +115,9 @@ foreach ($registrations as $r) {
         $row->add_value('sort_by_remove', $r->remove);
     }
     $row->add_value('sort_by_position', $r->pos ?? PHP_INT_MAX);
-    $row->add_value('position', $r->pos);
+
+    $not_publish = results::info_reason_not_publish($r);
+    $row->add_value('position', $r->pos . $not_publish);
 
     if (!$round->final and $r->next_round) {
         $row->add_value('next', '<i style="color:var(--green)" class="fas fa-chevron-right"></i></i>');

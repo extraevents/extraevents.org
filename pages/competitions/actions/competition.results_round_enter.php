@@ -35,6 +35,11 @@ switch ($action) {
     case 'finish':
         include 'results_round_enter.finish.php';
         break;
+    
+    case 'competitor_not_publish':
+        $args = form::required('wca_id');
+        include 'results_round_enter.competitor_not_publish.php';
+        break;
 }
 
 round::update_pos($round);
