@@ -12,10 +12,18 @@ $block->add_element(t('competition.date'),
 $block->add_element(t('competition.country'),
         $competition->get_country_line());
 
-$block->add_element(false,
-        "<a data-external-link='" . config::get()->wca_site . "/competitions/$id'>" .
-        t('competition.more_info') .
-        "</a>");
+$nonwca = $competition->nonwca;
+if ($nonwca) {
+    $block->add_element(false,
+            "<a data-external-link='$nonwca/$id'>" .
+            t('competition.more_info_nonwca') .
+            "</a>");
+} else {
+    $block->add_element(false,
+            "<a data-external-link='" . config::get()->wca_site . "/competitions/$id'>" .
+            t('competition.more_info') .
+            "</a>");
+}
 
 $block->add_element(t('competition.status'),
         competition::status_line($competition->status));

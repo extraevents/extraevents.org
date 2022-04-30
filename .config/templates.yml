@@ -125,6 +125,7 @@ competition:
     title: Competitions with Extra Events
     mine: My competitions
     more_info: WCA website
+    more_info_nonwca: FunCubing website
     date: Date
     name: Name
     events: Events

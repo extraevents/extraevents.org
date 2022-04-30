@@ -13,6 +13,7 @@ class competition {
     public $registration_enable;
     public $organizers = [];
     public $contact;
+    public $nonwca;
     public $rounds = [];
 
     const DRAFT = 'draft';
@@ -57,6 +58,7 @@ class competition {
             $this->city = $competition->city;
             $this->end_date = $competition->end_date;
             $this->start_date = $competition->start_date;
+            $this->nonwca = $competition->nonwca;
         }
         self::$object = $this;
     }
