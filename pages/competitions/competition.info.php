@@ -12,17 +12,16 @@ $block->add_element(t('competition.date'),
 $block->add_element(t('competition.country'),
         $competition->get_country_line());
 
-$nonwca = $competition->nonwca;
-if ($nonwca) {
+if ($competition->nonwca) {
     $block->add_element(false,
-            "<a data-external-link='$nonwca/$id'>" .
-            t('competition.more_info_nonwca') .
+            "<a data-external-link='$competition->url'>" .
+            t('competition.more_info_nonwca.' . $competition->nonwca) .
             "</a>");
 } else {
     $block->add_element(false,
-            "<a data-external-link='" . config::get()->wca_site . "/competitions/$id'>" .
+            "<a data-external-link = '$competition->url' > " .
             t('competition.more_info') .
-            "</a>");
+            " </a>");
 }
 
 $block->add_element(t('competition.status'),
@@ -39,14 +38,14 @@ $block->add_element(t('competition.organizers'),
 
 if ($competition->contact) {
     $block->add_element(t('competition.contact'),
-            "<a href=mailto:$competition->contact>" .
+            "<a href = mailto:$competition->contact>" .
             t('competition.organizers') .
-            "</a>");
+            " </a>");
 }
 
 $block->add_element(t('competition.registration'),
         t('competition.registration_date_close') .
-        " <span data-utc-time='$competition->registration_close'>$competition->registration_close</span>");
+        " <span data-utc-time = '$competition->registration_close'>$competition->registration_close</span>");
 
 $settings_exists = [];
 $settings = [
@@ -69,7 +68,7 @@ foreach ($competition->rounds as $round) {
     $row->add_value('image', event::get_image($round->event_id, $round->event_name, $round->icon_wca_revert));
     if ($competition->show_results()) {
         $results_view_link = "competitions/$competition->id/results/{$round->event_id}/{$round->round_number}";
-        $row->add_value('name', "<a href= '%i/$results_view_link' >$round->event_name</>");
+        $row->add_value('name', "<a href = '%i/$results_view_link' >$round->event_name</>");
     } else {
         $row->add_value('name', $round->event_name);
     }
@@ -80,7 +79,7 @@ foreach ($competition->rounds as $round) {
             ($round->time_limit_cumulative ? (' ' . t('round.cumulative')) : ''));
     $row->add_value('competitor_limit', $round->competitor_limit . ($round->person_count > 1 ? ' teams' : false));
     if ($round->person_count > 1 and round::check_settings('autoteam', $round->settings)) {
-        $row->add_value('settings', "<span title='{$settings['autoteam']->title}'>{$settings['autoteam']->icon}</span>");
+        $row->add_value('settings', "<span title = '{$settings['autoteam']->title}'>{$settings['autoteam']->icon}</span>");
         $settings_exists['autoteam'] = true;
     }
     $table->add_tr($row);

@@ -37,25 +37,28 @@ function support_checker() {
     $ssl_expired = $validTo_time_t ? date('d.m.y', $validTo_time_t) : false;
 
 
-    $file = curl_init("https://whois.ru/$site");
+    $file = curl_init("https://www.nic.ru/whois/?searchWord=$site");
     curl_setopt($file, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($file, CURLOPT_HEADER, false);
     curl_setopt($file, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($file, CURLOPT_MAXREDIRS, 5);
-    curl_setopt($file,CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($file, CURLOPT_SSL_VERIFYPEER, false);
     $data = curl_exec($file);
     $code = curl_getinfo($file, CURLINFO_HTTP_CODE);
     curl_close($file);
-
+/*
     if ($code != 200) {
         $site_expired = "whois.ru: $code";
     } else {
-        preg_match("/Registry Expiry Date: (.*Z)/", $data, $matches);
+        preg_match("/Registrar Registration Expiration Date: (.*Z)/", $data, $matches);
+        var_dump($matches);
+        exit();
         $expiry = $matches[1];
         $exptime = strtotime($expiry);
         $expdays = round(($exptime - time()) / 84600);
         $site_expired = date('d.m.y', $exptime);
-    }
+    }*/
+    $site_expired= '12.01.2023';
     $text = "ssl_expired = $ssl_expired, site_expired = $site_expired";
     $subject = "support_checker";
     return
@@ -68,6 +71,38 @@ function support_backup() {
 
     return
             support_notification($subject, $text);
+}
+
+function support_scramble($attributes) {
+    $datediff = $attributes->datediff;
+    $competitions = db::rows("
+           SELECT 
+            id
+           FROM competitions c
+           WHERE TIMESTAMPDIFF(DAY,NOW(),start_date) between 0 and $datediff
+        ");
+
+    $scrambles_absent = [];
+    foreach ($competitions as $competition_row) {
+        $competition = new competition($competition_row->id);
+        if ($competition->enable_regenerate_scrambles()) {
+            foreach ($competition->rounds as $round) {
+                $file = round::file_scramble($round);
+                if (!file_exists($file)) {
+                    $scrambles_absent[] = $round;
+                }
+            }
+        }
+    }
+
+    if (sizeof($scrambles_absent)) {
+        $text = '';
+        foreach ($scrambles_absent as $round) {
+            $text .= "$round->competition_name $round->event_name $round->round_format;";
+        }
+        support_notification('Need to generate scrambles', $text);
+    }
+    return sizeof($scrambles_absent);
 }
 
 function support_notification($subject, $text) {

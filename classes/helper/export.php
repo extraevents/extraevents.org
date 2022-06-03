@@ -33,6 +33,7 @@ class export {
 
         $rows = db::rows("SELECT 
                     cn.id,
+                    cn.url,
                     cn.name,
                     cn.city,
                     cy.name country,
@@ -45,14 +46,14 @@ class export {
                             JOIN countries cy on cy.id=cn.country_id
                             JOIN rounds r on r.competition_id=cn.id
                             JOIN `organizers` o on o.competition_id=cn.id
-                    group by cn.id, cn.name, cn.city, cy.name, cn.start_date, cn.end_date,cn.contact
+                    group by cn.id, cn.url, cn.name, cn.city, cy.name, cn.start_date, cn.end_date,cn.contact
                             ORDER BY cn.id");
 
         foreach ($rows as $r) {
             $r->name = db::escape($r->name);
             db::exec(" INSERT INTO `ee_competitions` 
-               ( `id`,`name`,`city`,`country`,`start_date`,`end_date`,`extra_events`,`extra_events_organizers`,`extra_events_contact`) 
-               values ( '$r->id','$r->name','$r->city','$r->country','$r->start_date','$r->end_date','$r->extra_events','$r->extra_events_organizers','$r->contact')",
+               ( `id`,`url`,`name`,`city`,`country`,`start_date`,`end_date`,`extra_events`,`extra_events_organizers`,`extra_events_contact`) 
+               values ( '$r->id','$r->url','$r->name','$r->city','$r->country','$r->start_date','$r->end_date','$r->extra_events','$r->extra_events_organizers','$r->contact')",
                     export::db());
         }
     }

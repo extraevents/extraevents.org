@@ -28,7 +28,8 @@ Represents the root object.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `id` | `String` | Competition identifier on the WCA. |
+| `id` | `String` | Competition identifier on the WCA (or another site). |
+| `nonwca` | `String` | Filled in if not WCA is used. FC - https://funcubing.org/ . `"FC"` |
 | `organizers` |  `[String]` | List of WCA ID of the organizers of extra events in the competition. |
 | `registration_close` | `DateTime` | The point in time when the registering ends on the site ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)) |
 | `contact` | `Email` | Email for contacts with organizers. |

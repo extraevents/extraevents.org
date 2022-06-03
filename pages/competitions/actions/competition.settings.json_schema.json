@@ -11,6 +11,10 @@
             "type": "string",
             "pattern": "^[a-zA-Z0-9_]*$"
         },
+        "nonwca": {
+            "type": "string",
+            "enum": ["FC"]
+        },
         "organizers": {
             "type": "array",
             "minItems": 1,

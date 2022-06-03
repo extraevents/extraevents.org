@@ -1,5 +1,4 @@
 config:
-    wca_site: https://www.worldcubeassociation.org
     site: extraevents.org
     title: Extra Events
     short: EE
@@ -48,12 +47,6 @@ db:
         username: #db_username
         password: #db_password
         schema: #db_helper_schema
-    initial_data:
-        host: #db_host
-        port: #db_port
-        username: #db_username
-        password: #db_password
-        schema: #db_initial_schema            
         
 db_count:
     table:
@@ -113,6 +106,14 @@ wcaapi:
             name: wcaapi
             clear: #hour
             depth: #day
+            
+fcapi:
+    url: https://funcubing.org/api/
+    table:
+        log:
+            name: fcapi
+            clear: #hour
+            depth: #day    
 
 training:
     dir:
@@ -323,4 +324,8 @@ cron:
             command: update_events
             run: #5minutes
             
-           
+        17: 
+            command: support_scramble
+            run: #day
+            attributes: 
+                datediff: 10

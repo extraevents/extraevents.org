@@ -4,9 +4,9 @@ $allowed = filter_input(INPUT_GET, 'allowed');
 $filename = filter_input(INPUT_GET, 'filename');
 $php_self = filter_input(INPUT_SERVER, 'PHP_SELF');
 $http_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
+$json = json_decode($data);
 ?>
 <script src='../scripts/external/jquery-3.4.1.min.js' type='text/javascript'></script>
-
 <script>
     var data = '<?= $data ?>';
     var filename = '<?= $filename ?>';
@@ -58,7 +58,8 @@ $http_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
                             function (data) {
                                 get_version(data, 'running_version');
                             }).fail(function () {
-                        $('#status').html('Error!<br>Tnoodle not runnig<br>Or you have Access-Control-Allow-Origin enabled in the browser.');
+                        $('#status').html('Error!');
+                        $('#manual').show();
                     });
                 });
     }
@@ -95,10 +96,56 @@ $http_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
         xhttp.send(data);
     }
     ;
-
     check_tnoodle();
 </script>
+<title><?= $json->wcif->name ?></title>
 <p>
     <span id="version" style="display: none"></span>
     <span id="status">Wait for the Tnoodle check...</span>
 </p>
+<div id="manual">
+    <font color="red">Tnoodle not runnig</font><br>
+    Or problems with CORS in your browser (try Safari).<br>
+    <hr>
+    You can save this page and open it.<br>
+    <?php
+    $events = [
+        '333' => '3x3x3 Cube',
+        '222' => '2x2x2 Cube',
+        '444' => '4x4x4 Cube',
+        '555' => '5x5x5 Cube',
+        '333oh' => '3x3x3 One-Handed',
+        'pyram' => 'Pyraminx',
+        'skewb' => 'Skewb',
+        'clock' => 'Clock',
+        'sq1' => 'Square-1',
+        'minx' => 'Megaminx',
+        '333bf' => '3x3x3 Blindfolded',
+        '666' => '6x6x6 Cube',
+        '777' => '7x7x7 Cube',
+        '333fm' => '3x3x3 Fewest Moves',
+    ];
+    $formats = [
+        'm' => 'Mo3',
+        'a' => 'Ao5',
+    ];
+    ?>
+    <hr>
+    You can generate scrambles manually in <a target='_blank' href="http://localhost:2014/">Toddler</a> ( <?= $allowed ?>)<br>
+    <b>Competition Name</b>: <?= $json->wcif->name ?><br>
+    <?php
+    foreach ($json->wcif->events as $event) {
+        $round = $event->rounds[0];
+        ?>
+        <b>Event</b>: <?= $events[$event->id] ?><br>
+        <b>Rounds</b>: 1<br>
+        <b>Format</b>: <?= $formats[$round->format] ?><br>
+        <b>Scramble Sets</b>: <?= $round->scrambleSetCount ?><br>
+        <b>Copies</b>: 1<br>
+    <?php } ?>
+</div>
+<script>
+    $('#manual').css('display', 'none');
+</script>
+<?php
+?>    

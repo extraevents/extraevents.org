@@ -14,6 +14,7 @@ class competition {
     public $organizers = [];
     public $contact;
     public $nonwca;
+    public $url;
     public $rounds = [];
 
     const DRAFT = 'draft';
@@ -59,6 +60,7 @@ class competition {
             $this->end_date = $competition->end_date;
             $this->start_date = $competition->start_date;
             $this->nonwca = $competition->nonwca;
+            $this->url = $competition->url;
         }
         self::$object = $this;
     }
@@ -73,15 +75,17 @@ class competition {
         }
 
         self::update_from_settings($settings);
-        self::update_from_wca();
+        self::update_from_api();
         return true;
     }
 
     function update_from_settings($settings) {
         self::update_organizers($settings->organizers);
         self::update_rounds($settings->events);
+        $this->nonwca = $settings->nonwca ?? '';
         $values = [];
         $values['id'] = $this->id;
+        $values['nonwca'] = $this->nonwca;
         $values['contact'] = $settings->contact;
         $values['registration_close'] = strtotime($settings->registration_close);
         sql_query::exec('update_competition_settings', $values);
@@ -107,22 +111,41 @@ class competition {
         return true;
     }
 
-    function update_from_wca() {
-        $api_competition = wcaapi::get("competitions/$this->id");
+    function update_from_api() {
+        if ($this->nonwca == 'FC') {
+            $api_competition = fcapi::get("competitions/$this->id")[0] ?? null;
+            if ($api_competition) {
+                $values = [];
+                $values['id'] = $this->id;
+                $values['name'] = $api_competition->name;
+                $values['city'] = transliterate($api_competition->city);
+                $values['url'] = $api_competition->url;
+                $values['country'] = 'Russia';
+                $values['end_date'] = $api_competition->end_date;
+                $values['start_date'] = $api_competition->start_date;
+            }
+        } elseif (!$this->nonwca) {
+            $api_competition = wcaapi::get("competitions/$this->id");
+            if ($api_competition) {
+                $country_iso2 = $api_competition->country_iso2;
+                $country = sql_query::row('country_by_iso2', ['iso2' => $country_iso2]);
+                $values = [];
+                $values['id'] = $this->id;
+                $values['name'] = $api_competition->name;
+                $values['city'] = $api_competition->city;
+                $values['url'] = $api_competition->url;
+                $values['country'] = $country->id ?? false;
+                $values['end_date'] = $api_competition->end_date;
+                $values['start_date'] = $api_competition->start_date;
+            }
+        } else {
+            user_error("wrong nonwca: $this->nonwca", E_ERROR);
+        }
         if (!$api_competition) {
             sql_query::exec('update_competition_draft', ['id' => $this->id]);
             return false;
         }
-        $country_iso2 = $api_competition->country_iso2;
-        $country = sql_query::row('country_by_iso2', ['iso2' => $country_iso2]);
-        $values = [];
-        $values['id'] = $this->id;
-        $values['name'] = $api_competition->name;
-        $values['city'] = $api_competition->city;
-        $values['country'] = $country->id ?? false;
-        $values['end_date'] = $api_competition->end_date;
-        $values['start_date'] = $api_competition->start_date;
-        sql_query::exec('update_competition_wca', $values);
+        sql_query::exec('update_competition_api', $values);
         return true;
     }
 
@@ -144,9 +167,9 @@ class competition {
         if (!in_array($new_status, $this->actions())) {
             return 'ERROR';
         }
-        $update_from_wca = self::update_from_wca();
-        $need_update_from_wca = self::need_update_from_wca($old_status, $new_status);
-        if (!$update_from_wca and $need_update_from_wca) {
+        $update_from_api = self::update_from_api();
+        $need_update_from_api = self::need_update_from_api($old_status, $new_status);
+        if (!$update_from_api and $need_update_from_api) {
             return 'NOT_FOUND';
         }
         $description .= self::update_results($old_status, $new_status);
@@ -156,7 +179,7 @@ class competition {
         return 'OK';
     }
 
-    private function need_update_from_wca($old_status, $new_status) {
+    private function need_update_from_api($old_status, $new_status) {
         if ($old_status == self::DRAFT and $new_status == self::DRAFT) {
             return true;
         }
@@ -577,13 +600,17 @@ class competition {
             $rounds[] = $add_round;
         }
 
-        return[
+        $return = [
             'id' => $this->id,
             'organizers' => $this->organizers,
             'registration_close' => $this->registration_close,
             'contact' => $this->contact,
             'events' => $rounds
         ];
+        if ($this->nonwca) {
+            $return['nonwca'] = $this->nonwca;
+        }
+        return $return;
     }
 
     function get_date_range() {
