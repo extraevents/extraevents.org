@@ -10,4 +10,5 @@ SELECT
 FROM team t 
 	JOIN persons p ON t.id = p.id
 	JOIN countries c on c.id = p.country_id
+WHERE is_archive = 0
 ORDER BY p.name

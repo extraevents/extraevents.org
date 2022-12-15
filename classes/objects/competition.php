@@ -25,6 +25,7 @@ class competition {
     const COMPLETED = 'completed';
     const RESULTS_CANCELED = 'results_canceled';
     const DELETE = 'delete';
+    const FREEZE = 'freeze';
 
     private static $object = null;
     private static $config;
@@ -118,7 +119,7 @@ class competition {
                 $values = [];
                 $values['id'] = $this->id;
                 $values['name'] = $api_competition->name;
-                $values['city'] = transliterate($api_competition->city);
+                $values['city'] = $this->city ? $this->city : transliterate($api_competition->city);
                 $values['url'] = $api_competition->url;
                 $values['country'] = 'Russia';
                 $values['end_date'] = $api_competition->end_date;
@@ -238,7 +239,8 @@ class competition {
             self::RUNNING,
             self::RESULTS_APPROVAL,
             self::COMPLETED,
-            self::RESULTS_CANCELED
+            self::RESULTS_CANCELED,
+            self::FREEZE
         ];
     }
 
@@ -257,14 +259,15 @@ class competition {
         return
                 in_array($this->status, [
             self::ANNOUNCED,
-            self::RUNNING]);
+            self::RUNNING,
+            self::FREEZE,]);
     }
 
     function show_register() {
 
         return
                 in_array($this->status, [
-                    self::ANNOUNCED
+                    self::ANNOUNCED,
                 ])
                 and strtotime($this->registration_close) > strtotime('now');
     }
@@ -311,7 +314,8 @@ class competition {
             self::RUNNING,
             self::RESULTS_APPROVAL,
             self::COMPLETED,
-            self::RESULTS_CANCELED]);
+            self::RESULTS_CANCELED,
+        ]);
     }
 
     function show_settings() {
@@ -360,6 +364,7 @@ class competition {
             self::RESULTS_APPROVAL => 'fas fa-pause-circle',
             self::COMPLETED => 'fas fa-check-circle',
             self::RESULTS_CANCELED => 'fas fa-times-circle',
+            self::FREEZE => 'fas fa-times-circle'
         ];
         return
                 '<i title="' . self::status_name($status) . ' "class="' . $icons[$status] . '"></i>';

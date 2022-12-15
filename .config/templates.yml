@@ -20,6 +20,7 @@ message:
         logout_all: You are logged out on all devices.
     wcaoauth:
         access_denied!: WCA authorization was denied!
+        freeze!: The website is frozen!
     round:
         register: Registration was done.
         register!: Registration was failed!
@@ -74,6 +75,9 @@ competition:
         results_canceled: |
             Extra Events Leaders canceled the results of the competition.
             For more information, contact the Extra Events Organizer.
+        freeze: |
+            Konstantin Solovyov canceled the holding of extra events at this competition.
+            The reason is the <a href="https://www.worldcubeassociation.org/posts/wca-action-regarding-situation-in-ukraine-march-2022" target="_blank">political sanctions of the WCA <i class='fas fa-external-link-alt'></i></a>.
     actions:
         expired: Expired
         description: Comment on changing status
@@ -150,6 +154,7 @@ competition:
         running: Running
         completed: Completed
         results_canceled: The results were canceled
+        freeze: The competition was declined
     registrations: Registrations for Extra Events
     register_descriptions:
         open: >-
@@ -331,3 +336,9 @@ statistics:
     
 table:
     total: Total
+    
+freeze: |
+    I am Konstantin Solovyov, a citizen of Russia <i class="flag flag-icon flag-icon-ru"></i>.<br>
+    I am the creator and owner of <a href='http://extraevents.org'>this website</a>.<br>
+    I do not agree with the <a href="https://www.worldcubeassociation.org/posts/wca-action-regarding-situation-in-ukraine-march-2022" target="_blank">political sanctions of the WCA <i class='fas fa-external-link-alt'></i></a>.<br>
+    I <b>personally</b> decided to freeze the site until their cancellation..

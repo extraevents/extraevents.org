@@ -21,7 +21,7 @@ class page {
             $request = $pages->default;
         }
         $page = $pages->$request ?? false;
-        if (!$page) {
+        if (!$page or $request == 'default' or $request == 'navigations') {
             page_404();
         }
 

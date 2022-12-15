@@ -58,7 +58,7 @@ function support_checker() {
         $expdays = round(($exptime - time()) / 84600);
         $site_expired = date('d.m.y', $exptime);
     }*/
-    $site_expired= '12.01.2023';
+    $site_expired = '12.01.2023';
     $text = "ssl_expired = $ssl_expired, site_expired = $site_expired";
     $subject = "support_checker";
     return

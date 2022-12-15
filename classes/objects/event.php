@@ -18,6 +18,7 @@ class event {
     public $icon_wca_revert;
 
     public function __construct($id) {
+        $id = db::escape($id);
         $row = db::row("SELECT
                 id,
                 name,

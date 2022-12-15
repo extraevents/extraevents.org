@@ -8,7 +8,8 @@ config:
     owner: 
         url: https://www.worldcubeassociation.org/persons/2015SOLO01
         name: Konstantin Solovev (Константин Соловьёв)
-                
+    freeze: true
+    
 regulation:                
     deadline:
         draft__announcement_approval:
@@ -302,7 +303,7 @@ cron:
             
         11:
             command: support_ping
-            run: #day        
+            run: #week        
             
         12:
             command: file_size::save

@@ -39,20 +39,23 @@ function notifications_competition_change_status() {
         if ($competition->contact) {
             $emails[] = $competition->contact;
         }
-        $subject = "$competition->name: $title (" . $competition_status_values['status_new'] . ")";
+        $competitionName = $competition->name ? $competition->name : $competition_status->competition;
+
+        $subject = "$competitionName: $title (" . $competition_status_values['status_new'] . ")";
         foreach ($emails as $email) {
             smtp::put($email,
                     $subject,
                     $body);
         }
 
-        $body_discort = "**$competition->name**: " . $competition_status_values['status_old'] . ' -> ' . $competition_status_values['status_new'] . " / $person->name $timestamp";
+        $body_discort = "**$competitionName**: " . $competition_status_values['status_old'] . ' -> ' . $competition_status_values['status_new'] . " / $person->name $timestamp";
 
         if ($competition_status->description) {
             $body_discort .= "\n" . $competition_status->description;
         }
-
-        discort::send('competition', $body_discort);
+        if (!(config::get()->freeze ?? false)) {
+            discort::send('competition', $body_discort);
+        }
     }
 
     return sizeof($competitions_status);

@@ -1,5 +1,10 @@
 <?php
 
+if (config::get()->freeze ?? false) {
+    message::set("wcaoauth.freeze!");
+    form::return('');
+}
+
 $user = wcaoauth::authorize();
 if ($user) {
     if ($user->ee_id != $user->wca_id) {

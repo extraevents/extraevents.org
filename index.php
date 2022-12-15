@@ -23,6 +23,19 @@ date_default_timezone_set('UTC');
         <link rel="stylesheet" href="%i/scripts/external/chosen_v1/chosen.css" type="text/css"/>
         <script src="%i/scripts/external/chosen_v1/chosen.jquery.js" type="text/javascript"></script> 
     </head>
+    <?php
+    if (config::get()->freeze ?? false) {
+        wcaoauth::session_end_all();
+        ?>
+        <div style="
+             border:1px solid red;
+             padding:5px;
+             text-align: center;
+             margin:5px;
+             background-color:antiquewhite ">
+            <?= t('freeze'); ?>
+        </div>
+    <?php } ?>
     <body>        
         <?php page::include('body'); ?>
     </body>

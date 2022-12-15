@@ -1,4 +1,4 @@
-default: info
+default: info    
 navigations:
     competitions:
         title: navigation.competitions
