@@ -7,7 +7,6 @@
 /.files_public
 /.well-known
 **/external
-/vendor/
 /composer.lock
 /nbproject/
 /.config_key/extraevents.org.yml
