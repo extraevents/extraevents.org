@@ -1,8 +1,7 @@
 .DS_Store
 /.initial_export
-/.files/backups
-/.files/scrambles
-/.files/sessions
+/.files/backups/*/*
+/.files/sessions/sess_*
 /.files_tmp/errors
 /.files_tmp/scramble_pdf
 /.files_public
