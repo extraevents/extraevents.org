@@ -1,17 +1,17 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : local
+ Source Server         : mysql.hosting.nic.ru
  Source Server Type    : MySQL
- Source Server Version : 50726
- Source Host           : localhost
- Source Database       : ee_helper
+ Source Server Version : 50641
+ Source Host           : mysql.hosting.nic.ru
+ Source Database       : suphair_helper
 
  Target Server Type    : MySQL
- Target Server Version : 50726
+ Target Server Version : 50641
  File Encoding         : utf-8
 
- Date: 12/02/2021 20:09:41 PM
+ Date: 05/21/2023 06:55:46 AM
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `backup` (
   `size` int(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2037 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `cash`
@@ -41,7 +41,7 @@ CREATE TABLE `cash` (
   `cash` varchar(255) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`process`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `competition_status`
@@ -57,7 +57,7 @@ CREATE TABLE `competition_status` (
   `send_notification` tinyint(4) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `cron`
@@ -65,14 +65,13 @@ CREATE TABLE `competition_status` (
 DROP TABLE IF EXISTS `cron`;
 CREATE TABLE `cron` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `log_id` int(11) DEFAULT NULL,
   `task_exec` varchar(255) DEFAULT NULL,
   `task_begin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `task_end` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=608 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=699380 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `db_count`
@@ -85,22 +84,7 @@ CREATE TABLE `db_count` (
   `is_post` bit(1) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8302 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `db_size`
--- ----------------------------
-DROP TABLE IF EXISTS `db_size`;
-CREATE TABLE `db_size` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `schema` varchar(32) DEFAULT NULL,
-  `table` varchar(126) DEFAULT NULL,
-  `file_mb` int(11) DEFAULT NULL,
-  `table_mb` int(11) DEFAULT NULL,
-  `rows` int(11) DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=755 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=654672 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `discort`
@@ -113,7 +97,19 @@ CREATE TABLE `discort` (
   `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   `result` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+--  Table structure for `fcapi`
+-- ----------------------------
+DROP TABLE IF EXISTS `fcapi`;
+CREATE TABLE `fcapi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) NOT NULL,
+  `status` varchar(11) DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `file_clear`
@@ -126,7 +122,7 @@ CREATE TABLE `file_clear` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `filemtime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=264 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8986 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `file_size`
@@ -140,7 +136,7 @@ CREATE TABLE `file_size` (
   `files` int(11) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=735 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `form`
@@ -156,7 +152,7 @@ CREATE TABLE `form` (
   `server` text,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1466 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2982 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `form_process`
@@ -172,7 +168,7 @@ CREATE TABLE `form_process` (
   `message` varchar(255) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=728 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1546 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `import_team`
@@ -186,7 +182,7 @@ CREATE TABLE `import_team` (
   `details` text,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `register`
@@ -202,7 +198,7 @@ CREATE TABLE `register` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=370 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `scoretaker`
@@ -216,7 +212,7 @@ CREATE TABLE `scoretaker` (
   `card_id` int(11) DEFAULT NULL,
   `details` varchar(255) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `smtp`
@@ -224,7 +220,6 @@ CREATE TABLE `scoretaker` (
 DROP TABLE IF EXISTS `smtp`;
 CREATE TABLE `smtp` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `log_id` int(11) DEFAULT NULL,
   `to` varchar(255) DEFAULT NULL,
   `subject` varchar(255) DEFAULT NULL,
   `body` text,
@@ -232,7 +227,7 @@ CREATE TABLE `smtp` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `smtp` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1368 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=897 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `telegram`
@@ -246,7 +241,7 @@ CREATE TABLE `telegram` (
   `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   `result` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=537 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `update_wcaid`
@@ -256,7 +251,7 @@ CREATE TABLE `update_wcaid` (
   `ee_id` varchar(10) DEFAULT NULL,
   `wca_id` varchar(10) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `wcaapi`
@@ -268,7 +263,7 @@ CREATE TABLE `wcaapi` (
   `status` varchar(11) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1926 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 --  Table structure for `wcaoauth`
@@ -285,6 +280,6 @@ CREATE TABLE `wcaoauth` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `session` (`session`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1174 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

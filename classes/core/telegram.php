@@ -10,6 +10,8 @@ class telegram {
 
     static function send($reciever, $subject, $text) {
         $chat_id = self::$config->chat_id->$reciever ?? false;
+        if (!is_numeric($chat_id))
+            return;
         if ($text != $subject) {
             $text = "$subject / $text";
         }
