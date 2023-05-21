@@ -1,8 +1,8 @@
 - **Create** databases on localhost:8889
--- l_extraevents
--- l_ee_helper
--- l_wca
--- l_ee_export
+  - l_extraevents
+  - l_ee_helper
+  - l_wca
+  - l_ee_export
 - **Exec** in DB l_extraevents init_localhost/db_ee_init.sql
 - **Exec** in DB l_helper exec db_helper_structure.sql
 - **Exec** in DB l_wca exec https://www.worldcubeassociation.org/export/results/WCA_export.sql.zip
