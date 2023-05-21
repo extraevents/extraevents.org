@@ -27,6 +27,9 @@ function support_error() {
 }
 
 function support_checker() {
+    if (config::isTest()) {
+        return;
+    }
     $site = config::get()->site;
     $get = @stream_context_create(array("ssl" => array("capture_peer_cert" => TRUE)));
     $read = @stream_socket_client("ssl://$site:443", $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $get);
@@ -46,18 +49,6 @@ function support_checker() {
     $data = curl_exec($file);
     $code = curl_getinfo($file, CURLINFO_HTTP_CODE);
     curl_close($file);
-/*
-    if ($code != 200) {
-        $site_expired = "whois.ru: $code";
-    } else {
-        preg_match("/Registrar Registration Expiration Date: (.*Z)/", $data, $matches);
-        var_dump($matches);
-        exit();
-        $expiry = $matches[1];
-        $exptime = strtotime($expiry);
-        $expdays = round(($exptime - time()) / 84600);
-        $site_expired = date('d.m.y', $exptime);
-    }*/
     $site_expired = '12.01.2023';
     $text = "ssl_expired = $ssl_expired, site_expired = $site_expired";
     $subject = "support_checker";
