@@ -6,7 +6,6 @@
 /.files_tmp/scramble_pdf
 /.files_public
 /.well-known
-**/external
 /composer.lock
 /nbproject/
 /.config_key/extraevents.org.yml

@@ -8,7 +8,7 @@ config:
     owner: 
         url: https://www.worldcubeassociation.org/persons/2015SOLO01
         name: Konstantin Solovev (Константин Соловьёв)
-    freeze: true
+    freeze: false
     
 regulation:                
     deadline:
